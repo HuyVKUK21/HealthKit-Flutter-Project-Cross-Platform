@@ -5,4 +5,5 @@ import '../utils/app_colors.dart';
 void main() {
   print("Toi la Bao");
   print('Hello World1');
+  print('xin chồ');
 }
