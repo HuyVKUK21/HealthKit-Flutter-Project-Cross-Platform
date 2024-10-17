@@ -1,5 +1,5 @@
 import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:fitnessapp/common_widgets/round_button.dart';
+import 'package:fitnessapp/presentation/common_widgets/round_button.dart';
 import 'package:fitnessapp/presentation/widgets/profile/setting_row.dart';
 import 'package:fitnessapp/presentation/widgets/profile/title_subtitle_cell.dart';
 import 'package:fitnessapp/utils/app_colors.dart';

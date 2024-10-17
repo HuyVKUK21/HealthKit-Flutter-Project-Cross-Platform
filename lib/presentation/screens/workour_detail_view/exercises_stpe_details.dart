@@ -1,4 +1,4 @@
-import 'package:fitnessapp/common_widgets/round_gradient_button.dart';
+import 'package:fitnessapp/presentation/common_widgets/round_gradient_button.dart';
 import 'package:fitnessapp/presentation/widgets/workour_detail_view/step_detail_row.dart';
 import 'package:fitnessapp/utils/app_colors.dart';
 import 'package:flutter/cupertino.dart';

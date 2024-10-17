@@ -1,5 +1,5 @@
 import 'package:calendar_agenda/calendar_agenda.dart';
-import 'package:fitnessapp/common_widgets/round_gradient_button.dart';
+import 'package:fitnessapp/presentation/common_widgets/round_gradient_button.dart';
 import 'package:fitnessapp/utils/app_colors.dart';
 import 'package:fitnessapp/utils/common.dart';
 import 'package:flutter/material.dart';
