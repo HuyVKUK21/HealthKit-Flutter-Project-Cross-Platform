@@ -1,4 +1,4 @@
-import 'package:fitnessapp/common_widgets/round_gradient_button.dart';
+import 'package:fitnessapp/presentation/common_widgets/round_gradient_button.dart';
 import 'package:fitnessapp/presentation/screens/workout_schedule_view/workout_schedule_view.dart';
 import 'package:fitnessapp/presentation/widgets/workour_detail_view/exercises_set_section.dart';
 import 'package:fitnessapp/presentation/widgets/workour_detail_view/icon_title_next_row.dart';

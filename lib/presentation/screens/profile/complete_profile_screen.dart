@@ -1,5 +1,5 @@
-import 'package:fitnessapp/common_widgets/round_gradient_button.dart';
-import 'package:fitnessapp/common_widgets/round_textfield.dart';
+import 'package:fitnessapp/presentation/common_widgets/round_gradient_button.dart';
+import 'package:fitnessapp/presentation/common_widgets/round_textfield.dart';
 import 'package:fitnessapp/presentation/screens/your_goal/your_goal_screen.dart';
 import 'package:fitnessapp/utils/app_colors.dart';
 import 'package:flutter/material.dart';

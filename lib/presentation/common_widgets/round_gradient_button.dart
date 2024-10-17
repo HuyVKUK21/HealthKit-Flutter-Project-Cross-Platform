@@ -1,6 +1,7 @@
+import 'package:fitnessapp/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/app_colors.dart';
+
 
 class RoundGradientButton extends StatelessWidget {
   final String title;

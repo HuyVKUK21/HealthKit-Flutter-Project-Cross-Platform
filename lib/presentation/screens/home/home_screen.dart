@@ -1,5 +1,5 @@
 import 'package:dotted_dashed_line/dotted_dashed_line.dart';
-import 'package:fitnessapp/common_widgets/round_button.dart';
+import 'package:fitnessapp/presentation/common_widgets/round_button.dart';
 import 'package:fitnessapp/presentation/screens/activity_tracker/activity_tracker_screen.dart';
 import 'package:fitnessapp/presentation/screens/finish_workout/finish_workout_screen.dart';
 import 'package:fitnessapp/presentation/widgets/home/widgets/workout_row.dart';
