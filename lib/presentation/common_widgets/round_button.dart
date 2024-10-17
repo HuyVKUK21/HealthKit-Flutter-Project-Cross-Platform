@@ -2,7 +2,6 @@ import 'package:fitnessapp/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
 
-
 enum RoundButtonType { primaryBG, secondaryBG }
 
 class RoundButton extends StatelessWidget {
