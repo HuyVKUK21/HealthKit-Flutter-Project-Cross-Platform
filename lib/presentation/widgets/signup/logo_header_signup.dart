@@ -15,12 +15,13 @@ class LogoHeaderSignUp extends StatelessWidget {
             Row(
               children: [
                 Image.asset('assets/images/app_logo.png',
-                  width: 50,
-                  height: 50,),
+                  width: 34,
+                  height: 34,),
+                SizedBox(width: 10,),
                 Text(
                   "HealthKit",
                   style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF043723),
                   ),
