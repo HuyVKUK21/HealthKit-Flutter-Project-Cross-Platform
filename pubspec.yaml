@@ -98,10 +98,10 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: SF-Pro-Display
+     - family: PlusJakartaSan
        fonts:
-         - asset: assets/fonts/SF-Pro-Display-Bold.otf
-         - asset: assets/fonts/SF-Pro-Display-Regular.otf
+         - asset: assets/fonts/PlusJakartaSans-Bold.ttf
+         - asset: assets/fonts/PlusJakartaSans-Regular.ttf
            weight: 700
 
   # For details regarding fonts from package dependencies,
