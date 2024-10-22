@@ -1,5 +1,6 @@
 import 'package:fitnessapp/presentation/screens/dashboard/dashboard_screen.dart';
 import 'package:fitnessapp/presentation/screens/login/login_screen.dart';
+import 'package:fitnessapp/presentation/screens/signup/signup_screen.dart';
 import 'package:fitnessapp/routes.dart';
 import 'package:fitnessapp/utils/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: "Poppins"
       ),
-      home: const LoginScreen(),
+      home: const SignupScreen(),
     );
   }
 }

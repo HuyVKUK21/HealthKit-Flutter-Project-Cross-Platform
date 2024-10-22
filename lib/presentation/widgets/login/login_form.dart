@@ -78,7 +78,7 @@ class _LoginFormState extends State<LoginForm> {
           ),
           child: Text(
             "Đăng nhập",
-            style: TextStyle(fontSize: 18, color: Colors.white),
+            style: TextStyle(fontSize: 14, color: Colors.white),
           ),
         ),
       ],
