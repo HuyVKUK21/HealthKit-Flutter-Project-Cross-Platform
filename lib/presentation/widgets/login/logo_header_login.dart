@@ -15,8 +15,9 @@ class LogoHeader extends StatelessWidget {
             Row(
               children: [
                 Image.asset('assets/images/app_logo.png',
-                  width: 50,
-                  height: 50,),
+                  width: 34,
+                  height: 34,),
+                SizedBox(width: 10,),
                 Text(
                   "HealthKit",
                   style: TextStyle(
