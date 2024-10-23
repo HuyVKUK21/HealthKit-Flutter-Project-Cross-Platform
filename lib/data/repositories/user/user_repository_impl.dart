@@ -21,4 +21,10 @@ class UserRepositoryImpl implements UserRepository {
     return UserEntity(email: user.email!, uid: user.uid!);
   }
 
+  @override
+  Future<UserEntity> signInWithGoogle() async{
+    final user = await firebaseAuthDataSource.signInWithGoogle();
+    return UserEntity(email: user.email!, uid: user.uid!);
+  }
+
 }

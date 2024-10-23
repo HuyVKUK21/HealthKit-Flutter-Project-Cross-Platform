@@ -6,3 +6,5 @@ class ButtonSubmitPressed extends RegisterEvent {
 
   ButtonSubmitPressed({required this.email, required this.password});
 }
+
+class GoogleSignInPressed extends RegisterEvent {}

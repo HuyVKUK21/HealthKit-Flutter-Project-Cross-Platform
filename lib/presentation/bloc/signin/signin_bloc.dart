@@ -19,5 +19,16 @@ class SignInBloc extends Bloc<RegisterEvent, RegisterState> {
         emit(RegisterFailure(error: error.toString()));
       }
     });
+
+    on<GoogleSignInPressed>((event, emit) async {
+      emit(RegisterLoading());
+      try {
+        UserEntity user = await _userUseCase.callsignInWithGoogle();
+        emit(RegisterSuccess(user: user));
+      } catch (error) {
+        emit(RegisterFailure(error: error.toString()));
+        print(error.toString());
+      }
+    });
   }
 }
