@@ -12,4 +12,9 @@ class FirebaseAuthDataSource {
     UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
     return UserModel.fromFirebaseUser(userCredential.user!);
   }
+
+  Future<UserModel> signInWithEmailAndPassword(String email, String password) async {
+    UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+    return UserModel.fromFirebaseUser(userCredential.user!);
+  }
 }

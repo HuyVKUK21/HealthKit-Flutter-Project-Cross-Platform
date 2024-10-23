@@ -1,5 +1,6 @@
-import 'package:fitnessapp/events/register/register_event.dart';
-import 'package:fitnessapp/presentation/bloc/register/register_state.dart';
+
+import 'package:fitnessapp/events/user/user_event.dart';
+import 'package:fitnessapp/presentation/state/user/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/register/register_bloc.dart';
@@ -160,7 +161,7 @@ class _LoginFormState extends State<SignUpForm> {
         ElevatedButton(
           onPressed: () {
             context.read<RegisterBloc>().add(
-              RegisterButtonPressed(email: _emailController.text, password: _passwordController.text)
+                ButtonSubmitPressed(email: _emailController.text, password: _passwordController.text)
             );
           },
           style: ElevatedButton.styleFrom(
