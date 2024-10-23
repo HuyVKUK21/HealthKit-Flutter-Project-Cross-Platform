@@ -1,4 +1,9 @@
+
+import 'package:fitnessapp/events/user/user_event.dart';
+import 'package:fitnessapp/presentation/state/user/user_state.dart';
+import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -10,11 +15,34 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   bool obscureText = true;
 
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return BlocListener<SignInBloc, RegisterState>(
+        listener: (context, state) {
+      if (state is RegisterLoading) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Đang đăng nhập'))
+        );
+      }
+      else if (state is RegisterSuccess) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Đăng nhập thành công'))
+        );
+      }
+      else if (state is RegisterFailure) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(
+                'Đăng nhập không thành công. Lỗi ${state.error}'))
+        );
+      }
+    },
+
+      child: Column(
       children: [
         TextField(
+          controller: _emailController,
           decoration: InputDecoration(
             hintText: 'Email hoặc tên người dùng',
             hintStyle: TextStyle(fontSize: 14),
@@ -30,6 +58,7 @@ class _LoginFormState extends State<LoginForm> {
         ),
         SizedBox(height: 16),
         TextField(
+          controller: _passwordController,
           obscureText: obscureText,
           decoration: InputDecoration(
             hintText: 'Mật khẩu',
@@ -66,7 +95,11 @@ class _LoginFormState extends State<LoginForm> {
         ),
         SizedBox(height: 16),
         ElevatedButton(
-          onPressed: () {},
+          onPressed: () {
+            context.read<SignInBloc>().add(
+                ButtonSubmitPressed(email: _emailController.text, password: _passwordController.text)
+            );
+          },
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(0xFF118036),
             minimumSize: Size(double.infinity, 50),
@@ -82,6 +115,7 @@ class _LoginFormState extends State<LoginForm> {
           ),
         ),
       ],
+      )
     );
   }
 }

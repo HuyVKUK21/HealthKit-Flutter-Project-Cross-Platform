@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitnessapp/presentation/bloc/register/register_bloc.dart';
+import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';
+import 'package:fitnessapp/presentation/screens/login/login_screen.dart';
 import 'package:fitnessapp/presentation/screens/signup/signup_screen.dart';
 import 'package:fitnessapp/routes.dart';
 import 'package:fitnessapp/service_locator.dart';
@@ -40,8 +42,8 @@ class MyApp extends StatelessWidget {
         fontFamily: "Poppins",
       ),
       home: BlocProvider(
-        create: (context) => getIt<RegisterBloc>(),
-        child: const SignupScreen(),
+        create: (context) => getIt<SignInBloc>(),
+        child: const LoginScreen(),
       ),
     );
   }
