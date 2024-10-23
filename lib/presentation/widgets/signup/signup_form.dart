@@ -58,22 +58,10 @@ class _LoginFormState extends State<SignUpForm> {
         ),
         SizedBox(height: 16),
         TextField(
-          obscureText: obscureText,
           decoration: InputDecoration(
             hintText: 'Tuổi',
             hintStyle: TextStyle(fontSize: 14),
-            prefixIcon: Icon(Icons.calendar_month, color: Color(0xFF787878)),
-            suffixIcon: GestureDetector(
-              onTap: () {
-                setState(() {
-                  obscureText = !obscureText;
-                });
-              },
-              child: Icon(
-                obscureText ? Icons.visibility_off : Icons.visibility,
-                color: Color(0xFF787878),
-              ),
-            ),
+            prefixIcon: Icon(Icons.calendar_month_rounded, color: Color(0xFF787878)),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide(
