@@ -14,4 +14,8 @@ class UserUseCase {
   Future<UserEntity> callSignIn(String email, String password) async {
     return await _userRepository.signIn(email, password);
   }
+
+  Future<UserEntity> callsignInWithGoogle() async {
+    return await _userRepository.signInWithGoogle();
+  }
 }

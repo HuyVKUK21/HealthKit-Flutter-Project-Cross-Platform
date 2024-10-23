@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 class SocialLoginButtons extends StatelessWidget {
-  const SocialLoginButtons({super.key});
+  final VoidCallback onGoogleSignIn;
+
+  const SocialLoginButtons({
+    super.key,
+    required this.onGoogleSignIn,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,24 +17,29 @@ class SocialLoginButtons extends StatelessWidget {
             Expanded(child: Divider()),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text("Hoặc", style: TextStyle(color: Color(0xFF787878)),),
+              child: Text(
+                "Hoặc",
+                style: TextStyle(color: Color(0xFF787878)),
+              ),
             ),
             Expanded(child: Divider()),
           ],
         ),
         SizedBox(height: 18),
         SocialButton(
-          text: "Đăng nhập với",
+          text: "Đăng nhập với ",
           imageLogo: Image.asset('assets/images/facebook_logo.png', width: 80),
           color: Colors.white,
-          onPressed: () {},
+          onPressed: () {
+
+          },
         ),
         SizedBox(height: 18),
         SocialButton(
-          text: "Đăng nhập với",
+          text: "Đăng nhập với ",
           imageLogo: Image.asset('assets/images/google_logo.png', width: 80),
           color: Colors.white,
-          onPressed: () {},
+          onPressed: onGoogleSignIn,
         ),
       ],
     );
@@ -42,7 +52,8 @@ class SocialButton extends StatelessWidget {
   final Color color;
   final VoidCallback onPressed;
 
-  const SocialButton({super.key,
+  const SocialButton({
+    super.key,
     required this.text,
     required this.imageLogo,
     required this.color,
@@ -65,7 +76,10 @@ class SocialButton extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(text, style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600)),
+          Text(
+            text,
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+          ),
           SizedBox(width: 8),
           imageLogo,
         ],

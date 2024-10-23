@@ -5,4 +5,5 @@ import 'package:injectable/injectable.dart';
 abstract class UserRepository {
   Future<UserEntity> register(String email, String password);
   Future<UserEntity> signIn(String email, String password);
+  Future<UserEntity> signInWithGoogle();
 }
