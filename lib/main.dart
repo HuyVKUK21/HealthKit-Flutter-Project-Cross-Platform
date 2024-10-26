@@ -26,24 +26,29 @@ void main() async {
   runApp(const MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Fitness',
-      debugShowCheckedModeBanner: false,
-      routes: routes,
-      theme: ThemeData(
-        primaryColor: AppColors.primaryColor1,
-        useMaterial3: true,
-        fontFamily: "Poppins",
-      ),
-      home: BlocProvider(
-        create: (context) => getIt<SignInBloc>(),
-        child: const LoginScreen(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SignInBloc>(
+          create: (context) => getIt<SignInBloc>(),
+        ),
+        BlocProvider<RegisterBloc>(
+          create: (context) => getIt<RegisterBloc>(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        routes: routes,
+        theme: ThemeData(
+          primaryColor: AppColors.primaryColor1,
+          useMaterial3: true,
+          fontFamily: "Poppins",
+        ),
+        home: const LoginScreen(),
       ),
     );
   }

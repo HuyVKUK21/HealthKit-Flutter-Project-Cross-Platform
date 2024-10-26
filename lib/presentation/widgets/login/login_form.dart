@@ -1,5 +1,8 @@
 import 'package:fitnessapp/events/user/user_event.dart';
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';
+import 'package:fitnessapp/presentation/screens/dashboard/dashboard_screen.dart';
+import 'package:fitnessapp/presentation/screens/signup/signup_screen.dart';
+import 'package:fitnessapp/presentation/screens/welcome/welcome_screen.dart';
 import 'package:fitnessapp/presentation/state/user/user_state.dart';
 import 'package:fitnessapp/presentation/widgets/login/social_login_button.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +24,15 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return BlocListener<SignInBloc, RegisterState>(
       listener: (context, state) {
+        print("Current state: $state");
         if (state is RegisterLoading) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Đang đăng nhập')));
         } else if (state is RegisterSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Đăng nhập thành công')));
+          Navigator.pushReplacementNamed(context, DashboardScreen.routeName);
         } else if (state is RegisterFailure) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Đăng nhập không thành công. Lỗi ${state.error}')));
+          Navigator.pushReplacementNamed(context, '/welcome');
         }
       },
       child: Column(
