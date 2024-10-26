@@ -1,7 +1,9 @@
 
 import 'package:fitnessapp/events/user/user_event.dart';
+import 'package:fitnessapp/presentation/screens/dashboard/dashboard_screen.dart';
 import 'package:fitnessapp/presentation/screens/login/login_screen.dart';
 import 'package:fitnessapp/presentation/state/user/user_state.dart';
+import 'package:fitnessapp/utils/page_route_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/register/register_bloc.dart';
@@ -33,7 +35,10 @@ class _LoginFormState extends State<SignUpForm> {
             ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Đăng ký thành công'))
             );
-            Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+            Navigator.pushReplacement(
+              context,
+              RouteHelper.createFadeRoute(LoginScreen()),
+            );
           }
           else if (state is RegisterFailure) {
             ScaffoldMessenger.of(context).showSnackBar(

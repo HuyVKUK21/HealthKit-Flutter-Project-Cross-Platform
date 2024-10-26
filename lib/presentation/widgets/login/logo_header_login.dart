@@ -1,4 +1,5 @@
 import 'package:fitnessapp/presentation/screens/signup/signup_screen.dart';
+import 'package:fitnessapp/utils/page_route_builder.dart';
 import 'package:flutter/material.dart';
 
 class LogoHeader extends StatelessWidget {
@@ -32,7 +33,10 @@ class LogoHeader extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                Navigator.pushNamed(context, SignupScreen.routeName);
+                Navigator.pushReplacement(
+                  context,
+                  RouteHelper.createFadeRoute(SignupScreen()),
+                );
               },
               child: Text(
                 "Đăng ký",
