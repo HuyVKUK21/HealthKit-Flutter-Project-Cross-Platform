@@ -10,21 +10,19 @@ class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                children: [
-                  LogoHeader(),
-                  SizedBox(height: 40),
-                  LoginForm(),
-                  SizedBox(height: 20),
-                  TermsAndPolicy(),
-                ],
-              ),
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              children: [
+                LogoHeader(),
+                SizedBox(height: 40),
+                LoginForm(),
+                SizedBox(height: 20),
+                TermsAndPolicy(),
+              ],
             ),
           ),
         ),

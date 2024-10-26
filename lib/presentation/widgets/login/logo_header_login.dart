@@ -1,3 +1,4 @@
+import 'package:fitnessapp/presentation/screens/signup/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 class LogoHeader extends StatelessWidget {
@@ -29,14 +30,20 @@ class LogoHeader extends StatelessWidget {
 
               ],
             ),
-            Text(
-              "Đăng ký",
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF043723),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, SignupScreen.routeName);
+              },
+              child: Text(
+                "Đăng ký",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF043723),
+                ),
               ),
-            ),
+            )
+
           ],
         ),
         SizedBox(height: 12),

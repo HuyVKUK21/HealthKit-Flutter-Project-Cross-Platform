@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 
 class WelcomeScreen extends StatelessWidget {
-  static String routeName = "/WelcomeScreen";
+  static String routeName = "/welcome";
 
   const WelcomeScreen({Key? key}) : super(key: key);
 
