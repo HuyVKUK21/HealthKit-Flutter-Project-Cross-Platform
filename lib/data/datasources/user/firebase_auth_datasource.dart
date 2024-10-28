@@ -21,16 +21,13 @@ class FirebaseAuthDataSource {
   }
 
   Future<UserModel> signInWithGoogle() async {
-    // Bước 1: Đăng nhập bằng Google
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
     if (googleUser == null) {
       throw Exception('Đăng nhập bị hủy.');
     }
 
-    // Bước 2: Lấy thông tin xác thực
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
-    // Bước 3: Tạo đối tượng UserCredential từ thông tin xác thực
     final UserCredential userCredential = await _firebaseAuth.signInWithCredential(
       GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -38,7 +35,6 @@ class FirebaseAuthDataSource {
       ),
     );
 
-    // Bước 4: Chuyển đổi UserCredential thành UserModel
     return UserModel.fromFirebaseUser(userCredential.user!);
   }
 }

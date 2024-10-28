@@ -1,12 +1,8 @@
-
 import 'dart:io';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:fitnessapp/presentation/bloc/register/register_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';
-import 'package:fitnessapp/presentation/screens/login/login_screen.dart';
-import 'package:fitnessapp/presentation/screens/signup/signup_screen.dart';
+import 'package:fitnessapp/presentation/bloc/signup/signup_bloc.dart';
+import 'package:fitnessapp/presentation/screens/signin/signin_screen.dart';
 import 'package:fitnessapp/routes.dart';
 import 'package:fitnessapp/service_locator.dart';
 import 'package:fitnessapp/utils/app_colors.dart';
@@ -36,8 +32,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<SignInBloc>(
           create: (context) => getIt<SignInBloc>(),
         ),
-        BlocProvider<RegisterBloc>(
-          create: (context) => getIt<RegisterBloc>(),
+        BlocProvider<SignupBloc>(
+          create: (context) => getIt<SignupBloc>(),
         ),
       ],
       child: MaterialApp(
@@ -48,7 +44,7 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           fontFamily: "Poppins",
         ),
-        home: const LoginScreen(),
+        home: SigninScreen(),
       ),
     );
   }
