@@ -1,8 +1,9 @@
 import 'dart:io';
 
-import 'package:fitnessapp/presentation/screens/activity/activity_screen.dart';
 import 'package:fitnessapp/presentation/screens/camera/camera_screen.dart';
+import 'package:fitnessapp/presentation/screens/health_management/health_management_screen.dart';
 import 'package:fitnessapp/presentation/screens/profile/user_profile.dart';
+import 'package:fitnessapp/presentation/widgets/health_management/health_management_widget.dart';
 import 'package:fitnessapp/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -11,7 +12,7 @@ import '../home/home_screen.dart';
 class DashboardScreen extends StatefulWidget {
   static String routeName = "/DashboardScreen";
 
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -22,7 +23,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
-    const ActivityScreen(),
+    const HealthManagementScreen(),
     const CameraScreen(),
     const UserProfile()
   ];

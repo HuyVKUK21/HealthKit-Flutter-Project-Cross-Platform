@@ -17,9 +17,8 @@ import 'package:fitnessapp/domain/repositories/user/user_repository.dart'
     as _i645;
 import 'package:fitnessapp/domain/usecases/user/user_usecase.dart' as _i635;
 import 'package:fitnessapp/firebase_module.dart' as _i139;
-import 'package:fitnessapp/presentation/bloc/register/register_bloc.dart'
-    as _i761;
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart' as _i876;
+import 'package:fitnessapp/presentation/bloc/signup/signup_bloc.dart' as _i447;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -42,10 +41,10 @@ extension GetItInjectableX on _i174.GetIt {
         firebaseAuthDataSource: gh<_i66.FirebaseAuthDataSource>()));
     gh.factory<_i635.UserUseCase>(
         () => _i635.UserUseCase(gh<_i645.UserRepository>()));
-    gh.factory<_i761.RegisterBloc>(
-        () => _i761.RegisterBloc(gh<_i635.UserUseCase>()));
     gh.factory<_i876.SignInBloc>(
         () => _i876.SignInBloc(gh<_i635.UserUseCase>()));
+    gh.factory<_i447.SignupBloc>(
+        () => _i447.SignupBloc(gh<_i635.UserUseCase>()));
     return this;
   }
 }

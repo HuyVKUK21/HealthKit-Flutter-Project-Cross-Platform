@@ -2,11 +2,11 @@
 import 'package:fitnessapp/presentation/screens/activity_tracker/activity_tracker_screen.dart';
 import 'package:fitnessapp/presentation/screens/dashboard/dashboard_screen.dart';
 import 'package:fitnessapp/presentation/screens/finish_workout/finish_workout_screen.dart';
-import 'package:fitnessapp/presentation/screens/login/login_screen.dart';
 import 'package:fitnessapp/presentation/screens/notification/notification_screen.dart';
 import 'package:fitnessapp/presentation/screens/on_boarding/on_boarding_screen.dart';
 import 'package:fitnessapp/presentation/screens/on_boarding/start_screen.dart';
 import 'package:fitnessapp/presentation/screens/profile/complete_profile_screen.dart';
+import 'package:fitnessapp/presentation/screens/signin/signin_screen.dart';
 import 'package:fitnessapp/presentation/screens/signup/signup_screen.dart';
 import 'package:fitnessapp/presentation/screens/welcome/welcome_screen.dart';
 import 'package:fitnessapp/presentation/screens/workout_schedule_view/workout_schedule_view.dart';
@@ -15,7 +15,7 @@ import 'package:flutter/cupertino.dart';
 
 final Map<String, WidgetBuilder> routes = {
   OnBoardingScreen.routeName: (context) => const OnBoardingScreen(),
-  LoginScreen.routeName: (context) => const LoginScreen(),
+  SigninScreen.routeName: (context) => const SigninScreen(),
   StartScreen.routeName: (context) => const StartScreen(),
   SignupScreen.routeName: (context) => const SignupScreen(),
   CompleteProfileScreen.routeName: (context) => const CompleteProfileScreen(),

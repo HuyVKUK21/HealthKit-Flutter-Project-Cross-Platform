@@ -6,9 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 @injectable
-class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
+class SignupBloc extends Bloc<RegisterEvent, RegisterState> {
   final UserUseCase _userUseCase;
-  RegisterBloc(this._userUseCase) : super(RegisterInitial()) {
+  SignupBloc(this._userUseCase) : super(RegisterInitial()) {
     on<ButtonSubmitPressed>((event, emit) async {
       emit(RegisterLoading());
       try {
