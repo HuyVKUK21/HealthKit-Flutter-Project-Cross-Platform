@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:fitnessapp/presentation/screens/camera/camera_screen.dart';
 import 'package:fitnessapp/presentation/screens/health_management/health_management_screen.dart';
 import 'package:fitnessapp/presentation/screens/profile/user_profile.dart';
-import 'package:fitnessapp/presentation/widgets/health_management/health_management_widget.dart';
 import 'package:fitnessapp/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -33,32 +32,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: InkWell(
-        onTap: () {},
-        child: SizedBox(
-          width: 70,
-          height: 70,
-          child: Container(
-            width: 65,
-            height: 65,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(colors: AppColors.primaryG),
-                borderRadius: BorderRadius.circular(35),
-                boxShadow: const [
-                  BoxShadow(color: Colors.black12, blurRadius: 2)
-                ]),
-            child: const Icon(Icons.search_sharp,
-                color: AppColors.whiteColor, size: 32),
-          ),
-        ),
-      ),
       body: IndexedStack(
         index: selectTab,
         children: _widgetOptions,
       ),
       bottomNavigationBar: BottomAppBar(
         height: Platform.isIOS ? 70 : 65,
-        color: Colors.transparent,
+        color: Colors.green,
         padding: const EdgeInsets.all(0),
         child: Container(
           height: Platform.isIOS ? 70 : 65,
@@ -95,7 +75,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       });
                     }
                   }),
-              const SizedBox(width: 30),
               TabButton(
                   icon: "assets/icons/camera_icon.png",
                   selectIcon: "assets/icons/camera_select_icon.png",
@@ -160,7 +139,7 @@ class TabButton extends StatelessWidget {
               width: 4,
               height: 4,
               decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: AppColors.secondaryG),
+                  color: Colors.green,
                   borderRadius: BorderRadius.circular(2)),
             ),
           )
