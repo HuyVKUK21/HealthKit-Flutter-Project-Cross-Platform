@@ -230,7 +230,7 @@ class _ActivityTrackerScreenState extends State<ActivityTrackerScreen> {
                     BarChartData(
                       barTouchData: BarTouchData(
                         touchTooltipData: BarTouchTooltipData(
-                          tooltipBgColor: Colors.grey,
+                         
                           tooltipHorizontalAlignment: FLHorizontalAlignment.right,
                           tooltipMargin: 10,
                           getTooltipItem: (group, groupIndex, rod, rodIndex) {
