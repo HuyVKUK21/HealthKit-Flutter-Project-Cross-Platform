@@ -1,6 +1,9 @@
 import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
+import '../../../utils/page_route_builder.dart';
+import '../my_medician/MyMedicineScreen.dart';
+
 class HomeScreen extends StatelessWidget {
 
   static String routeName = "/HomeScreen";
@@ -105,6 +108,19 @@ class HomeScreen extends StatelessWidget {
                     subtitle: "300 kcal • Hôm nay",
                     points: "167",
                   ),
+                  HealthMetricCard(
+                    icon: Icons.medical_information,
+                    color: Colors.grey,
+                    title: "Thuốc của tôi",
+                    subtitle: "Hôm nay",
+                    points: "0",
+                    onTap: () => {
+                      Navigator.pushReplacement(
+                        context,
+                        RouteHelper.createFadeRoute(MyMedicineScreen()),
+                      )
+                    },
+                  ),
                   SizedBox(height: 20),
                   // Health Goals Section
                   Text(
@@ -174,6 +190,7 @@ class HealthMetricCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final String points;
+  final VoidCallback? onTap;
 
   HealthMetricCard({
     required this.icon,
@@ -181,58 +198,62 @@ class HealthMetricCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.points,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            CircleAvatar(
-              backgroundColor: color.withOpacity(0.1),
-              child: Icon(icon, color: color),
-            ),
-            SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
+    return GestureDetector(
+      onTap: onTap, // Handle tap event
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: color.withOpacity(0.1),
+                child: Icon(icon, color: color),
               ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              child: Text(
-                points,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+              SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      subtitle,
+                      style: TextStyle(
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ],
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                child: Text(
+                  points,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -2,6 +2,8 @@
 import 'package:fitnessapp/presentation/screens/activity_tracker/activity_tracker_screen.dart';
 import 'package:fitnessapp/presentation/screens/dashboard/dashboard_screen.dart';
 import 'package:fitnessapp/presentation/screens/finish_workout/finish_workout_screen.dart';
+import 'package:fitnessapp/presentation/screens/home/home_screen.dart';
+import 'package:fitnessapp/presentation/screens/my_medician/MyMedicineScreen.dart';
 import 'package:fitnessapp/presentation/screens/notification/notification_screen.dart';
 import 'package:fitnessapp/presentation/screens/on_boarding/on_boarding_screen.dart';
 import 'package:fitnessapp/presentation/screens/on_boarding/start_screen.dart';
@@ -26,4 +28,5 @@ final Map<String, WidgetBuilder> routes = {
   NotificationScreen.routeName: (context) => const NotificationScreen(),
   ActivityTrackerScreen.routeName: (context) => const ActivityTrackerScreen(),
   WorkoutScheduleView.routeName: (context) => const WorkoutScheduleView(),
+  HomeScreen.routeName: (context) => MyMedicineScreen(),
 };
