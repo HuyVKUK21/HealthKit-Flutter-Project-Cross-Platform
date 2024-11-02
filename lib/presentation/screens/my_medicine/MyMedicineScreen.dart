@@ -1,8 +1,10 @@
+import 'package:fitnessapp/presentation/screens/my_medicine/EditMedicineScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/MedicineModel.dart';
+import '../../../utils/page_route_builder.dart';
 import '../../widgets/appbar/custom_app_bar.dart';
+import '../../widgets/my_medicine/medicine_card.dart';
 
 class MyMedicineScreen extends StatefulWidget {
   static String routeName = "/MyMedicineScreen";
@@ -16,13 +18,13 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
   final List<String> weekdays = ["CN", "TH 2", "TH 3", "TH 4", "TH 5", "TH 6", "TH 7"];
   final ScrollController _scrollController = ScrollController();
 
-  // test data sau mới áp dụng firebase
   List<Medicine> yourListOfMedicineData() {
     return [
       Medicine(
-        medicineName: "A.t Ibuprofen",
-        dosageTime: "8:00",
-        remainingDoses: "29",
+          medicineName: "A.t Ibuprofen",
+          dosageTime: "8:00",
+          remainingDoses: "29",
+          usageStatus: true,
       ),
       Medicine(
         medicineName: "Paracetamol",
@@ -45,7 +47,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
 
   void _scrollToCurrentDay() {
     double screenWidth = MediaQuery.of(context).size.width;
-    double position = (today.weekday - 1) * 58.0 - (screenWidth / 2) + 29.0; // Adjust to center the current day
+    double position = (today.weekday - 1) * 58.0 - (screenWidth / 2) + 29.0; // Center the current day
     _scrollController.animateTo(
       position,
       duration: Duration(milliseconds: 500),
@@ -131,12 +133,15 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
               children: [
                 ...yourListOfMedicineData().map((medicine) {
                   return MedicineCard(
-                    medicineName: medicine.medicineName,
-                    dosageTime: medicine.dosageTime,
-                    remainingDoses: medicine.remainingDoses,
-                    onEditPressed: () {
-                      _showMedicineDialog(context, medicine.medicineName, medicine.dosageTime);
-                    },
+                      medicineName: medicine.medicineName,
+                      dosageTime: medicine.dosageTime,
+                      remainingDoses: medicine.remainingDoses,
+                      offStatus: false,
+                      usageStatus: medicine.usageStatus,
+                      iconRight: "check",
+                      onEditPressed: () {
+                        _showMedicineDialog(context, medicine.medicineName, medicine.dosageTime);
+                      },
                   );
                 }).toList(),
                 SizedBox(height: 16.0), // Spacing after the list
@@ -149,7 +154,12 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                       ),
                       padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 24.0),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          RouteHelper.createFadeRoute(EditMedicineScreen())
+                      );
+                    },
                     icon: Icon(Icons.edit, color: Colors.white),
                     label: Text(
                       "Chỉnh sửa hộp thuốc",
@@ -165,70 +175,6 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
     );
   }
 }
-
-class MedicineCard extends StatelessWidget {
-  final String medicineName;
-  final String dosageTime;
-  final String remainingDoses;
-  final VoidCallback onEditPressed;
-
-  const MedicineCard({
-    Key? key,
-    required this.medicineName,
-    required this.dosageTime,
-    required this.remainingDoses,
-    required this.onEditPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onEditPressed,
-      child: Container(
-        padding: EdgeInsets.all(16.0),
-        margin: EdgeInsets.symmetric(vertical: 4.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.0),
-          border: Border.all(color: Colors.green),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                radius: 24,
-                child: Icon(Icons.medication, color: Colors.black),
-              ),
-            ),
-            SizedBox(width: 16.0),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    medicineName,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 4.0),
-                  Text("Đã uống vào lúc $dosageTime", style: TextStyle(fontSize: 14)),
-                  Text("$remainingDoses lần dùng còn lại", style: TextStyle(fontSize: 14)),
-                ],
-              ),
-            ),
-            Container(
-                margin: EdgeInsets.symmetric(vertical: 20.0),
-                child: Icon(Icons.check_circle, color: Colors.green, size: 28)
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
 
 void _showMedicineDialog(BuildContext context, String medicineName, String dosageTime) {
   showDialog(
@@ -267,8 +213,8 @@ void _showMedicineDialog(BuildContext context, String medicineName, String dosag
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50.0),
-                    side: BorderSide(color: Colors.black, width: 1.0)
+                      borderRadius: BorderRadius.circular(50.0),
+                      side: BorderSide(color: Colors.black, width: 1.0)
                   ),
                   padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                 ),
@@ -287,4 +233,3 @@ void _showMedicineDialog(BuildContext context, String medicineName, String dosag
     },
   );
 }
-
