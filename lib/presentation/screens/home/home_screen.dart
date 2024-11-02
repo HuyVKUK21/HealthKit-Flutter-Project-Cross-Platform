@@ -2,7 +2,7 @@ import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/page_route_builder.dart';
-import '../my_medician/MyMedicineScreen.dart';
+import '../my_medicine/MyMedicineScreen.dart';
 
 class HomeScreen extends StatelessWidget {
   static String routeName = "/HomeScreen";
