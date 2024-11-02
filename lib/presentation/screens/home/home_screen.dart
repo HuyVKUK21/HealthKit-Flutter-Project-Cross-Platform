@@ -1,6 +1,9 @@
 import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
+import '../../../utils/page_route_builder.dart';
+import '../my_medician/MyMedicineScreen.dart';
+
 class HomeScreen extends StatelessWidget {
   static String routeName = "/HomeScreen";
 
@@ -91,6 +94,7 @@ class HomeScreen extends StatelessWidget {
                       title: "Nhịp tim",
                       subtitle: "78 bpm • Hôm nay",
                       points: "56",
+                      measure: true,
                     ),
                     HealthMetricCard(
                       icon: 'assets/images/home-weight.png',
@@ -98,13 +102,29 @@ class HomeScreen extends StatelessWidget {
                       title: "Cân nặng",
                       subtitle: "68 kg • Hôm qua",
                       points: "114",
+                      measure: true,
                     ),
                     HealthMetricCard(
                       icon: 'assets/images/calories-icon.png',
                       color: Colors.orange,
                       title: "Lượng Calo",
                       subtitle: "300 kcal • Hôm nay",
-                      points: "167",
+                      points: "168",
+                      measure: true,
+                    ),
+                    HealthMetricCard(
+                      icon: 'assets/images/calories-icon.png',
+                      color: Colors.grey,
+                      title: "Thuốc của tôi",
+                      subtitle: "Hôm nay",
+                      points: "0",
+                      measure: false,
+                      onTap: () => {
+                        Navigator.pushReplacement(
+                          context,
+                          RouteHelper.createFadeRoute(MyMedicineScreen()),
+                        )
+                      },
                     ),
                     SizedBox(height: 20),
                     // Health Goals Section
@@ -176,6 +196,8 @@ class HealthMetricCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final String points;
+  final bool measure;
+  final VoidCallback? onTap;
 
   HealthMetricCard({
     super.key,
@@ -184,74 +206,83 @@ class HealthMetricCard extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.points,
+    required this.measure,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Card(
-          color: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-            side: BorderSide(color: Color(0xFFBCBCBC), width: 0.6),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Image.asset(
-                  icon,
-                  width: 48,
-                  height: 48,
-                  fit: BoxFit.cover,
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
+    return GestureDetector(
+        onTap: onTap,
+        child: Column(
+          children: [
+            Card(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+                side: BorderSide(color: Color(0xFFBCBCBC), width: 0.6),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      icon,
+                      width: 48,
+                      height: 48,
+                      fit: BoxFit.cover,
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            subtitle,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (onTap != null) {
+                            onTap!();
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF118036),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          elevation: 4,
+                          shadowColor: Color(0xFF118036),
+                        ),
+                        child: Text(
+                          measure == true ? "Đo ngay" : "Xem",
+                          style: TextStyle(fontSize: 14, color: Colors.white),
                         ),
                       ),
-                      Text(
-                        subtitle,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF118036),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      elevation: 6,
-                      shadowColor: Color(0xFF118036),
                     ),
-                    child: Text(
-                      "Đo ngay",
-                      style: TextStyle(fontSize: 14, color: Colors.white),
-                    ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-        SizedBox(height: 10), // Khoảng cách dưới cùng của Card
-      ],
+            SizedBox(height: 10), // Khoảng cách dưới cùng của Card
+          ],
+        )
     );
   }
 
