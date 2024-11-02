@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
-
 import '../../../data/models/MedicineModel.dart';
 import '../../widgets/appbar/custom_app_bar.dart';
 
