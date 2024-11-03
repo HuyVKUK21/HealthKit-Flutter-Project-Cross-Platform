@@ -1,361 +1,189 @@
-import 'package:animated_toggle_switch/animated_toggle_switch.dart';
-import 'package:fitnessapp/presentation/common_widgets/round_button.dart';
-import 'package:fitnessapp/presentation/widgets/profile/setting_row.dart';
-import 'package:fitnessapp/presentation/widgets/profile/title_subtitle_cell.dart';
-import 'package:fitnessapp/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
-
-class UserProfile extends StatefulWidget {
-  const UserProfile({Key? key}) : super(key: key);
-
-  @override
-  State<UserProfile> createState() => _UserProfileState();
-}
-
-class _UserProfileState extends State<UserProfile> {
-
-  bool positive = false;
-
-  List accountArr = [
-    {"image": "assets/icons/p_personal.png", "name": "Dữ liệu người dùng", "tag": "1"},
-    {"image": "assets/icons/p_achi.png", "name": "Số theo dõi", "tag": "2"},
-    {
-      "image": "assets/icons/p_activity.png",
-      "name": "Theo dõi hoạt động",
-      "tag": "3"
-    },
-    {
-      "image": "assets/icons/p_workout.png",
-      "name": "Tiến trình hoạt động",
-      "tag": "4"
-    }
-  ];
-
-  List otherArr = [
-    {"image": "assets/icons/p_contact.png", "name": "Liên hệ với Chúng tôi", "tag": "5"},
-    {"image": "assets/icons/p_privacy.png", "name": "Chính sách Bảo mật", "tag": "6"},
-    {"image": "assets/icons/p_setting.png", "name": "Cài đặt", "tag": "7"},
-  ];
+class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
       appBar: AppBar(
-        backgroundColor: AppColors.whiteColor,
-        centerTitle: true,
-        elevation: 0,
         title: const Text(
-          "Profile",
-          style: TextStyle(
-              color: AppColors.blackColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w700),
+          'Cài đặt',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.pink,
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(Icons.close, color: Colors.white),
+          onPressed: () => Navigator.pop(context),
         ),
         actions: [
-          InkWell(
-            onTap: () {},
-            child: Container(
-              margin: const EdgeInsets.all(8),
-              height: 40,
-              width: 40,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: AppColors.lightGrayColor,
-                  borderRadius: BorderRadius.circular(10)),
-              child: Image.asset(
-                "assets/icons/more_icon.png",
-                width: 12,
-                height: 12,
-                fit: BoxFit.contain,
-              ),
-            ),
-          )
+          IconButton(
+            icon: const Icon(Icons.qr_code, color: Colors.white),
+            onPressed: () {
+              // Xử lý QR code action
+            },
+          ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
-                    child: Image.asset(
-                      "assets/images/user.png",
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Phạm Quốc Huy",
-                          style: TextStyle(
-                            color: AppColors.blackColor,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        Text(
-                          "Tập luyện giảm cân",
-                          style: TextStyle(
-                            color: AppColors.grayColor,
-                            fontSize: 12,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 100,
-                    height: 25,
-                    child: RoundButton(
-                      title: "Cập nhật",
-                      type: RoundButtonType.primaryBG,
-                      onPressed: () {
-
-                      },
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const Row(
-                children: [
-                  Expanded(
-                    child: TitleSubtitleCell(
-                      title: "187cm",
-                      subtitle: "Chiều cao",
-                    ),
-                  ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: TitleSubtitleCell(
-                      title: "87kg",
-                      subtitle: "Cân nặng",
-                    ),
-                  ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: TitleSubtitleCell(
-                      title: "21",
-                      subtitle: "Tuổi",
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              Container(
-                padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                decoration: BoxDecoration(
-                    color: AppColors.whiteColor,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black12, blurRadius: 2)
-                    ]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Account",
-                      style: TextStyle(
-                        color: AppColors.blackColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: accountArr.length,
-                      itemBuilder: (context, index) {
-                        var iObj = accountArr[index] as Map? ?? {};
-                        return SettingRow(
-                          icon: iObj["image"].toString(),
-                          title: iObj["name"].toString(),
-                          onPressed: () {},
-                        );
-                      },
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              Container(
-                padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                decoration: BoxDecoration(
-                    color: AppColors.whiteColor,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black12, blurRadius: 2)
-                    ]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Thông báo",
-                      style: TextStyle(
-                        color: AppColors.blackColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    SizedBox(
-                      height: 30,
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset("assets/icons/p_notification.png",
-                                height: 15, width: 15, fit: BoxFit.contain),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Expanded(
-                              child: Text(
-                                "Cho phép Thông báo",
-                                style: TextStyle(
-                                  color: AppColors.blackColor,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                            CustomAnimatedToggleSwitch<bool>(
-                              current: positive,
-                              values: [false, true],
-                              // dif: 0.0,
-                              indicatorSize: Size.square(30.0),
-                              animationDuration:
-                              const Duration(milliseconds: 200),
-                              animationCurve: Curves.linear,
-                              onChanged: (b) => setState(() => positive = b),
-                              iconBuilder: (context, local, global) {
-                                return const SizedBox();
-                              },
-                              // defaultCursor: SystemMouseCursors.click,
-                              // onTap: () => setState(() => positive = !positive),
-                              iconsTappable: false,
-                              wrapperBuilder: (context, global, child) {
-                                return Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Positioned(
-                                        left: 10.0,
-                                        right: 10.0,
-
-                                        height: 30.0,
-                                        child: DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            gradient: LinearGradient(
-                                                colors: AppColors.secondaryG),
-                                            borderRadius:
-                                            const BorderRadius.all(
-                                                Radius.circular(30.0)),
-                                          ),
-                                        )),
-                                    child,
-                                  ],
-                                );
-                              },
-                              foregroundIndicatorBuilder: (context, global) {
-                                return SizedBox.fromSize(
-                                  size: const Size(10, 10),
-                                  child: DecoratedBox(
-                                    decoration: BoxDecoration(
-                                      color: AppColors.whiteColor,
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(50.0)),
-                                      boxShadow: const [
-                                        BoxShadow(
-                                            color: Colors.black38,
-                                            spreadRadius: 0.05,
-                                            blurRadius: 1.1,
-                                            offset: Offset(0.0, 0.8))
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          ]),
-                    )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              Container(
-                padding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                decoration: BoxDecoration(
-                    color: AppColors.whiteColor,
-                    borderRadius: BorderRadius.circular(15),
-                    boxShadow: const [
-                      BoxShadow(color: Colors.black12, blurRadius: 2)
-                    ]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Other",
-                      style: TextStyle(
-                        color: AppColors.blackColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    ListView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      shrinkWrap: true,
-                      itemCount: otherArr.length,
-                      itemBuilder: (context, index) {
-                        var iObj = otherArr[index] as Map? ?? {};
-                        return SettingRow(
-                          icon: iObj["image"].toString(),
-                          title: iObj["name"].toString(),
-                          onPressed: () {},
-                        );
-                      },
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
+      body: Container(
+        color: Colors.grey[200],
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
+            const ProfileSection(),
+            const SizedBox(height: 24.0),
+            SettingsCategory(
+              title: 'Chung',
+              items: const [
+                SettingsItem(icon: Icons.person, title: 'Hồ sơ'),
+                SettingsItem(icon: Icons.info, title: 'Phiên bản ứng dụng'),
+                SettingsItem(icon: Icons.cloud, title: 'Tài khoản & dữ liệu'),
+                SettingsItem(icon: Icons.language, title: 'Ngôn ngữ'),
+                SettingsItem(icon: Icons.public, title: 'Quốc gia'),
+              ],
+            ),
+            const SizedBox(height: 24.0),
+            SettingsCategory(
+              title: 'Sức khoẻ',
+              items: const [
+                SettingsItem(icon: Icons.health_and_safety, title: 'Tình trạng sức khoẻ'),
+                SettingsItem(icon: Icons.schedule, title: 'Kế hoạch sức khoẻ'),
+                SettingsItem(icon: Icons.local_hospital, title: 'Bệnh viện / Bác sĩ'),
+                SettingsItem(icon: Icons.fitness_center, title: 'Đơn vị'),
+                SettingsItem(icon: Icons.book, title: 'Hướng dẫn sức khoẻ'),
+              ],
+            ),
+            const SizedBox(height: 24.0),
+            SettingsCategory(
+              title: 'Quyền truy cập',
+              items: const [
+                SettingsItem(icon: Icons.notifications, title: 'Thông báo'),
+                SettingsItem(icon: Icons.health_and_safety, title: 'Ứng dụng sức khoẻ'),
+                SettingsItem(icon: Icons.bluetooth, title: 'Thiết bị Bluetooth'),
+              ],
+            ),
+            const SizedBox(height: 24.0),
+            SettingsCategory(
+              title: 'Giới thiệu',
+              items: const [
+                SettingsItem(icon: Icons.info, title: 'Về chúng tôi'),
+                SettingsItem(icon: Icons.help_outline, title: 'Giới thiệu về Ngày Đầu Tiên'),
+                SettingsItem(icon: Icons.rule, title: 'Điều khoản và điều kiện'),
+                SettingsItem(icon: Icons.privacy_tip, title: 'Chính sách bảo mật'),
+                SettingsItem(icon: Icons.games, title: 'Quy tắc Trò chơi hoá'),
+                SettingsItem(icon: Icons.cookie, title: 'Chính sách Cookie'),
+                SettingsItem(icon: Icons.logout, title: 'Đăng xuất'),
+              ],
+            ),
+          ],
         ),
       ),
+    );
+  }
+}
+
+class ProfileSection extends StatelessWidget {
+  const ProfileSection({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(color: Colors.grey.withOpacity(0.4), blurRadius: 4, offset: Offset(0, 2)),
+        ],
+      ),
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          const CircleAvatar(
+            radius: 40,
+            backgroundImage: AssetImage('assets/profile_picture.png'),
+          ),
+          const SizedBox(height: 8.0),
+          const Text(
+            'Phó',
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.pink),
+          ),
+          const Text(
+            'Thành viên',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+          const SizedBox(height: 16.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Cấp độ: 5',
+                style: TextStyle(fontSize: 16, color: Colors.pink[300]),
+              ),
+              const SizedBox(width: 16.0),
+              Text(
+                'Hoàn thành: 70%',
+                style: TextStyle(fontSize: 16, color: Colors.pink[300]),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SettingsCategory extends StatelessWidget {
+  final String title;
+  final List<SettingsItem> items;
+
+  const SettingsCategory({required this.title, required this.items, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(color: Colors.grey.withOpacity(0.4), blurRadius: 6, offset: const Offset(0, 2)),
+        ],
+      ),
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              title,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ),
+          ...items.map((item) => Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4.0),
+            child: item,
+          )).toList(),
+        ],
+      ),
+    );
+  }
+}
+
+class SettingsItem extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final VoidCallback? onTap;
+
+  const SettingsItem({required this.icon, required this.title, this.onTap, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.purple),
+      title: Text(title, style: const TextStyle(fontSize: 16)),
+      trailing: const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+      onTap: onTap,
     );
   }
 }
