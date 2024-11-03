@@ -1,4 +1,4 @@
-import 'package:fitnessapp/presentation/screens/my_medicine/EditMedicineScreen.dart';
+import 'package:fitnessapp/presentation/screens/my_medicine/ViewMedicineScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/MedicineModel.dart';
@@ -18,23 +18,35 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
   final List<String> weekdays = ["CN", "TH 2", "TH 3", "TH 4", "TH 5", "TH 6", "TH 7"];
   final ScrollController _scrollController = ScrollController();
 
+  // demo
   List<Medicine> yourListOfMedicineData() {
     return [
       Medicine(
-          medicineName: "A.t Ibuprofen",
-          dosageTime: "8:00",
-          remainingDoses: "29",
-          usageStatus: true,
+        medicineName: "A.t Ibuprofen 1",
+        dosageTime: "8:00",
+        remainingDoses: "30",
+        drugForm: "Viên",
+        frequencyUse: 1,
+        offStatus: false,
+        usageStatus: true,
       ),
       Medicine(
-        medicineName: "Paracetamol",
-        dosageTime: "12:00",
-        remainingDoses: "15",
-      ),
-      Medicine(
-        medicineName: "A.t Ibuprofen",
+        medicineName: "A.t Ibuprofen 2",
         dosageTime: "8:00",
         remainingDoses: "29",
+        drugForm: "Viên",
+        frequencyUse: 1,
+        offStatus: false,
+        usageStatus: false,
+      ),
+      Medicine(
+        medicineName: "A.t Ibuprofen 3",
+        dosageTime: "8:00",
+        remainingDoses: "29",
+        drugForm: "Viên",
+        frequencyUse: 1,
+        offStatus: true,
+        usageStatus: false,
       ),
     ];
   }
@@ -129,10 +141,14 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
           SizedBox(height: 16.0),
           Expanded(
             child: ListView(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
               children: [
-                ...yourListOfMedicineData().map((medicine) {
-                  return MedicineCard(
+                ...yourListOfMedicineData()
+                    .where((medicine) => medicine.offStatus == false)
+                    .map((medicine) {
+                  return  MedicineCard(
                       medicineName: medicine.medicineName,
                       dosageTime: medicine.dosageTime,
                       remainingDoses: medicine.remainingDoses,
@@ -143,7 +159,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                         _showMedicineDialog(context, medicine.medicineName, medicine.dosageTime);
                       },
                   );
-                }).toList(),
+                }),
                 SizedBox(height: 16.0), // Spacing after the list
                 Center(
                   child: ElevatedButton.icon(
@@ -157,7 +173,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                     onPressed: () {
                       Navigator.pushReplacement(
                           context,
-                          RouteHelper.createFadeRoute(EditMedicineScreen())
+                          RouteHelper.createFadeRoute(ViewMedicineScreen())
                       );
                     },
                     icon: Icon(Icons.edit, color: Colors.white),
