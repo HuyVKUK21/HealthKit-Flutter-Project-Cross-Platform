@@ -1,5 +1,9 @@
 import 'package:fitnessapp/presentation/screens/foot_step/main_foot_step.dart';
 import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
+import 'package:fitnessapp/presentation/widgets/home/activity_reminder_card.dart';
+import 'package:fitnessapp/presentation/widgets/home/goal_card.dart';
+import 'package:fitnessapp/presentation/widgets/home/greet_with_temperature.dart';
+import 'package:fitnessapp/presentation/widgets/home/health_metric_card.dart';
 import 'package:flutter/material.dart';
 
 import '../../../utils/page_route_builder.dart';
@@ -22,46 +26,8 @@ class HomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Xin chào, Huy!',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
-                        ),
-                      ),
-                      Text(
-                        'Chào mừng bạn đến với HealthKit',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Icon(Icons.wb_sunny, color: Colors.orange),
-                      SizedBox(width: 5),
-                      Text(
-                        '28°C',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              GreetWithTemperature(greetingMessage: "Xin chào, Huy!", welcomeMessage: "Chào mừng bạn đến với HealthKit", temperature: 21),
               SizedBox(height: 20),
-              // Search bar (Fixed section)
               TextField(
                 decoration: InputDecoration(
                   prefixIcon: Icon(Icons.search, size: 14),
@@ -76,11 +42,9 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-
               Expanded(
                 child: ListView(
                   children: [
-                    // Health Metrics Section
                     Text(
                       "Hoạt động sức khỏe",
                       style: TextStyle(
@@ -90,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     HealthMetricCard(
-                      icon: 'assets/images/on_board2.png',
+                      icon: 'assets/images/foot_step_icon.png',
                       color: Colors.green,
                       title: "Bước đi",
                       subtitle: "180 bước • Hôm nay",
@@ -110,6 +74,7 @@ class HomeScreen extends StatelessWidget {
                       subtitle: "78 bpm • Hôm nay",
                       points: "56",
                       measure: true,
+                      onTap: (){},
                     ),
                     HealthMetricCard(
                       icon: 'assets/images/home-weight.png',
@@ -118,6 +83,7 @@ class HomeScreen extends StatelessWidget {
                       subtitle: "68 kg • Hôm qua",
                       points: "114",
                       measure: true,
+                      onTap: (){},
                     ),
                     HealthMetricCard(
                       icon: 'assets/images/calories-icon.png',
@@ -126,9 +92,10 @@ class HomeScreen extends StatelessWidget {
                       subtitle: "300 kcal • Hôm nay",
                       points: "168",
                       measure: true,
+                      onTap: (){},
                     ),
                     HealthMetricCard(
-                      icon: 'assets/images/calories-icon.png',
+                      icon: 'assets/images/medicine_icon.png',
                       color: Colors.grey,
                       title: "Thuốc của tôi",
                       subtitle: "Hôm nay",
@@ -142,7 +109,6 @@ class HomeScreen extends StatelessWidget {
                       },
                     ),
                     SizedBox(height: 20),
-                    // Health Goals Section
                     Text(
                       "Mục tiêu sức khỏe",
                       style: TextStyle(
@@ -153,24 +119,23 @@ class HomeScreen extends StatelessWidget {
                     SizedBox(height: 10),
                     GoalCard(
                       title: "Bước đi hôm nay",
-                      progress: 3500, // current progress
-                      goal: 10000, // total goal
+                      progress: 3500,
+                      goal: 10000,
                       unit: "bước",
                     ),
                     GoalCard(
                       title: "Calo tiêu thụ",
-                      progress: 400, // current progress
-                      goal: 2000, // total goal
+                      progress: 400,
+                      goal: 2000,
                       unit: "kcal",
                     ),
                     GoalCard(
                       title: "Thời gian tập luyện",
-                      progress: 30, // current progress in minutes
-                      goal: 60, // total goal in minutes
+                      progress: 30,
+                      goal: 60,
                       unit: "phút",
                     ),
                     SizedBox(height: 20),
-                    // Activity Reminders Section
                     Text(
                       "Nhắc nhở hoạt động",
                       style: TextStyle(
@@ -198,188 +163,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class HealthMetricCard extends StatelessWidget {
-  final String icon;
-  final Color color;
-  final String title;
-  final String subtitle;
-  final String points;
-  final bool measure;
-  final VoidCallback? onTap;
-
-  HealthMetricCard({
-    super.key,
-    required this.icon,
-    required this.color,
-    required this.title,
-    required this.subtitle,
-    required this.points,
-    required this.measure,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: onTap,
-        child: Column(
-          children: [
-            Card(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-                side: BorderSide(color: Color(0xFFBCBCBC), width: 0.6),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      icon,
-                      width: 48,
-                      height: 48,
-                      fit: BoxFit.cover,
-                    ),
-                    SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            subtitle,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey[600],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (onTap != null) {
-                            onTap!();
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF118036),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          elevation: 4,
-                          shadowColor: Color(0xFF118036),
-                        ),
-                        child: Text(
-                          measure == true ? "Đo ngay" : "Xem",
-                          style: TextStyle(fontSize: 14, color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 10), // Khoảng cách dưới cùng của Card
-          ],
-        ));
-  }
-}
-
-class GoalCard extends StatelessWidget {
-  final String title;
-  final int progress;
-  final int goal;
-  final String unit;
-
-  GoalCard({
-    required this.title,
-    required this.progress,
-    required this.goal,
-    required this.unit,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    double progressPercent = progress / goal;
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 10),
-            LinearProgressIndicator(
-              value: progressPercent,
-              backgroundColor: Colors.grey[300],
-              color: Colors.red,
-            ),
-            SizedBox(height: 10),
-            Text(
-              "$progress / $goal $unit",
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[600],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ActivityReminderCard extends StatelessWidget {
-  final String message;
-  final IconData icon;
-  final Color backgroundColor;
-
-  ActivityReminderCard({
-    required this.message,
-    required this.icon,
-    required this.backgroundColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: backgroundColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: ListTile(
-        leading: Icon(icon, color: Colors.white),
-        title: Text(
-          message,
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
           ),
         ),
       ),
