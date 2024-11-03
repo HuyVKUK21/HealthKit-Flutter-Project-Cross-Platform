@@ -5,7 +5,7 @@ import 'package:fitnessapp/presentation/bloc/signup/signup_bloc.dart';
 import 'package:fitnessapp/presentation/screens/signin/signin_screen.dart';
 import 'package:fitnessapp/routes.dart';
 import 'package:fitnessapp/service_locator.dart';
-import 'package:fitnessapp/utils/app_colors.dart';
+// import 'package:fitnessapp/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: routes,
         theme: ThemeData(
-          primaryColor: AppColors.primaryColor1,
+          // primaryColor: AppColors.primaryColor1,
           useMaterial3: true,
           fontFamily: "Poppins",
         ),

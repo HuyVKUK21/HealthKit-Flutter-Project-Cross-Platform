@@ -1,3 +1,4 @@
+import 'package:fitnessapp/presentation/screens/foot_step/main_foot_step.dart';
 import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -88,6 +89,20 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 10),
+                    HealthMetricCard(
+                      icon: 'assets/images/on_board2.png',
+                      color: Colors.green,
+                      title: "Bước đi",
+                      subtitle: "180 bước • Hôm nay",
+                      points: "56",
+                      measure: false,
+                      onTap: () {
+                        Navigator.pushReplacement(
+                          context,
+                          RouteHelper.createFadeRoute(MainFootStepScreen()),
+                        );
+                      },
+                    ),
                     HealthMetricCard(
                       icon: 'assets/images/heart-rate-icon.png',
                       color: Colors.red,
@@ -255,7 +270,8 @@ class HealthMetricCard extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       child: ElevatedButton(
                         onPressed: () {
                           if (onTap != null) {
@@ -282,10 +298,8 @@ class HealthMetricCard extends StatelessWidget {
             ),
             SizedBox(height: 10), // Khoảng cách dưới cùng của Card
           ],
-        )
-    );
+        ));
   }
-
 }
 
 class GoalCard extends StatelessWidget {
