@@ -1,41 +1,15 @@
+# Uncomment the next line to define a global platform for your project
 platform :ios, '14.0'
 
-ENV['COCOAPODS_DISABLE_STATS'] = 'true'
-
-use_frameworks! :linkage => :static
-
-project 'Runner', {
-  'Debug' => :debug,
-  'Profile' => :release,
-  'Release' => :release,
-}
-
-def flutter_installation
-  load File.join(__dir__, 'podhelper.rb') # Tải file podhelper.rb từ thư mục hiện tại
-end
-
 target 'Runner' do
-  flutter_installation
-
-  # Allow non-modular includes in framework modules
+  # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
-  use_modular_headers!
 
   # Pods for Runner
-  pod 'Firebase/Auth'
-  pod 'Firebase/Core'
-  pod 'Firebase/Analytics'
-  pod 'Firebase/Messaging'
 
-  # Add any additional Flutter dependencies here
-  flutter_install_all_pods File.dirname(File.realpath(__FILE__))
-end
-
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      # Allow non-modular includes in framework modules
-      config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
-    end
+  target 'RunnerTests' do
+    inherit! :search_paths
+    # Pods for testing
   end
+
 end
