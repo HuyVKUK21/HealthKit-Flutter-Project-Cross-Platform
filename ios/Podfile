@@ -5,11 +5,11 @@ ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
 # Định nghĩa hàm cài đặt Flutter Pods
 def install_all_flutter_pods
-  flutter_application_path = File.expand_path('..', File.dirname(__FILE__))
-  podhelper_path = File.join(flutter_application_path, 'Flutter', 'podhelper.rb')
+  flutter_application_path = 'D:/ThuchanhFlutter/HealthKit-Flutter-Project-Cross-Platform'
+  podhelper_path = File.join(flutter_application_path, 'ios', 'Flutter', 'podhelper.rb')
 
   if File.exist?(podhelper_path)
-    load podhelper_path
+    eval(File.read(podhelper_path), binding)
   else
     puts "Không tìm thấy podhelper.rb tại #{podhelper_path}"
     exit 1
