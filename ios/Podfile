@@ -1,34 +1,35 @@
 platform :ios, '13.0'
 
-# CocoaPods analytics disabled to reduce CI/CD build time
+# Tắt thống kê của CocoaPods để giảm thời gian build CI/CD
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
 
-# Define the missing function if not defined
+# Định nghĩa hàm cài đặt Flutter Pods
 def install_all_flutter_pods
-  flutter_application_path = File.join('..', 'Flutter')
-  load File.join(flutter_application_path, '.ios', 'Flutter', 'podhelper.rb')
+  # Đường dẫn đến thư mục Flutter (chỉnh sửa để tương thích với Windows)
+  flutter_application_path = File.expand_path('..', File.dirname(__FILE__))
+  load File.join(flutter_application_path, 'Flutter', 'podhelper.rb')
 end
 
 target 'Runner' do
-  # Comment the next line if you don't want to use dynamic frameworks
+  # Bỏ comment dòng tiếp theo nếu bạn muốn sử dụng dynamic frameworks
   use_frameworks!
 
-  # Pods for Firebase
+  # Thêm Firebase Pods
   pod 'Firebase/Auth'
   pod 'Firebase/Core'
-  pod 'Firebase/Analytics' # Uncomment if you need Firebase Analytics
+  pod 'Firebase/Analytics' # Bỏ comment nếu bạn cần dùng Firebase Analytics
 
-  # Required for Flutter plugins
+  # Cài đặt các Flutter plugin cần thiết
   install_all_flutter_pods
 
   target 'RunnerTests' do
     inherit! :search_paths
-    # Pods for testing
+    # Các Pods dùng cho testing
   end
 end
 
-# Workaround for Cocoapods issue #10058, remove this post_install block
-# when it's resolved. This is essential for projects with iOS 14+.
+# Workaround cho vấn đề Cocoapods #10058
+# (Bạn có thể bỏ post_install block này nếu vấn đề đã được khắc phục)
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
