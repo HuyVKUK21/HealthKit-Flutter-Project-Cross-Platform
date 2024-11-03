@@ -1,7 +1,7 @@
-
 import 'package:fitnessapp/presentation/screens/activity_tracker/activity_tracker_screen.dart';
 import 'package:fitnessapp/presentation/screens/dashboard/dashboard_screen.dart';
 import 'package:fitnessapp/presentation/screens/finish_workout/finish_workout_screen.dart';
+import 'package:fitnessapp/presentation/screens/foot_step/main_foot_step.dart';
 import 'package:fitnessapp/presentation/screens/home/home_screen.dart';
 import 'package:fitnessapp/presentation/screens/my_medicine/EditMedicineScreen.dart';
 import 'package:fitnessapp/presentation/screens/my_medicine/MyMedicineScreen.dart';
@@ -31,4 +31,5 @@ final Map<String, WidgetBuilder> routes = {
   WorkoutScheduleView.routeName: (context) => const WorkoutScheduleView(),
   HomeScreen.routeName: (context) => MyMedicineScreen(),
   MyMedicineScreen.routeName: (context) => EditMedicineScreen(),
+  MainFootStepScreen.routeName: (context) => MainFootStepScreen(),
 };
