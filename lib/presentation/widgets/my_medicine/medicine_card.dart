@@ -4,7 +4,7 @@ class MedicineCard extends StatelessWidget {
   final String medicineName;
   final String dosageTime;
   final String remainingDoses;
-  final bool offStatus;
+  final bool? offStatus;
   final bool? usageStatus;
   final String iconRight;
   final VoidCallback? onEditPressed;
@@ -14,7 +14,7 @@ class MedicineCard extends StatelessWidget {
     required this.medicineName,
     required this.dosageTime,
     required this.remainingDoses,
-    required this.offStatus,
+    this.offStatus,
     this.usageStatus,
     required this.iconRight,
     this.onEditPressed,
