@@ -24,7 +24,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const HomeScreen(),
     const HealthManagementScreen(),
     const CameraScreen(),
-    const UserProfile()
+    const SettingsScreen()
   ];
 
   @override
