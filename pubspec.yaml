@@ -46,7 +46,7 @@ dependencies:
   calendar_agenda:
     path: dev_lib/calendar_agenda/
   font_awesome_flutter: ^10.7.0
-  firebase_auth: 4.1.4
+  firebase_auth: 4.17.2
   flutter_bloc: ^8.1.6
   get_it: ^8.0.2
   injectable: ^2.1.0
