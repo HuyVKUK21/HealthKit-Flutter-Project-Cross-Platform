@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "539525530321",
     "project_id": "healthkit-flutter",
-    "storage_bucket": "healthkit-flutter.appspot.com"
+    "storage_bucket": "healthkit-flutter.firebasestorage.app"
   },
   "client": [
     {
@@ -13,6 +13,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "539525530321-b3gh8h68om4db88dqa69g4i3ki0u6nhq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hypeteq.fitnessapp",
+            "certificate_hash": "8052290f2cce83f1383b5b096f82bec9df682316"
+          }
+        },
         {
           "client_id": "539525530321-t2m7seccml59v9glq2is8f54d223h5ma.apps.googleusercontent.com",
           "client_type": 3
@@ -29,6 +37,13 @@
             {
               "client_id": "539525530321-t2m7seccml59v9glq2is8f54d223h5ma.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "539525530321-rr38uki81p5qthg1n6ei3roiei65hnsu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hypeteq.fitnessapp"
+              }
             }
           ]
         }
