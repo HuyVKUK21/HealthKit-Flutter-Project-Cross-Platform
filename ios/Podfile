@@ -1,15 +1,39 @@
-# Uncomment the next line to define a global platform for your project
 platform :ios, '13.0'
+
+# CocoaPods analytics disabled to reduce CI/CD build time
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+# Define the missing function if not defined
+def install_all_flutter_pods
+  flutter_application_path = File.join('..', 'Flutter')
+  load File.join(flutter_application_path, '.ios', 'Flutter', 'podhelper.rb')
+end
 
 target 'Runner' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for Runner
+  # Pods for Firebase
+  pod 'Firebase/Auth'
+  pod 'Firebase/Core'
+  pod 'Firebase/Analytics' # Uncomment if you need Firebase Analytics
+
+  # Required for Flutter plugins
+  install_all_flutter_pods
 
   target 'RunnerTests' do
     inherit! :search_paths
     # Pods for testing
   end
+end
 
+# Workaround for Cocoapods issue #10058, remove this post_install block
+# when it's resolved. This is essential for projects with iOS 14+.
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+    target.build_configurations.each do |config|
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+    end
+  end
 end
