@@ -1,3 +1,4 @@
+import 'package:fitnessapp/presentation/screens/my_medicine/EditMedicineScreen.dart';
 import 'package:fitnessapp/presentation/screens/my_medicine/MyMedicineScreen.dart';
 import 'package:fitnessapp/utils/page_route_builder.dart';
 import 'package:flutter/material.dart';
@@ -56,17 +57,20 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
+          padding: EdgeInsets.symmetric(vertical: 30),
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             Navigator.pushReplacement(context, RouteHelper.createFadeRoute(MyMedicineScreen()));
           },
         ),
-        title: Text(
-          'Hộp thuốc của tôi',
-          style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+        title: Container(
+          margin: EdgeInsets.fromLTRB(0, 24, 0, 0),
+          child: Text(
+            'Hộp thuốc của tôi',
+            style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+          ),
         ),
         centerTitle: true,
       ),
@@ -100,7 +104,9 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
                         offStatus: medicine.offStatus,
                         usageStatus: medicine.usageStatus,
                         iconRight: "edit",
-                        onEditPressed: () {},
+                        onEditPressed: () {
+                          Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen()));
+                        },
                       );
                     }),
                   ]
@@ -137,9 +143,7 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
             Spacer(),
             Center(
               child: ElevatedButton.icon(
-                onPressed: () {
-                  // Handle "Thêm thuốc" button press
-                },
+                onPressed: () {},
                 icon: Icon(Icons.add, color: Colors.white),
                 label: Text('Thêm thuốc', style: TextStyle(color: Colors.white)),
                 style: ElevatedButton.styleFrom(
