@@ -1,0 +1,46 @@
+platform :ios, '13.0'
+
+# Tắt thống kê của CocoaPods để giảm thời gian build CI/CD
+ENV['COCOAPODS_DISABLE_STATS'] = 'true'
+
+# Định nghĩa hàm cài đặt Flutter Pods
+def install_all_flutter_pods
+  flutter_application_path = 'D:/ThuchanhFlutter/HealthKit-Flutter-Project-Cross-Platform'
+  podhelper_path = File.join(flutter_application_path, 'ios', 'Flutter', 'podhelper.rb')
+
+  if File.exist?(podhelper_path)
+    eval(File.read(podhelper_path), binding)
+  else
+    puts "Không tìm thấy podhelper.rb tại #{podhelper_path}"
+    exit 1
+  end
+end
+
+target 'Runner' do
+  # Bỏ comment dòng tiếp theo nếu bạn muốn sử dụng dynamic frameworks
+  use_frameworks!
+
+  # Thêm Firebase Pods
+  pod 'Firebase/Auth'
+  pod 'Firebase/Core'
+  pod 'Firebase/Analytics' # Bỏ comment nếu bạn cần dùng Firebase Analytics
+
+  # Cài đặt các Flutter plugin cần thiết
+  install_all_flutter_pods
+
+  target 'RunnerTests' do
+    inherit! :search_paths
+    # Các Pods dùng cho testing
+  end
+end
+
+# Workaround cho vấn đề Cocoapods #10058
+# (Bạn có thể bỏ post_install block này nếu vấn đề đã được khắc phục)
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    flutter_additional_ios_build_settings(target)
+    target.build_configurations.each do |config|
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+    end
+  end
+end
