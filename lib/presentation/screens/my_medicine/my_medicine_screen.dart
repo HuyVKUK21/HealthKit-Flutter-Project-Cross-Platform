@@ -3,6 +3,7 @@ import 'package:fitnessapp/presentation/screens/my_medicine/view_medicine_screen
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../data/models/medicine_model.dart';
+import '../../../data/repositories/medicine/medicine_repository_impl.dart';
 import '../../../utils/page_route_builder.dart';
 import '../../widgets/appbar/custom_app_bar.dart';
 import '../../widgets/my_medicine/medicine_card.dart';
@@ -18,49 +19,27 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
   final DateTime today = DateTime.now();
   final List<String> weekdays = ["CN", "TH 2", "TH 3", "TH 4", "TH 5", "TH 6", "TH 7"];
   final ScrollController _scrollController = ScrollController();
-  late final MedicineUseCase _medicineUseCase;
-
-  // demo
-  List<MedicineModel> yourListOfMedicineData() {
-    return [
-      MedicineModel(
-        medicineName: "A.t Ibuprofen 1",
-        dosageTime: "8:00",
-        remainingDoses: "30",
-        drugForm: "Viên",
-        frequencyUse: 1,
-        offStatus: false,
-        usageStatus: true,
-        idUser: ""
-      ),
-      MedicineModel(
-        medicineName: "A.t Ibuprofen 2",
-        dosageTime: "8:00",
-        remainingDoses: "29",
-        drugForm: "Viên",
-        frequencyUse: 1,
-        offStatus: false,
-        usageStatus: false,
-        idUser: ""
-      ),
-      MedicineModel(
-        medicineName: "A.t Ibuprofen 3",
-        dosageTime: "8:00",
-        remainingDoses: "29",
-        drugForm: "Viên",
-        frequencyUse: 1,
-        offStatus: true,
-        usageStatus: false,
-        idUser: ""
-      ),
-    ];
-  }
+  late List<MedicineModel> _medicineList = [];
+  late MedicineUseCase _medicineUseCase;
+  late MedicineModel medicineInfo;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToCurrentDay());
-    _medicineUseCase = MedicineUseCase();
+    _medicineUseCase = MedicineUseCase(MedicineRepositoryImpl());
+    _fetchMedicines();
+  }
+
+  Future<void> _fetchMedicines() async {
+    try {
+      List<MedicineModel> medicines = await _medicineUseCase.getMedicineData("nvCeupX3wCTu30uoXbDh");
+      setState(() {
+        _medicineList = medicines;
+      });
+    } catch (e) {
+      print('Error fetching medicines: $e');
+    }
   }
 
   void _scrollToCurrentDay() {
@@ -104,7 +83,6 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                       DateTime date = today.add(Duration(days: index - today.weekday + 1));
                       String dayOfWeek = weekdays[date.weekday % 7];
                       String formattedDate = DateFormat('dd').format(date);
-
                       bool isToday = date.day == today.day && date.month == today.month && date.year == today.year;
 
                       return Column(
@@ -144,52 +122,61 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
               ],
             ),
           ),
-          SizedBox(height: 16.0),
+          SizedBox(height: 20.0),
           Expanded(
-            child: ListView(
-              shrinkWrap: true,
+            child: ListView.builder(
               physics: NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
               padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
-              children: [
-                ...yourListOfMedicineData()
-                    .where((medicine) => medicine.offStatus == false)
-                    .map((medicine) {
-                  return  MedicineCard(
-                      medicineName: medicine.medicineName,
-                      dosageTime: medicine.dosageTime,
-                      remainingDoses: medicine.remainingDoses,
-                      offStatus: false,
-                      usageStatus: medicine.usageStatus,
-                      iconRight: "check",
-                      onEditPressed: () {
-                        _showMedicineDialog(context, medicine.medicineName, medicine.dosageTime);
-                      },
-                  );
-                }),
-                SizedBox(height: 16.0), // Spacing after the list
-                Center(
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+              itemCount: _medicineList.where((medicine) => medicine.offStatus == false).length + 1,
+              itemBuilder: (context, index) {
+                if (index == _medicineList.where((medicine) => medicine.offStatus == false).length) {
+                  // Last item for the button
+                  return Container(
+                    margin: EdgeInsets.symmetric(vertical: 20.0),
+                    child: Center(
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 24.0),
+                        ),
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            RouteHelper.createFadeRoute(ViewMedicineScreen()),
+                          );
+                        },
+                        icon: Icon(Icons.edit, color: Colors.white),
+                        label: Text(
+                          "Chỉnh sửa hộp thuốc",
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                        ),
                       ),
-                      padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 24.0),
                     ),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          RouteHelper.createFadeRoute(ViewMedicineScreen())
-                      );
-                    },
-                    icon: Icon(Icons.edit, color: Colors.white),
-                    label: Text(
-                      "Chỉnh sửa hộp thuốc",
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ),
-              ],
+                  );
+                }
+
+                // Display medicine card
+                MedicineModel medicine = _medicineList.where((medicine) => medicine.offStatus == false).elementAt(index);
+                return MedicineCard(
+                  medicineName: medicine.medicineName,
+                  dosageTime: medicine.dosageTime,
+                  remainingDoses: medicine.remainingDoses,
+                  offStatus: medicine.offStatus,
+                  usageStatus: medicine.usageStatus,
+                  iconRight: "check",
+                  onEditPressed: () {
+                    setState(() async {
+                      medicineInfo = await _medicineUseCase.getMedicineById(medicine.id);
+                    });
+                    print(medicineInfo);
+                    _showMedicineDialog(context, medicine.medicineName, medicine.dosageTime, medicine.id);
+                  },
+                );
+              },
             ),
           ),
         ],
@@ -198,7 +185,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
   }
 }
 
-void _showMedicineDialog(BuildContext context, String medicineName, String dosageTime) {
+void _showMedicineDialog(BuildContext context, String medicineName, String dosageTime, String? id) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
@@ -236,8 +223,7 @@ void _showMedicineDialog(BuildContext context, String medicineName, String dosag
                   foregroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50.0),
-                      side: BorderSide(color: Colors.black, width: 1.0)
-                  ),
+                      side: BorderSide(color: Colors.black, width: 1.0)),
                   padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                 ),
                 child: Icon(Icons.check),

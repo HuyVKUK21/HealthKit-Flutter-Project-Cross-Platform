@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MedicineModel {
   final String? id;
@@ -26,37 +27,20 @@ class MedicineModel {
     required this.idUser,
   });
 
-  // Chuyển dữ liệu thành Map
-  Map<String, dynamic> toMap() {
-    return {
-      'medicineName': medicineName,
-      'dosageTime': dosageTime,
-      'remainingDoses': remainingDoses,
-      'drugForm': drugForm,
-      'frequencyUse': frequencyUse,
-      'drugStartTime': drugStartTime,
-      'drugEndTime': drugEndTime,
-      'offStatus': offStatus,
-      'usageStatus': usageStatus,
-      'idUser': idUser,
-    };
-  }
-
-  // Tạo đối tượng User từ Firestore document snapshot
+  // Chuyển dữ liệu từ Firestore thành đối tượng MedicineModel
   factory MedicineModel.fromFirebaseMedicine(Map<String, dynamic> data, String id) {
     return MedicineModel(
       id: id,
       medicineName: data['medicineName'] ?? '',
       dosageTime: data['dosageTime'] ?? '',
-      remainingDoses: data['remainingDoses'] ?? '',
-      drugForm: data['drugForm'] ?? '',
-      frequencyUse: data['frequencyUse'] ?? '',
-      drugStartTime: data['drugStartTime'] ?? '',
-      drugEndTime: data['drugEndTime'] ?? '',
-      offStatus: data['offStatus'] ?? '',
-      usageStatus: data['usageStatus'] ?? '',
+      remainingDoses: data['remainingDoses']?.toString() ?? '0', // Convert to String if needed
+      drugForm: data['drugForm'] is Map ? data['drugForm']['name'] ?? '' : '', // Access the 'name' field in the map
+      frequencyUse: data['frequencyUse'] ?? 0,
+      drugStartTime: (data['drugStartTime'] is Timestamp) ? (data['drugStartTime'] as Timestamp).toDate() : null,
+      drugEndTime: (data['drugEndTime'] is Timestamp) ? (data['drugEndTime'] as Timestamp).toDate() : null,
+      offStatus: data['offStatus'] ?? false,
+      usageStatus: data['usageStatus'] ?? false,
       idUser: data['idUser'] ?? '',
     );
   }
-
 }

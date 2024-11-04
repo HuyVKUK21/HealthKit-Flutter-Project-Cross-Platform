@@ -4,6 +4,8 @@ import 'package:fitnessapp/utils/page_route_builder.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/models/medicine_model.dart';
+import '../../../data/repositories/medicine/medicine_repository_impl.dart';
+import '../../../domain/usecases/medicine/medicine_usecase.dart';
 import '../../widgets/my_medicine/medicine_card.dart';
 import '../../widgets/my_medicine/session_header.dart';
 
@@ -15,6 +17,26 @@ class ViewMedicineScreen extends StatefulWidget {
 class _ViewMedicineScreen extends State<ViewMedicineScreen> {
   bool isExpiredSectionExpanded = true;
   bool isInactiveSectionExpanded = false;
+  late List<MedicineModel> _medicineList = [];
+  late MedicineUseCase _medicineUseCase;
+
+  @override
+  void initState() {
+    super.initState();
+    _medicineUseCase = MedicineUseCase(MedicineRepositoryImpl());
+    _fetchMedicines();
+  }
+
+  Future<void> _fetchMedicines() async {
+    try {
+      List<MedicineModel> medicines = await  _medicineUseCase.getMedicineData("nvCeupX3wCTu30uoXbDh");
+      setState(() {
+        _medicineList = medicines;
+      });
+    } catch (e) {
+      print('Error fetching medicines: $e');
+    }
+  }
 
   // demo
   List<MedicineModel> yourListOfMedicineData() {
@@ -55,8 +77,8 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
   @override
   Widget build(BuildContext context) {
 
-    int countOffStatusFalse = yourListOfMedicineData().where((medicine) => medicine.offStatus == false).length;
-    int countOffStatusTrue = yourListOfMedicineData().where((medicine) => medicine.offStatus == true).length;
+    int countOffStatusFalse = _medicineList.where((medicine) => medicine.offStatus == false).length;
+    int countOffStatusTrue = _medicineList.where((medicine) => medicine.offStatus == true).length;
 
     return Scaffold(
       appBar: AppBar(
@@ -93,26 +115,26 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
               },
             ),
             if (isExpiredSectionExpanded)
-              ListView(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [
-                    ...yourListOfMedicineData()
-                        .where((medicine) => medicine.offStatus == false)
-                        .map((medicine) {
-                      return  MedicineCard(
-                        medicineName: medicine.medicineName,
-                        dosageTime: medicine.dosageTime,
-                        remainingDoses: medicine.remainingDoses,
-                        offStatus: medicine.offStatus,
-                        usageStatus: medicine.usageStatus,
-                        iconRight: "edit",
-                        onEditPressed: () {
-                          Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen()));
-                        },
-                      );
-                    }),
-                  ]
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+                itemCount: _medicineList.where((medicine) => medicine.offStatus == false).length,
+                itemBuilder: (context, index) {
+                  // Display medicine card
+                  MedicineModel medicine = _medicineList.where((medicine) => medicine.offStatus == false).elementAt(index);
+                  return MedicineCard(
+                    medicineName: medicine.medicineName,
+                    dosageTime: medicine.dosageTime,
+                    remainingDoses: medicine.remainingDoses,
+                    offStatus: medicine.offStatus,
+                    usageStatus: medicine.usageStatus,
+                    iconRight: "edit",
+                    onEditPressed: () {
+                      Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen()));
+                    },
+                  );
+                },
               ),
             SectionHeader(
               title: 'Đang tắt ($countOffStatusTrue)',
@@ -124,26 +146,26 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
               },
             ),
             if (isInactiveSectionExpanded) // Only show content if expanded
-              ListView(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  children: [
-                    ...yourListOfMedicineData()
-                        .where((medicine) => medicine.offStatus == true)
-                        .map((medicine) {
-                      return  MedicineCard(
-                        medicineName: medicine.medicineName,
-                        dosageTime: medicine.dosageTime,
-                        remainingDoses: medicine.remainingDoses,
-                        offStatus: medicine.offStatus,
-                        usageStatus: medicine.usageStatus,
-                        iconRight: "edit",
-                        onEditPressed: () {
-                          Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen()));
-                        },
-                      );
-                    }),
-                  ]
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+                itemCount: _medicineList.where((medicine) => medicine.offStatus == true).length,
+                itemBuilder: (context, index) {
+                  // Display medicine card
+                  MedicineModel medicine = _medicineList.where((medicine) => medicine.offStatus == true).elementAt(index);
+                  return MedicineCard(
+                    medicineName: medicine.medicineName,
+                    dosageTime: medicine.dosageTime,
+                    remainingDoses: medicine.remainingDoses,
+                    offStatus: medicine.offStatus,
+                    usageStatus: medicine.usageStatus,
+                    iconRight: "edit",
+                    onEditPressed: () {
+                      Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen()));
+                    },
+                  );
+                },
               ),
             Spacer(),
             Center(

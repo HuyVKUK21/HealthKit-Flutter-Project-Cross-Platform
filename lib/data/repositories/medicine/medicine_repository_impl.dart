@@ -3,8 +3,8 @@ import 'package:fitnessapp/data/models/medicine_model.dart';
 import 'package:fitnessapp/domain/repositories/medicine/medicine_repository.dart';
 import 'package:injectable/injectable.dart';
 
-@LazySingleton(as: MedicineReponsitory)
-class MedicineRepositoryImpl extends MedicineReponsitory {
+@LazySingleton(as: MedicineRepository)
+class MedicineRepositoryImpl extends MedicineRepository {
 
   final CollectionReference _medicinesCollection = FirebaseFirestore.instance.collection('medicines');
 
@@ -18,4 +18,15 @@ class MedicineRepositoryImpl extends MedicineReponsitory {
       return MedicineModel.fromFirebaseMedicine(doc.data() as Map<String, dynamic>, doc.id);
     }).toList();
   }
+
+  @override
+  Future<MedicineModel> getMedicineById(String id) async {
+    DocumentSnapshot doc = await _medicinesCollection.doc(id).get();
+    if (doc.exists) {
+      return MedicineModel.fromFirebaseMedicine(doc.data() as Map<String, dynamic>, doc.id);
+    } else {
+      throw Exception('Medicine not found');
+    }
+  }
+
 }
