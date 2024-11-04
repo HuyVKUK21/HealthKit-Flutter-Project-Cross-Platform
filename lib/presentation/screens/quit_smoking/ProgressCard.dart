@@ -27,6 +27,7 @@ class ProgressCard extends StatelessWidget {
                 iconPath,
                 width: 40, // Kích thước icon
                 height: 40,
+                fit: BoxFit.cover,
               ),
               SizedBox(height: 8),
               Text(
