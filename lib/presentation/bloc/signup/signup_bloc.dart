@@ -13,7 +13,7 @@ class SignupBloc extends Bloc<RegisterEvent, RegisterState> {
       emit(RegisterLoading());
       try {
         UserEntity user =
-            await _userUseCase.callSignUp(event.email, event.password);
+            await _userUseCase.callSignUp(event.email, event.password, event.fullName, event.age, event.phone);
         emit(RegisterSuccess(user: user));
       } catch (error) {
         emit(RegisterFailure(error: error.toString()));

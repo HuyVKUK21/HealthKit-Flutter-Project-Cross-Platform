@@ -1,3 +1,4 @@
+import 'package:fitnessapp/events/user/signin_event.dart';
 import 'package:fitnessapp/events/user/user_event.dart';
 import 'package:fitnessapp/main.dart';
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';

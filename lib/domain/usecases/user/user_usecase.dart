@@ -7,8 +7,9 @@ class UserUseCase {
   final UserRepository _userRepository;
   UserUseCase(this._userRepository);
 
-  Future<UserEntity> callSignUp(String email, String password) async {
-    return await _userRepository.register(email, password);
+  Future<UserEntity> callSignUp(String email, String password, String fullName,
+  String age, String phone) async {
+    return await _userRepository.register(email, password, fullName: fullName, age: age, phone: phone);
   }
 
   Future<UserEntity> callSignIn(String email, String password) async {
