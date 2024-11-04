@@ -1,7 +1,5 @@
-import 'package:fitnessapp/events/user/signin_event.dart';
-import 'package:fitnessapp/events/user/user_event.dart';
-import 'package:fitnessapp/main.dart';
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';
+import 'package:fitnessapp/presentation/events/user/signin_event.dart';
 import 'package:fitnessapp/presentation/screens/dashboard/dashboard_screen.dart';
 import 'package:fitnessapp/presentation/state/user/signin_state.dart';
 import 'package:fitnessapp/presentation/state/user/user_state.dart';

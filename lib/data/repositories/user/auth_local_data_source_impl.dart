@@ -24,7 +24,4 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('user_uid', uid);
   }
-
-
-
 }

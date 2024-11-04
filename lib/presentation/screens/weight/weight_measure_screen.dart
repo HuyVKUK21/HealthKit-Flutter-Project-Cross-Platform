@@ -4,12 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Thêm thư viện intl
 
 class WeightMeasureScreen extends StatefulWidget {
+  static String routeName = "/WeightMeasureScreen";
+
+  const WeightMeasureScreen({super.key});
   @override
   _WeightScreenState createState() => _WeightScreenState();
 }
 
 class _WeightScreenState extends State<WeightMeasureScreen> {
-  double weight = 91.0;
+
+  double weight = 50.0;
   String currentDate = '';
 
   // Danh sách tháng bằng tiếng Việt
@@ -31,9 +35,8 @@ class _WeightScreenState extends State<WeightMeasureScreen> {
   @override
   void initState() {
     super.initState();
-    // Lấy ngày hiện tại và định dạng
     DateTime now = DateTime.now();
-    currentDate = '${now.day} ${months[now.month - 1]}, ${now.year}'; // Sử dụng danh sách tháng
+    currentDate = '${now.day} ${months[now.month - 1]}, ${now.year}';
   }
 
   @override
@@ -67,7 +70,7 @@ class _WeightScreenState extends State<WeightMeasureScreen> {
                 Icon(Icons.calendar_today_outlined, color: Colors.black),
                 SizedBox(width: 8),
                 Text(
-                  'Hôm nay, $currentDate', // Sử dụng ngày hiện tại đã định dạng
+                  'Hôm nay, $currentDate',
                   style: TextStyle(fontSize: 16, color: Colors.black54),
                 ),
               ],
@@ -99,7 +102,6 @@ class _WeightScreenState extends State<WeightMeasureScreen> {
               ],
             ),
             SizedBox(height: 20),
-            // Chỉ giữ lại ToggleButton cho kg mà không có bóng và không có vùng lem thừa
             ToggleButtons(
               borderColor: Colors.transparent,
               selectedColor: Colors.pink,
@@ -152,9 +154,10 @@ class _WeightScreenState extends State<WeightMeasureScreen> {
                 ),
               ),
               onPressed: () {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  RouteHelper.createFadeRoute(HeightMeasureScreen()),
+                  HeightMeasureScreen.routeName,
+                  arguments: weight,
                 );
               },
               child: Text(
