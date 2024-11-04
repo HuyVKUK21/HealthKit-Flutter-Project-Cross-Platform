@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/signup/signup_bloc.dart';
+import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_screen.dart';
+import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_screen.dart';
 import 'package:fitnessapp/presentation/screens/home/home_screen.dart';
 import 'package:fitnessapp/presentation/screens/signin/signin_screen.dart';
 import 'package:fitnessapp/presentation/screens/weight/weight_screen.dart';

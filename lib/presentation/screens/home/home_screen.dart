@@ -1,4 +1,7 @@
+import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_screen.dart';
+import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_screen.dart';
 import 'package:fitnessapp/presentation/screens/foot_step/main_foot_step.dart';
+import 'package:fitnessapp/presentation/screens/weight/weight_screen.dart';
 import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
 import 'package:fitnessapp/presentation/widgets/home/activity_reminder_card.dart';
 import 'package:fitnessapp/presentation/widgets/home/goal_card.dart';
@@ -61,7 +64,7 @@ class HomeScreen extends StatelessWidget {
                       points: "56",
                       measure: false,
                       onTap: () {
-                        Navigator.pushReplacement(
+                        Navigator.push(
                           context,
                           RouteHelper.createFadeRoute(MainFootStepScreen()),
                         );
@@ -74,7 +77,12 @@ class HomeScreen extends StatelessWidget {
                       subtitle: "78 bpm • Hôm nay",
                       points: "56",
                       measure: true,
-                      onTap: (){},
+                      onTap: () => {
+                        Navigator.push(
+                          context,
+                          RouteHelper.createFadeRoute(BloodsureScreen()),
+                        )
+                      },
                     ),
                     HealthMetricCard(
                       icon: 'assets/images/home-weight.png',
@@ -83,16 +91,26 @@ class HomeScreen extends StatelessWidget {
                       subtitle: "68 kg • Hôm qua",
                       points: "114",
                       measure: true,
-                      onTap: (){},
+                      onTap: () => {
+                        Navigator.push(
+                          context,
+                          RouteHelper.createFadeRoute(WeightScreen()),
+                        )
+                      },
                     ),
                     HealthMetricCard(
-                      icon: 'assets/images/calories-icon.png',
+                      icon: 'assets/images/blood_sugar_icon.png',
                       color: Colors.orange,
-                      title: "Lượng Calo",
-                      subtitle: "300 kcal • Hôm nay",
+                      title: "Đường huyết",
+                      subtitle: "98.4 mg/DL • Hôm nay",
                       points: "168",
                       measure: true,
-                      onTap: (){},
+                      onTap: () => {
+                        Navigator.push(
+                          context,
+                          RouteHelper.createFadeRoute(BloodSugarScreen()),
+                        )
+                      },
                     ),
                     HealthMetricCard(
                       icon: 'assets/images/medicine_icon.png',
@@ -102,7 +120,7 @@ class HomeScreen extends StatelessWidget {
                       points: "0",
                       measure: false,
                       onTap: () => {
-                        Navigator.pushReplacement(
+                        Navigator.push(
                           context,
                           RouteHelper.createFadeRoute(MyMedicineScreen()),
                         )
