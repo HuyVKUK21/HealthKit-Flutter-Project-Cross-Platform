@@ -19,6 +19,7 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
   bool isInactiveSectionExpanded = false;
   late List<MedicineModel> _medicineList = [];
   late MedicineUseCase _medicineUseCase;
+  late MedicineModel medicineInfo;
 
   @override
   void initState() {
@@ -36,42 +37,6 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
     } catch (e) {
       print('Error fetching medicines: $e');
     }
-  }
-
-  // demo
-  List<MedicineModel> yourListOfMedicineData() {
-    return [
-      MedicineModel(
-        medicineName: "A.t Ibuprofen 1",
-        dosageTime: "8:00",
-        remainingDoses: "30",
-        drugForm: "Viên",
-        frequencyUse: 1,
-        offStatus: false,
-        usageStatus: true,
-        idUser: ""
-      ),
-      MedicineModel(
-        medicineName: "A.t Ibuprofen 2",
-        dosageTime: "8:00",
-        remainingDoses: "29",
-        drugForm: "Viên",
-        frequencyUse: 1,
-        offStatus: false,
-        usageStatus: false,
-        idUser: ""
-      ),
-      MedicineModel(
-        medicineName: "A.t Ibuprofen 3",
-        dosageTime: "8:00",
-        remainingDoses: "29",
-        drugForm: "Viên",
-        frequencyUse: 1,
-        offStatus: true,
-        usageStatus: false,
-        idUser: ""
-      ),
-    ];
   }
 
   @override
@@ -106,7 +71,7 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
           children: [
             SizedBox(height: 10),
             SectionHeader(
-              title: 'Còn hạn ($countOffStatusFalse))',
+              title: 'Còn hạn ($countOffStatusFalse)',
               isExpanded: isExpiredSectionExpanded,
               onToggle: () {
                 setState(() {
@@ -118,7 +83,7 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
               ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+                padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 6.0),
                 itemCount: _medicineList.where((medicine) => medicine.offStatus == false).length,
                 itemBuilder: (context, index) {
                   // Display medicine card
@@ -130,8 +95,16 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
                     offStatus: medicine.offStatus,
                     usageStatus: medicine.usageStatus,
                     iconRight: "edit",
-                    onEditPressed: () {
-                      Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen()));
+                    onEditPressed: () async {
+                      try {
+                        MedicineModel fetchedMedicineInfo = await _medicineUseCase.getMedicineById(medicine.id);
+                        setState(() {
+                          medicineInfo = fetchedMedicineInfo;
+                        });
+                        Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen(medicineInfo: medicineInfo,)));
+                      } catch (e) {
+                        print('Error fetching medicine info: $e');
+                      }
                     },
                   );
                 },
@@ -149,7 +122,7 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
               ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+                padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 6.0),
                 itemCount: _medicineList.where((medicine) => medicine.offStatus == true).length,
                 itemBuilder: (context, index) {
                   // Display medicine card
@@ -161,8 +134,16 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
                     offStatus: medicine.offStatus,
                     usageStatus: medicine.usageStatus,
                     iconRight: "edit",
-                    onEditPressed: () {
-                      Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen()));
+                    onEditPressed: () async {
+                      try {
+                        MedicineModel fetchedMedicineInfo = await _medicineUseCase.getMedicineById(medicine.id);
+                        setState(() {
+                          medicineInfo = fetchedMedicineInfo;
+                        });
+                        Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen(medicineInfo: medicineInfo,)));
+                      } catch (e) {
+                        print('Error fetching medicine info: $e');
+                      }
                     },
                   );
                 },
@@ -171,8 +152,8 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {},
-                icon: Icon(Icons.add, color: Colors.white),
-                label: Text('Thêm thuốc', style: TextStyle(color: Colors.white)),
+                icon: Icon(Icons.add, color: Colors.white, size: 28,),
+                label: Text('Thêm thuốc', style: TextStyle(color: Colors.white, fontSize: 20)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   shape: RoundedRectangleBorder(

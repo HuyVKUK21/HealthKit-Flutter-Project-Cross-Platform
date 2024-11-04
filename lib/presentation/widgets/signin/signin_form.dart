@@ -1,6 +1,5 @@
-import 'package:fitnessapp/events/user/signin_event.dart';
-import 'package:fitnessapp/events/user/user_event.dart';
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';
+import 'package:fitnessapp/presentation/events/user/signin_event.dart';
 import 'package:flutter/material.dart';
 
 class SigninForm extends StatefulWidget {
@@ -67,10 +66,7 @@ class _LoginFormState extends State<SigninForm> {
         ElevatedButton(
           onPressed: () {
             widget.signInBloc.add(
-              SigninButtonSubmit(
-                  email: _emailController.text,
-                  password: _passwordController.text
-              )
+              SignInEvent(_emailController.text, _passwordController.text)
             );
           },
           style: ElevatedButton.styleFrom(

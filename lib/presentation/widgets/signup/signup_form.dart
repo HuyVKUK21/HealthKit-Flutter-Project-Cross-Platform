@@ -1,6 +1,6 @@
 
-import 'package:fitnessapp/events/user/user_event.dart';
 import 'package:fitnessapp/presentation/bloc/signup/signup_bloc.dart';
+import 'package:fitnessapp/presentation/events/user/user_event.dart';
 import 'package:flutter/material.dart';
 
 class SignUpForm extends StatefulWidget {

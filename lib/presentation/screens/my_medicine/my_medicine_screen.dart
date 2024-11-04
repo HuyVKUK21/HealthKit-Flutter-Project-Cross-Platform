@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../data/models/medicine_model.dart';
 import '../../../data/repositories/medicine/medicine_repository_impl.dart';
 import '../../../utils/page_route_builder.dart';
+import '../../dialogs/my_medicine/medicine_dialog.dart';
 import '../../widgets/appbar/custom_app_bar.dart';
 import '../../widgets/my_medicine/medicine_card.dart';
 
@@ -44,9 +45,11 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
 
   void _scrollToCurrentDay() {
     double screenWidth = MediaQuery.of(context).size.width;
-    double position = (today.weekday - 1) * 58.0 - (screenWidth / 2) + 29.0; // Center the current day
+    double itemWidth = 58.0;
+    double position = (today.weekday - 1) * itemWidth + (itemWidth / 2) - (screenWidth / 2);
+
     _scrollController.animateTo(
-      position,
+      position.clamp(0.0, _scrollController.position.maxScrollExtent),
       duration: Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
@@ -74,11 +77,11 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                 ),
                 SizedBox(height: 16.0),
                 SizedBox(
-                  height: 80.0,
+                  height: 90.0,
                   child: ListView.builder(
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
-                    itemCount: 14,
+                    itemCount: 30,
                     itemBuilder: (context, index) {
                       DateTime date = today.add(Duration(days: index - today.weekday + 1));
                       String dayOfWeek = weekdays[date.weekday % 7];
@@ -93,6 +96,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                               style: TextStyle(
                                 color: isToday ? Colors.red : Colors.black,
                                 fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
+                                fontSize: 18
                               ),
                             ),
                           ),
@@ -139,9 +143,9 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(20.0),
                           ),
-                          padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 24.0),
+                          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
                         ),
                         onPressed: () {
                           Navigator.pushReplacement(
@@ -152,7 +156,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                         icon: Icon(Icons.edit, color: Colors.white),
                         label: Text(
                           "Chỉnh sửa hộp thuốc",
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
@@ -168,12 +172,27 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                   offStatus: medicine.offStatus,
                   usageStatus: medicine.usageStatus,
                   iconRight: "check",
-                  onEditPressed: () {
-                    setState(() async {
-                      medicineInfo = await _medicineUseCase.getMedicineById(medicine.id);
-                    });
-                    print(medicineInfo);
-                    _showMedicineDialog(context, medicine.medicineName, medicine.dosageTime, medicine.id);
+                  onEditPressed: () async {
+                    try {
+                      MedicineModel fetchedMedicineInfo = await _medicineUseCase.getMedicineById(medicine.id);
+                      setState(() {
+                        medicineInfo = fetchedMedicineInfo;
+                      });
+                      showMedicineDialog(
+                          context,
+                          medicineInfo.medicineName,
+                          medicineInfo.usageStatus,
+                          medicineInfo.dosageTime,
+                          () async {
+                            await _medicineUseCase.updateUsageStatusMedicine(medicine.id, medicine.usageStatus);
+                            Navigator.pushReplacement(
+                                context,
+                                RouteHelper.createFadeRoute(MyMedicineScreen())
+                            );
+                          });
+                    } catch (e) {
+                      print('Error fetching medicine info: $e');
+                    }
                   },
                 );
               },
@@ -183,61 +202,4 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
       ),
     );
   }
-}
-
-void _showMedicineDialog(BuildContext context, String medicineName, String dosageTime, String? id) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
-        ),
-        child: Container(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                radius: 36,
-                child: Icon(Icons.more_horiz, size: 36, color: Colors.black),
-              ),
-              SizedBox(height: 16.0),
-              Text(
-                medicineName,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8.0),
-              Text(
-                "Đã bỏ qua 1 lần dùng lúc $dosageTime",
-                style: TextStyle(fontSize: 18, color: Colors.red, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 24.0),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50.0),
-                      side: BorderSide(color: Colors.black, width: 1.0)),
-                  padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-                ),
-                child: Icon(Icons.check),
-              ),
-              SizedBox(height: 24.0),
-              Text(
-                "Đổi thành đã uống",
-                style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
 }
