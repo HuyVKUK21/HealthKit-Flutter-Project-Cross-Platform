@@ -5,6 +5,7 @@ import 'package:fitnessapp/domain/repositories/user/auth_local_data_source.dart'
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/signup/signup_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
+import 'package:fitnessapp/presentation/screens/dashboard/dashboard_screen.dart';
 import 'package:fitnessapp/presentation/screens/home/home_screen.dart';
 import 'package:fitnessapp/presentation/screens/signin/signin_screen.dart';
 import 'package:fitnessapp/routes.dart';
@@ -30,7 +31,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final authLocalDataSource = getIt<AuthLocalDataSource>();
   String? uid = await authLocalDataSource.getUid();
-  runApp(MyApp(initialRoute: uid != null ? HomeScreen.routeName : SigninScreen.routeName));
+  runApp(MyApp(initialRoute: uid != null ? DashboardScreen.routeName : SigninScreen.routeName));
 }
 
 class MyApp extends StatelessWidget {
