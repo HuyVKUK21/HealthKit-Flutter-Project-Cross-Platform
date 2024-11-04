@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fitnessapp/domain/usecases/medicine/medicine_usecase.dart';
 import 'package:fitnessapp/presentation/screens/my_medicine/view_medicine_screen.dart';
 import 'package:flutter/material.dart';
@@ -24,14 +26,17 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
   late MedicineUseCase _medicineUseCase;
   late MedicineModel medicineInfo;
 
+  // Khởi tạo
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToCurrentDay());
     _medicineUseCase = MedicineUseCase(MedicineRepositoryImpl());
     _fetchMedicines();
+    _scheduleMidnightReset();
   }
 
+  // Duyệt danh sách dữ liệu thuốc
   Future<void> _fetchMedicines() async {
     try {
       List<MedicineModel> medicines = await _medicineUseCase.getMedicineData("nvCeupX3wCTu30uoXbDh");
@@ -43,6 +48,20 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
     }
   }
 
+  // reset lượt uống sau 12h đêm
+  void _scheduleMidnightReset() {
+    DateTime now = DateTime.now();
+    DateTime nextMidnight = DateTime(now.year, now.month, now.day + 1);
+
+    Duration timeUntilMidnight = nextMidnight.difference(now);
+
+    Timer(timeUntilMidnight, () async {
+      await _medicineUseCase.resetAllUsageStatuses();
+      _scheduleMidnightReset();
+    });
+  }
+
+  // Ngày hiện tại (tính toán + animation)
   void _scrollToCurrentDay() {
     double screenWidth = MediaQuery.of(context).size.width;
     double itemWidth = 58.0;
