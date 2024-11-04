@@ -1,4 +1,8 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitnessapp/data/models/meansure_foot_step.dart';
+import 'package:fitnessapp/data/repositories/foot_step/foot_step_repository_impl.dart';
+import 'package:fitnessapp/domain/usecases/foot_step/foot_step_usecase.dart';
 import 'package:fitnessapp/presentation/screens/foot_step/modal_setting_aim.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -21,10 +25,82 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
   String _status = '?', _steps = '?';
   bool _isTracking = false;
 
+  String _km = "0";
+  String _calories = "0";
+  String _time = "0";
+  late FootStepUsecase _footStepUsecase;
+  late FootStepModel _footStepData;
+  late StepOfDay _stepOfToday = StepOfDay(date: '00/00/2000', step: 0);
+
   @override
   void initState() {
     super.initState();
+
+    _footStepData = FootStepModel(
+      idUser: 'user_id_123',
+      aim: 500,
+      stepOfDay: [],
+    );
+
     _checkActivityRecognitionPermission();
+    _footStepUsecase = FootStepUsecase(FootStepRepositoryImpl());
+    fetchFootStepByUserId();
+  }
+
+  Future<void> fetchFootStepByUserId() async {
+    try {
+      FootStepModel? model = await _footStepUsecase
+          .getFootStepByIdUser(FirebaseAuth.instance.currentUser!.uid);
+      setState(() {
+        _footStepData = model!;
+        Result result = _footStepData.findStepOfToday();
+        _stepOfToday = result.stepOfDay;
+        _km = ((_stepOfToday.step * 0.75) * 100).toStringAsFixed(2);
+        _calories = (65 * ((_stepOfToday.step * 0.75) / 1000) * 0.57)
+            .toStringAsFixed(2);
+        _time =
+            ((((_stepOfToday.step * 0.75) / 1000) / 5) * 60).toStringAsFixed(1);
+        if (!result.exists) {
+          StepOfDay newStepOfDay = result.stepOfDay;
+
+          _footStepData = FootStepModel(
+            idUser: _footStepData.idUser,
+            aim: _footStepData.aim,
+            stepOfDay: [..._footStepData.stepOfDay, newStepOfDay],
+          );
+          List<Map<String, dynamic>> stepOfDayMaps = _footStepData.stepOfDay
+              .map((step) => {
+                    'date': step.date,
+                    'step': step.step,
+                  })
+              .toList();
+
+          _footStepUsecase.updateFootStepByIdUser(
+            FirebaseAuth.instance.currentUser!.uid,
+            stepOfDayMaps,
+          );
+        }
+      });
+    } catch (e) {
+      print('Error fetching foot step');
+    }
+  }
+
+  Future<void> updateAim(int aim) async {
+    _footStepUsecase.updateAimByIdUser(
+        FirebaseAuth.instance.currentUser!.uid, aim);
+    setState(() {
+      _footStepData = _footStepData.copyWith(newAim: aim);
+    });
+  }
+
+  Future<void> updateWhenStopWalk() async {
+    StepOfDay _stepUpdate =
+        await _footStepUsecase.updateStepOfDayWhenStopByIdUser(
+            FirebaseAuth.instance.currentUser!.uid, _stepOfToday);
+    setState(() {
+      _stepOfToday = StepOfDay(date: _stepUpdate.date, step: _stepUpdate.step);
+    });
   }
 
   void startListening() {
@@ -45,12 +121,20 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
       _isTracking = false;
       _steps = '?';
     });
+    updateWhenStopWalk();
   }
 
   void onStepCount(StepCount event) {
     if (!_isTracking) return;
     setState(() {
       _steps = event.steps.toString();
+      int step = _stepOfToday.getStep() + int.parse(_steps);
+      _stepOfToday = _stepOfToday.copyWith(step: step);
+      _km = ((_stepOfToday.step * 0.75) * 100).toStringAsFixed(2);
+      _calories =
+          (65 * ((_stepOfToday.step * 0.75) / 1000) * 0.57).toStringAsFixed(2);
+      _time =
+          ((((_stepOfToday.step * 0.75) / 1000) / 5) * 60).toStringAsFixed(1);
     });
   }
 
@@ -103,7 +187,10 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
 
   void _openSettingAimOverlay() {
     showModalBottomSheet(
-        context: context, builder: (ctx) => const ModalSettingAimWidget());
+        context: context,
+        builder: (ctx) => ModalSettingAimWidget(
+              updateAim: updateAim,
+            ));
   }
 
   @override
@@ -197,7 +284,9 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
             CircularPercentIndicator(
               radius: 170.0,
               lineWidth: 15.0,
-              percent: 0.7,
+              percent: _footStepData.aim > 0
+                  ? (_stepOfToday.step / _footStepData.aim).clamp(0.0, 1.0)
+                  : 0.0,
               animation: true,
               center: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -215,8 +304,8 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 35),
                         ),
-                        const Text(
-                          'Mục tiêu: 30/500 bước',
+                        Text(
+                          'Mục tiêu: ${_stepOfToday.step} / ${_footStepData.aim} bước',
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.w600),
                         )
@@ -233,22 +322,22 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
               children: [
                 InfoCard(
                   icon: Icons.directions_walk,
-                  value: '1,721',
+                  value: '${_stepOfToday.step}',
                   unit: 'bước',
                 ),
                 InfoCard(
                   icon: Icons.local_fire_department,
-                  value: '42.8',
+                  value: _calories,
                   unit: 'kcal',
                 ),
                 InfoCard(
                   icon: Icons.arrow_forward,
-                  value: '1.36',
+                  value: _km,
                   unit: 'km',
                 ),
                 InfoCard(
                   icon: Icons.access_time,
-                  value: '16',
+                  value: _time,
                   unit: 'phút',
                 ),
               ],

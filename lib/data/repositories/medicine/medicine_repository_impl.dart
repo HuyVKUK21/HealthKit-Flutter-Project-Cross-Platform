@@ -5,17 +5,17 @@ import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: MedicineRepository)
 class MedicineRepositoryImpl extends MedicineRepository {
-
-  final CollectionReference _medicinesCollection = FirebaseFirestore.instance.collection('medicines');
+  final CollectionReference _medicinesCollection =
+      FirebaseFirestore.instance.collection('medicines');
 
   @override
   Future<List<MedicineModel>> getMedicineData(String idUser) async {
     QuerySnapshot querySnapshot = await _medicinesCollection.get();
-    return querySnapshot
-        .docs
+    return querySnapshot.docs
         .where((doc) => doc['idUser'] == idUser)
         .map((doc) {
-      return MedicineModel.fromFirebaseMedicine(doc.data() as Map<String, dynamic>, doc.id);
+      return MedicineModel.fromFirebaseMedicine(
+          doc.data() as Map<String, dynamic>, doc.id);
     }).toList();
   }
 
@@ -23,10 +23,10 @@ class MedicineRepositoryImpl extends MedicineRepository {
   Future<MedicineModel> getMedicineById(String id) async {
     DocumentSnapshot doc = await _medicinesCollection.doc(id).get();
     if (doc.exists) {
-      return MedicineModel.fromFirebaseMedicine(doc.data() as Map<String, dynamic>, doc.id);
+      return MedicineModel.fromFirebaseMedicine(
+          doc.data() as Map<String, dynamic>, doc.id);
     } else {
       throw Exception('Medicine not found');
     }
   }
-
 }
