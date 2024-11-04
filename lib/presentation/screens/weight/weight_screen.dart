@@ -1,37 +1,83 @@
+import 'package:fitnessapp/domain/entities/weight_entity.dart';
+import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
+import 'package:fitnessapp/presentation/events/weight/weight_event.dart';
+import 'package:fitnessapp/presentation/state/weight/weight_state.dart';
 import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
+import 'package:fitnessapp/utils/global/user.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-class WeightScreen extends StatelessWidget {
+class WeightScreen extends StatefulWidget {
+  static String routeName = "/WeightScreen";
+
+  const WeightScreen({super.key});
+
+  @override
+  _WeightScreenState createState() => _WeightScreenState();
+}
+
+class _WeightScreenState extends State<WeightScreen> {
+  late String userId = "";
+  String? _targetScreen;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserId();
+
+  }
+
+  Future<void> _getUserId() async {
+    userId = (await GlobalUtil.getUserId())!;
+    context.read<WeightBloc>().add(LoadWeightData(userId));
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildWeightStats(),
-              _buildWeightChart(),
-              _buildControlPanel(),
-              _buildBmiSection(),
-              _buildWeightHistory(),
-              _buildRecommendations()
-            ],
-          ),
-        ),
+      body: BlocBuilder<WeightBloc, WeightState>(
+        builder: (context, state) {
+          if (state is WeightLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is WeightLoaded) {
+            final weightData = state.weightEntity;
+            final currentWeight = weightData.currentWeight;
+            final bmi = weightData.bmi;
+            final bmiStatus = weightData.currentWeight;
+
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildWeightStats(weightData),
+                    _buildWeightChart(weightData),
+                    _buildControlPanel(),
+                    _buildBmiSection(bmi!),
+                    _buildWeightHistory(),
+                    _buildRecommendations(),
+                  ],
+                ),
+              ),
+            );
+          } else {
+            return Center(child: Text('Có lỗi xảy ra'));
+          }
+        },
       ),
     );
   }
 
 
-  Widget _buildWeightStats() {
+  Widget _buildWeightStats(WeightEntity weightData) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
@@ -50,7 +96,7 @@ class WeightScreen extends StatelessWidget {
               Row(
                 children: [
                   Text(
-                    "86.2",
+                    "${weightData.currentWeight}", // Use currentWeight from weightData
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -74,7 +120,7 @@ class WeightScreen extends StatelessWidget {
                   Icon(Icons.circle, color: Colors.amber, size: 8),
                   SizedBox(width: 4),
                   Text(
-                    "BMI: 25.2",
+                    "BMI: ${weightData.bmi}", // Display the BMI
                     style: TextStyle(
                       fontSize: 12,
                       color: Colors.black,
@@ -85,41 +131,34 @@ class WeightScreen extends StatelessWidget {
             ],
           ),
           Center(
-            // Đặt container vào Center để căn giữa
             child: Container(
               width: 150,
               height: 36,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey, width: 0.5),
-                // Màu viền xám, độ dày 0.5
                 borderRadius: BorderRadius.circular(10),
               ),
               child: DropdownButton<String>(
                 value: 'Hiển thị theo Tuần',
-                // Giá trị mặc định
                 items: <String>[
                   'Hiển thị theo Tuần'
-                ]
-                    .map((String value) {
+                ].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
                         value,
-                        style:
-                            TextStyle(fontSize: 8, color: Colors.grey),
+                        style: TextStyle(fontSize: 8, color: Colors.grey),
                       ),
                     ),
                   );
                 }).toList(),
-                onChanged: (String? newValue) {
-                },
+                onChanged: (String? newValue) {},
                 underline: Container(),
-                // Ẩn underline
                 icon: Padding(
                   padding: const EdgeInsets.only(left: 8.0),
-                  child: Icon(Icons.keyboard_arrow_down, color: Colors.grey,),
+                  child: Icon(Icons.keyboard_arrow_down, color: Colors.grey),
                 ),
                 isExpanded: true,
               ),
@@ -130,10 +169,16 @@ class WeightScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildWeightChart() {
-    int todayIndex =
-        DateTime.now().weekday;
+  Widget _buildWeightChart(WeightEntity weightData) {
+    int todayIndex = DateTime.now().weekday;
 
+    List<FlSpot> spots = [];
+
+
+    for (int i = 1; i <= 7; i++) {
+      double weight = weightData.currentWeight; // Hàm này cần được định nghĩa để lấy trọng số cho ngày i
+      spots.add(FlSpot(i.toDouble(), weight));
+    }
     return Container(
       height: 200,
       margin: EdgeInsets.only(bottom: 16),
@@ -151,18 +196,9 @@ class WeightScreen extends StatelessWidget {
           maxX: 7,
           minY: 0,
           maxY: 200,
-          // Trục Y có giá trị từ 0 đến 200
           lineBarsData: [
             LineChartBarData(
-              spots: [
-                FlSpot(1, 87.1),
-                FlSpot(2, 86.1),
-                FlSpot(3, 86.1),
-                FlSpot(4, 86.1),
-                FlSpot(5, 86.2),
-                FlSpot(6, 86.3),
-                FlSpot(7, 86.4),
-              ],
+              spots: spots,
               isCurved: true,
               color: Colors.green.shade400,
               barWidth: 3,
@@ -178,15 +214,13 @@ class WeightScreen extends StatelessWidget {
                   );
                 },
               ),
-              belowBarData:
-                  BarAreaData(show: false),
+              belowBarData: BarAreaData(show: false),
             ),
           ],
           titlesData: FlTitlesData(
             topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
             leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            // Ẩn trục Y
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
@@ -262,9 +296,9 @@ class WeightScreen extends StatelessWidget {
                 child: Text(
                   "Tạo mới",
                   style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white
                   ),
                 ),
               ),
@@ -323,7 +357,7 @@ class WeightScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBmiSection() {
+  Widget _buildBmiSection(double bmi) {
     return Container(
       padding: EdgeInsets.all(16),
       margin: EdgeInsets.only(bottom: 16),
@@ -347,15 +381,15 @@ class WeightScreen extends StatelessWidget {
                   fontSize: 18,
                 ),
               ),
-              SizedBox(height: 2,),
+              SizedBox(height: 2),
               Text(
-                "3 THG 11,2024",
+                "3 THG 11, 2024", // Date can be dynamic if needed
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.grey,
                   fontSize: 12,
                 ),
-              )
+              ),
             ],
           ),
           SizedBox(height: 12),
@@ -367,14 +401,12 @@ class WeightScreen extends StatelessWidget {
                 radiusFactor: 0.8,
                 ranges: <GaugeRange>[
                   GaugeRange(startValue: 0, endValue: 18.5, color: Colors.blue),
-                  GaugeRange(
-                      startValue: 18.5, endValue: 24.9, color: Colors.green),
-                  GaugeRange(
-                      startValue: 24.9, endValue: 29.9, color: Colors.orange),
+                  GaugeRange(startValue: 18.5, endValue: 24.9, color: Colors.green),
+                  GaugeRange(startValue: 24.9, endValue: 29.9, color: Colors.orange),
                   GaugeRange(startValue: 29.9, endValue: 40, color: Colors.red),
                 ],
                 pointers: <GaugePointer>[
-                  NeedlePointer(value: 25.3),
+                  NeedlePointer(value: bmi), // Use dynamic BMI value
                 ],
                 annotations: <GaugeAnnotation>[
                   GaugeAnnotation(
@@ -382,7 +414,7 @@ class WeightScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '25.3',
+                          bmi.toStringAsFixed(1), // Display BMI value dynamically
                           style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
@@ -390,11 +422,11 @@ class WeightScreen extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'Thừa cân',
+                          _getBmiStatus(bmi), // Display BMI status
                           style: TextStyle(
                             fontSize: 24,
                             color: Colors.amber,
-                            fontWeight: FontWeight.w700
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                       ],
@@ -409,6 +441,19 @@ class WeightScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+
+  String _getBmiStatus(double bmi) {
+    if (bmi < 18.5) {
+      return "Thiếu cân";
+    } else if (bmi >= 18.5 && bmi < 24.9) {
+      return "Bình thường";
+    } else if (bmi >= 25 && bmi < 29.9) {
+      return "Thừa cân";
+    } else {
+      return "Béo phì";
+    }
   }
 
   Widget _buildWeightHistory() {
@@ -444,15 +489,15 @@ class WeightScreen extends StatelessWidget {
           ListView.builder(
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: 5,
+            itemCount: 2,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("11/2023"),
-                    Text("86.2 kg"),
+                    Text("11/2024"),
+                    Text("50 kg"),
                   ],
                 ),
               );
@@ -493,3 +538,5 @@ class WeightScreen extends StatelessWidget {
     );
   }
 }
+
+

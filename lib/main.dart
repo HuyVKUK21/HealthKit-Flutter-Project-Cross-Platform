@@ -1,14 +1,20 @@
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fitnessapp/data/repositories/user/auth_local_data_source_impl.dart';
 import 'package:fitnessapp/domain/repositories/user/auth_local_data_source.dart';
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/signup/signup_bloc.dart';
+import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
 import 'package:fitnessapp/presentation/screens/home/home_screen.dart';
 import 'package:fitnessapp/presentation/screens/signin/signin_screen.dart';
 import 'package:fitnessapp/routes.dart';
 import 'package:fitnessapp/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+
+
+final GetIt getIt = GetIt.instance;
 
 void main() async {
   
@@ -41,6 +47,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<SignupBloc>(
           create: (context) => getIt<SignupBloc>(),
+        ),
+        BlocProvider<WeightBloc>(
+          create: (context) => getIt<WeightBloc>(),
         ),
       ],
       child: MaterialApp(

@@ -1,6 +1,6 @@
 import 'package:fitnessapp/domain/entities/user_entity.dart';
 import 'package:fitnessapp/domain/usecases/user/user_usecase.dart';
-import 'package:fitnessapp/events/user/user_event.dart';
+import 'package:fitnessapp/presentation/events/user/user_event.dart';
 import 'package:fitnessapp/presentation/state/user/user_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
