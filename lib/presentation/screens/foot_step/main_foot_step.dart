@@ -1,5 +1,9 @@
-import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pedometer/pedometer.dart';
+import 'package:percent_indicator/percent_indicator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class MainFootStepScreen extends StatefulWidget {
   const MainFootStepScreen({super.key});
@@ -11,11 +15,187 @@ class MainFootStepScreen extends StatefulWidget {
 }
 
 class _MainFootStepScreen extends State<MainFootStepScreen> {
+  late Stream<StepCount> _stepCountStream;
+  late Stream<PedestrianStatus> _pedestrianStatusStream;
+  String _status = '?', _steps = '?';
+
+  @override
+  void initState() {
+    super.initState();
+    initPlatformState();
+  }
+
+  void onStepCount(StepCount event) {
+    print(event);
+    setState(() {
+      _steps = event.steps.toString();
+    });
+  }
+
+  void onPedestrianStatusChanged(PedestrianStatus event) {
+    print(event);
+    setState(() {
+      _status = event.status;
+    });
+  }
+
+  void onPedestrianStatusError(error) {
+    print('onPedestrianStatusError: $error');
+    setState(() {
+      _status = 'Pedestrian Status not available';
+    });
+    print(_status);
+  }
+
+  void onStepCountError(error) {
+    print('onStepCountError: $error');
+    setState(() {
+      _steps = 'Step Count not available';
+    });
+  }
+
+  Future<bool> _checkActivityRecognitionPermission() async {
+    bool granted = await Permission.activityRecognition.isGranted;
+
+    if (!granted) {
+      granted = await Permission.activityRecognition.request() ==
+          PermissionStatus.granted;
+    }
+
+    return granted;
+  }
+
+  Future<void> initPlatformState() async {
+    bool granted = await _checkActivityRecognitionPermission();
+    if (!granted) {
+      // tell user, the app will not work
+    }
+
+    _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
+    (await _pedestrianStatusStream.listen(onPedestrianStatusChanged))
+        .onError(onPedestrianStatusError);
+
+    _stepCountStream = Pedometer.stepCountStream;
+    _stepCountStream.listen(onStepCount).onError(onStepCountError);
+
+    if (!mounted) return;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
-      body: Text('Main Foot step screen'),
+      appBar: AppBar(
+        title: const Text(
+          'Bước chân',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              print('Pressed + button');
+            },
+          ),
+        ],
+      ),
+      body: Container(
+        child: Column(
+          children: [
+            Center(
+              child: FittedBox(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: const Color(0xFFD4DFEE),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              side: BorderSide.none),
+                          child: Text(
+                            'NGÀY',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          )),
+                      ElevatedButton(
+                        onPressed: () {},
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFD4DFEE),
+                            side: BorderSide.none),
+                        child: Text(
+                          'TUẦN',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFD4DFEE),
+                              side: BorderSide.none),
+                          child: Text(
+                            'THÁNG',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                      ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFD4DFEE),
+                              side: BorderSide.none),
+                          child: Text(
+                            'NĂM',
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          )),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 40,
+            ),
+            Text(_steps),
+            CircularPercentIndicator(
+              radius: 130.0,
+              lineWidth: 10.0,
+              percent: 0.7,
+              animation: true,
+              center: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          FontAwesomeIcons.personWalking,
+                          size: 30.0,
+                          color: Colors.black,
+                        ),
+                        Text(
+                          '1,721',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 35),
+                        ),
+                        const Text(
+                          'Mục tiêu: 500 bước',
+                          style: TextStyle(fontSize: 12),
+                        )
+                      ])
+                ],
+              ),
+              progressColor: Colors.green,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
