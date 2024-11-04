@@ -67,10 +67,7 @@ class _LoginFormState extends State<SigninForm> {
         ElevatedButton(
           onPressed: () {
             widget.signInBloc.add(
-              SigninButtonSubmit(
-                  email: _emailController.text,
-                  password: _passwordController.text
-              )
+              SignInEvent(_emailController.text, _passwordController.text)
             );
           },
           style: ElevatedButton.styleFrom(

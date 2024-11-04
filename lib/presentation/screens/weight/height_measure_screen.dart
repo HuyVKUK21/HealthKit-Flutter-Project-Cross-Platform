@@ -1,14 +1,14 @@
-import 'package:fitnessapp/presentation/screens/weight/height_measure_screen.dart';
+import 'package:fitnessapp/presentation/screens/weight/weight_screen.dart';
 import 'package:fitnessapp/utils/page_route_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Thêm thư viện intl
 
-class WeightMeasureScreen extends StatefulWidget {
+class HeightMeasureScreen extends StatefulWidget {
   @override
   _WeightScreenState createState() => _WeightScreenState();
 }
 
-class _WeightScreenState extends State<WeightMeasureScreen> {
+class _WeightScreenState extends State<HeightMeasureScreen> {
   double weight = 91.0;
   String currentDate = '';
 
@@ -57,7 +57,7 @@ class _WeightScreenState extends State<WeightMeasureScreen> {
           children: [
             SizedBox(height: 10),
             Text(
-              'Cân nặng',
+              'Chiều cao',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 20),
@@ -112,7 +112,7 @@ class _WeightScreenState extends State<WeightMeasureScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text('kg', style: TextStyle(fontSize: 16,color: Colors.black)),
+                  child: Text('cm', style: TextStyle(fontSize: 16,color: Colors.black)),
                 ),
               ],
             ),
@@ -120,7 +120,7 @@ class _WeightScreenState extends State<WeightMeasureScreen> {
             Slider(
               value: weight,
               min: 40,
-              max: 150,
+              max: 210,
               divisions: 110,
               activeColor: Colors.green,
               inactiveColor: Colors.grey[300],
@@ -138,7 +138,7 @@ class _WeightScreenState extends State<WeightMeasureScreen> {
               },
               icon: Icon(Icons.chat_bubble_outline, color: Colors.black54),
               label: Text(
-                'Đo cân nặng như thế nào?',
+                'Đo chiều cao như thế nào?',
                 style: TextStyle(color: Colors.black54),
               ),
             ),
@@ -154,7 +154,7 @@ class _WeightScreenState extends State<WeightMeasureScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  RouteHelper.createFadeRoute(HeightMeasureScreen()),
+                  RouteHelper.createFadeRoute(WeightScreen()),
                 );
               },
               child: Text(

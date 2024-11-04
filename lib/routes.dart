@@ -29,7 +29,7 @@ final Map<String, WidgetBuilder> routes = {
   NotificationScreen.routeName: (context) => const NotificationScreen(),
   ActivityTrackerScreen.routeName: (context) => const ActivityTrackerScreen(),
   WorkoutScheduleView.routeName: (context) => const WorkoutScheduleView(),
-  HomeScreen.routeName: (context) => MyMedicineScreen(),
+  HomeScreen.routeName: (context) => HomeScreen(),
   MyMedicineScreen.routeName: (context) => ViewMedicineScreen(),
   MainFootStepScreen.routeName: (context) => MainFootStepScreen(),
 };
