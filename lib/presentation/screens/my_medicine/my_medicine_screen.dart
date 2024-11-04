@@ -36,7 +36,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
     try {
       List<MedicineModel> medicines = await _medicineUseCase.getMedicineData("nvCeupX3wCTu30uoXbDh");
       setState(() {
-        _medicineList = medicines;
+        _medicineList = medicines.where((medicine) => !medicine.offStatus! && !(medicine.isDeleted ?? false)).toList();
       });
     } catch (e) {
       print('Error fetching medicines: $e');
@@ -130,15 +130,15 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                   ],
                 ),
               ),
-              // SizedBox(height: 12.0),
+              SizedBox(height: 12.0),
               Expanded(
                 child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  itemCount: _medicineList.where((medicine) => medicine.offStatus == false).length + 1,
+                  itemCount: _medicineList.length + 1,
                   itemBuilder: (context, index) {
-                    if (index == _medicineList.where((medicine) => medicine.offStatus == false).length) {
+                    if (index == _medicineList.length) {
                       // Last item for the button
                       return Container(
                         margin: EdgeInsets.symmetric(vertical: 20.0),
@@ -168,7 +168,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                     }
 
                     // Display medicine card
-                    MedicineModel medicine = _medicineList.where((medicine) => medicine.offStatus == false).elementAt(index);
+                    MedicineModel medicine = _medicineList.elementAt(index);
                     return Column(
                       children: [
                         MedicineCard(
