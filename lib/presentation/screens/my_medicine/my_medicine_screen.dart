@@ -44,9 +44,11 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
 
   void _scrollToCurrentDay() {
     double screenWidth = MediaQuery.of(context).size.width;
-    double position = (today.weekday - 1) * 58.0 - (screenWidth / 2) + 29.0; // Center the current day
+    double itemWidth = 58.0;
+    double position = (today.weekday - 1) * itemWidth + (itemWidth / 2) - (screenWidth / 2);
+
     _scrollController.animateTo(
-      position,
+      position.clamp(0.0, _scrollController.position.maxScrollExtent),
       duration: Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
@@ -78,7 +80,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                   child: ListView.builder(
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
-                    itemCount: 14,
+                    itemCount: 30,
                     itemBuilder: (context, index) {
                       DateTime date = today.add(Duration(days: index - today.weekday + 1));
                       String dayOfWeek = weekdays[date.weekday % 7];
@@ -168,12 +170,16 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                   offStatus: medicine.offStatus,
                   usageStatus: medicine.usageStatus,
                   iconRight: "check",
-                  onEditPressed: () {
-                    setState(() async {
-                      medicineInfo = await _medicineUseCase.getMedicineById(medicine.id);
-                    });
-                    print(medicineInfo);
-                    _showMedicineDialog(context, medicine.medicineName, medicine.dosageTime, medicine.id);
+                  onEditPressed: () async {
+                    try {
+                      MedicineModel fetchedMedicineInfo = await _medicineUseCase.getMedicineById(medicine.id);
+                      setState(() {
+                        medicineInfo = fetchedMedicineInfo;
+                      });
+                      _showMedicineDialog(context, medicineInfo);
+                    } catch (e) {
+                      print('Error fetching medicine info: $e');
+                    }
                   },
                 );
               },
@@ -185,16 +191,18 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
   }
 }
 
-void _showMedicineDialog(BuildContext context, String medicineName, String dosageTime, String? id) {
+void _showMedicineDialog(BuildContext context, MedicineModel medicine) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return Dialog(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: BorderRadius.circular(16.0),
         ),
+        elevation: 3,
+        shadowColor: Colors.grey,
         child: Container(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.symmetric(vertical: 40),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -205,13 +213,15 @@ void _showMedicineDialog(BuildContext context, String medicineName, String dosag
               ),
               SizedBox(height: 16.0),
               Text(
-                medicineName,
+                medicine.medicineName,
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 8.0),
               Text(
-                "Đã bỏ qua 1 lần dùng lúc $dosageTime",
-                style: TextStyle(fontSize: 18, color: Colors.red, fontWeight: FontWeight.bold),
+                medicine.usageStatus == true ?
+                "Đã dùng 1 lần \nlúc ${medicine.dosageTime}" :
+                "Đã bỏ qua 1 lần dùng\nlúc ${medicine.dosageTime}",
+                style: TextStyle(fontSize: 18, color: medicine.usageStatus == true ? Colors.green : Colors.red, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 24.0),
@@ -223,13 +233,16 @@ void _showMedicineDialog(BuildContext context, String medicineName, String dosag
                   foregroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50.0),
-                      side: BorderSide(color: Colors.black, width: 1.0)),
+                      side: BorderSide(color: Colors.black, width: 1.0)
+                  ),
                   padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
                 ),
-                child: Icon(Icons.check),
+                child: Icon(medicine.usageStatus == true ? Icons.data_usage_sharp : Icons.check),
               ),
               SizedBox(height: 24.0),
               Text(
+                medicine.usageStatus == true ?
+                "Đổi thành đã bỏ qua" :
                 "Đổi thành đã uống",
                 style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
