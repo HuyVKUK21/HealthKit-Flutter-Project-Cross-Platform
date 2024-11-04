@@ -30,7 +30,7 @@ class MedicineCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20.0),
-          border: Border.all(color: offStatus == false ? (usageStatus == true ? Colors.green : Colors.red) : Colors.grey, width: 2.0),
+          border: Border.all(color: offStatus == false ? (usageStatus == true ? Colors.green : Colors.red) : Colors.grey, width: 1.0),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +40,11 @@ class MedicineCard extends StatelessWidget {
               child: CircleAvatar(
                 backgroundColor: Colors.grey[200],
                 radius: 24,
-                child: Icon(Icons.medication, color: Colors.black),
+                child: Image.asset(
+                  'assets/images/medicine_icon.png',
+                  width: 24,
+                  height: 24,
+                ),
               ),
             ),
             SizedBox(width: 16.0),
@@ -50,13 +54,14 @@ class MedicineCard extends StatelessWidget {
                 children: [
                   Text(
                     medicineName,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 4.0),
+                  SizedBox(height: 2.0),
                   Text(offStatus == false ?
                   (usageStatus == true ? "Đã uống vào lúc $dosageTime" : "Bỏ qua vào $dosageTime") :
-                  "Chưa có nhắc nhở nào được đặt", style: TextStyle(fontSize: 18)),
-                  Text("$remainingDoses lần dùng còn lại", style: TextStyle(fontSize: 18)),
+                  "Chưa có nhắc nhở nào được đặt", style: TextStyle(fontSize: 14, color: Colors.grey)),
+                  SizedBox(height: 2.0),
+                  Text("$remainingDoses lần dùng còn lại", style: TextStyle(fontSize: 14, color: Colors.grey)),
                 ],
               ),
             ),
@@ -68,8 +73,10 @@ class MedicineCard extends StatelessWidget {
               Icon(Icons.cancel, color: Colors.red,)) :
               Icon(Icons.chevron_right, color: Colors.grey,),
             ),
+
           ],
         ),
+
       ),
     );
   }

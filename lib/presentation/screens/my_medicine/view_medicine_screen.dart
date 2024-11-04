@@ -59,112 +59,115 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
           margin: EdgeInsets.fromLTRB(0, 24, 0, 0),
           child: Text(
             'Hộp thuốc của tôi',
-            style: TextStyle(color: Colors.black, fontSize: 24, fontWeight: FontWeight.bold),
+            style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
           ),
         ),
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 10),
-            SectionHeader(
-              title: 'Còn hạn ($countOffStatusFalse)',
-              isExpanded: isExpiredSectionExpanded,
-              onToggle: () {
-                setState(() {
-                  isExpiredSectionExpanded = !isExpiredSectionExpanded;
-                });
-              },
-            ),
-            if (isExpiredSectionExpanded)
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 6.0),
-                itemCount: _medicineList.where((medicine) => medicine.offStatus == false).length,
-                itemBuilder: (context, index) {
-                  // Display medicine card
-                  MedicineModel medicine = _medicineList.where((medicine) => medicine.offStatus == false).elementAt(index);
-                  return MedicineCard(
-                    medicineName: medicine.medicineName,
-                    dosageTime: medicine.dosageTime,
-                    remainingDoses: medicine.remainingDoses,
-                    offStatus: medicine.offStatus,
-                    usageStatus: medicine.usageStatus,
-                    iconRight: "edit",
-                    onEditPressed: () async {
-                      try {
-                        MedicineModel fetchedMedicineInfo = await _medicineUseCase.getMedicineById(medicine.id);
-                        setState(() {
-                          medicineInfo = fetchedMedicineInfo;
-                        });
-                        Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen(medicineInfo: medicineInfo,)));
-                      } catch (e) {
-                        print('Error fetching medicine info: $e');
-                      }
-                    },
-                  );
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 10),
+              SectionHeader(
+                title: 'Còn hạn ($countOffStatusFalse)',
+                isExpanded: isExpiredSectionExpanded,
+                onToggle: () {
+                  setState(() {
+                    isExpiredSectionExpanded = !isExpiredSectionExpanded;
+                  });
                 },
               ),
-            SectionHeader(
-              title: 'Đang tắt ($countOffStatusTrue)',
-              isExpanded: isInactiveSectionExpanded,
-              onToggle: () {
-                setState(() {
-                  isInactiveSectionExpanded = !isInactiveSectionExpanded;
-                });
-              },
-            ),
-            if (isInactiveSectionExpanded) // Only show content if expanded
-              ListView.builder(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 6.0),
-                itemCount: _medicineList.where((medicine) => medicine.offStatus == true).length,
-                itemBuilder: (context, index) {
-                  // Display medicine card
-                  MedicineModel medicine = _medicineList.where((medicine) => medicine.offStatus == true).elementAt(index);
-                  return MedicineCard(
-                    medicineName: medicine.medicineName,
-                    dosageTime: medicine.dosageTime,
-                    remainingDoses: medicine.remainingDoses,
-                    offStatus: medicine.offStatus,
-                    usageStatus: medicine.usageStatus,
-                    iconRight: "edit",
-                    onEditPressed: () async {
-                      try {
-                        MedicineModel fetchedMedicineInfo = await _medicineUseCase.getMedicineById(medicine.id);
-                        setState(() {
-                          medicineInfo = fetchedMedicineInfo;
-                        });
-                        Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen(medicineInfo: medicineInfo,)));
-                      } catch (e) {
-                        print('Error fetching medicine info: $e');
-                      }
-                    },
-                  );
+              if (isExpiredSectionExpanded)
+                ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 6.0),
+                  itemCount: _medicineList.where((medicine) => medicine.offStatus == false).length,
+                  itemBuilder: (context, index) {
+                    // Display medicine card
+                    MedicineModel medicine = _medicineList.where((medicine) => medicine.offStatus == false).elementAt(index);
+                    return MedicineCard(
+                      medicineName: medicine.medicineName,
+                      dosageTime: medicine.dosageTime,
+                      remainingDoses: medicine.remainingDoses,
+                      offStatus: medicine.offStatus,
+                      usageStatus: medicine.usageStatus,
+                      iconRight: "edit",
+                      onEditPressed: () async {
+                        try {
+                          MedicineModel fetchedMedicineInfo = await _medicineUseCase.getMedicineById(medicine.id);
+                          setState(() {
+                            medicineInfo = fetchedMedicineInfo;
+                          });
+                          Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen(medicineInfo: medicineInfo,)));
+                        } catch (e) {
+                          print('Error fetching medicine info: $e');
+                        }
+                      },
+                    );
+                  },
+                ),
+              SectionHeader(
+                title: 'Đang tắt ($countOffStatusTrue)',
+                isExpanded: isInactiveSectionExpanded,
+                onToggle: () {
+                  setState(() {
+                    isInactiveSectionExpanded = !isInactiveSectionExpanded;
+                  });
                 },
               ),
-            Spacer(),
-            Center(
-              child: ElevatedButton.icon(
-                onPressed: () {},
-                icon: Icon(Icons.add, color: Colors.white, size: 28,),
-                label: Text('Thêm thuốc', style: TextStyle(color: Colors.white, fontSize: 20)),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
+              if (isInactiveSectionExpanded) // Only show content if expanded
+                ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 6.0),
+                  itemCount: _medicineList.where((medicine) => medicine.offStatus == true).length,
+                  itemBuilder: (context, index) {
+                    // Display medicine card
+                    MedicineModel medicine = _medicineList.where((medicine) => medicine.offStatus == true).elementAt(index);
+                    return MedicineCard(
+                      medicineName: medicine.medicineName,
+                      dosageTime: medicine.dosageTime,
+                      remainingDoses: medicine.remainingDoses,
+                      offStatus: medicine.offStatus,
+                      usageStatus: medicine.usageStatus,
+                      iconRight: "edit",
+                      onEditPressed: () async {
+                        try {
+                          MedicineModel fetchedMedicineInfo = await _medicineUseCase.getMedicineById(medicine.id);
+                          setState(() {
+                            medicineInfo = fetchedMedicineInfo;
+                          });
+                          Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen(medicineInfo: medicineInfo,)));
+                        } catch (e) {
+                          print('Error fetching medicine info: $e');
+                        }
+                      },
+                    );
+                  },
+                ),
+              Spacer(),
+              Center(
+                child: ElevatedButton.icon(
+                  onPressed: () {},
+                  icon: Icon(Icons.add, color: Colors.white, size: 20,),
+                  label: Text('Thêm thuốc', style: TextStyle(color: Colors.white, fontSize: 16)),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                 ),
               ),
-            ),
-            SizedBox(height: 20),
-          ],
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
 import 'package:fitnessapp/presentation/events/weight/weight_event.dart';
+import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_measure_screen.dart';
 import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_screen.dart';
 import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_screen.dart';
 import 'package:fitnessapp/presentation/screens/foot_step/main_foot_step.dart';
@@ -119,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            RouteHelper.createFadeRoute(BloodsureScreen()),
+                            RouteHelper.createFadeRoute(BloodSugarMeasureScreen()),
                           );
                         },
                       ),
