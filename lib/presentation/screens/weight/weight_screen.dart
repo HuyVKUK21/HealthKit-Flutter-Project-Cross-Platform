@@ -1,3 +1,4 @@
+import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,7 +9,7 @@ class WeightScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: _buildAppBar(),
+      appBar: CustomAppBar(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Padding(
@@ -29,48 +30,6 @@ class WeightScreen extends StatelessWidget {
     );
   }
 
-  AppBar _buildAppBar() {
-    return AppBar(
-      backgroundColor: Colors.white,
-      elevation: 0,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back, color: Colors.black),
-        onPressed: () {},
-      ),
-      title: Text(
-        "Cân nặng",
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 20,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      centerTitle: true,
-      actions: [
-        IconButton(
-          icon: Icon(Icons.add, color: Colors.black),
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTabButton(String title, {bool isSelected = false}) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: isSelected ? Colors.black : Colors.transparent,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        title,
-        style: TextStyle(
-          color: isSelected ? Colors.white : Colors.black,
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-        ),
-      ),
-    );
-  }
 
   Widget _buildWeightStats() {
     return Padding(
@@ -220,7 +179,7 @@ class WeightScreen extends StatelessWidget {
                 },
               ),
               belowBarData:
-                  BarAreaData(show: false), // Tắt phần tô dưới chấm tròn
+                  BarAreaData(show: false),
             ),
           ],
           titlesData: FlTitlesData(
@@ -241,9 +200,8 @@ class WeightScreen extends StatelessWidget {
                       days[value.toInt() - 1],
                       style: TextStyle(
                         color: isToday
-                            ? Colors.green.shade700 // Bôi xanh cho ngày hôm nay
+                            ? Colors.green.shade700
                             : Colors.grey.shade600.withOpacity(0.5),
-                        // Mờ cho các ngày khác
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
                       ),
@@ -257,7 +215,7 @@ class WeightScreen extends StatelessWidget {
             show: true,
             border: Border.all(color: Colors.grey.shade300, width: 1),
           ),
-          gridData: FlGridData(show: false), // Tắt lưới
+          gridData: FlGridData(show: false),
         ),
       ),
     );
@@ -266,7 +224,7 @@ class WeightScreen extends StatelessWidget {
   Widget _buildControlPanel() {
     return Container(
       padding: EdgeInsets.all(22),
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 24),
+      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -288,14 +246,14 @@ class WeightScreen extends StatelessWidget {
                 "Kiểm soát cân nặng",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 18,
+                  fontSize: 16,
                   color: Colors.black87,
                 ),
               ),
               ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
+                  backgroundColor: Colors.green,
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
@@ -304,7 +262,7 @@ class WeightScreen extends StatelessWidget {
                 child: Text(
                   "Tạo mới",
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: Colors.white
                   ),

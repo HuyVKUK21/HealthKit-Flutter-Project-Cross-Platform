@@ -11,10 +11,20 @@
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:fitnessapp/data/datasources/user/firebase_auth_datasource.dart'
     as _i66;
+import 'package:fitnessapp/data/repositories/medicine/medicine_repository_impl.dart'
+    as _i708;
+import 'package:fitnessapp/data/repositories/user/auth_local_data_source_impl.dart'
+    as _i431;
 import 'package:fitnessapp/data/repositories/user/user_repository_impl.dart'
     as _i960;
+import 'package:fitnessapp/domain/repositories/medicine/medicine_repository.dart'
+    as _i91;
+import 'package:fitnessapp/domain/repositories/user/auth_local_data_source.dart'
+    as _i397;
 import 'package:fitnessapp/domain/repositories/user/user_repository.dart'
     as _i645;
+import 'package:fitnessapp/domain/usecases/medicine/medicine_usecase.dart'
+    as _i915;
 import 'package:fitnessapp/domain/usecases/user/user_usecase.dart' as _i635;
 import 'package:fitnessapp/firebase_module.dart' as _i139;
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart' as _i876;
@@ -35,12 +45,22 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final firebaseAuthModule = _$FirebaseAuthModule();
     gh.lazySingleton<_i59.FirebaseAuth>(() => firebaseAuthModule.firebaseAuth);
+    gh.lazySingleton<_i91.MedicineRepository>(
+        () => _i708.MedicineRepositoryImpl());
+    gh.factory<_i915.MedicineUseCase>(
+        () => _i915.MedicineUseCase(gh<_i91.MedicineRepository>()));
+    gh.lazySingleton<_i397.AuthLocalDataSource>(
+        () => _i431.AuthLocalDataSourceImpl());
     gh.factory<_i66.FirebaseAuthDataSource>(
         () => _i66.FirebaseAuthDataSource(gh<_i59.FirebaseAuth>()));
     gh.lazySingleton<_i645.UserRepository>(() => _i960.UserRepositoryImpl(
-        firebaseAuthDataSource: gh<_i66.FirebaseAuthDataSource>()));
-    gh.factory<_i635.UserUseCase>(
-        () => _i635.UserUseCase(gh<_i645.UserRepository>()));
+          gh<_i66.FirebaseAuthDataSource>(),
+          gh<_i397.AuthLocalDataSource>(),
+        ));
+    gh.factory<_i635.UserUseCase>(() => _i635.UserUseCase(
+          gh<_i645.UserRepository>(),
+          gh<_i397.AuthLocalDataSource>(),
+        ));
     gh.factory<_i876.SignInBloc>(
         () => _i876.SignInBloc(gh<_i635.UserUseCase>()));
     gh.factory<_i447.SignupBloc>(

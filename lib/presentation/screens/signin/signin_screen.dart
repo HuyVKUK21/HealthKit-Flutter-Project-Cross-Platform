@@ -3,6 +3,7 @@ import 'package:fitnessapp/events/user/user_event.dart';
 import 'package:fitnessapp/main.dart';
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';
 import 'package:fitnessapp/presentation/screens/dashboard/dashboard_screen.dart';
+import 'package:fitnessapp/presentation/state/user/signin_state.dart';
 import 'package:fitnessapp/presentation/state/user/user_state.dart';
 import 'package:fitnessapp/presentation/widgets/common/term_policy.dart';
 import 'package:fitnessapp/presentation/widgets/signin/logo_header_signin.dart';
@@ -22,23 +23,23 @@ class SigninScreen extends StatelessWidget {
     final signInBloc = context.read<SignInBloc>();
 
     return MultiBlocListener(
-      listeners: [
-        BlocListener<SignInBloc, RegisterState>(
-          listener: (context, state) {
-           if (state is RegisterSuccess) {
-              Navigator.pushReplacement(
-                context,
-                RouteHelper.createFadeRoute(DashboardScreen()),
-              );
-            } else if (state is RegisterFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Đăng nhập không thành công. Lỗi ${state.error}')),
-              );
-            }
-          },
-        ),
-
-      ],
+        listeners: [
+          BlocListener<SignInBloc, SigninState>(
+            listener: (context, state) {
+              if (state is AuthLoading) {
+              } else if (state is AuthAuthenticated) {
+                Navigator.pushReplacement(
+                  context,
+                  RouteHelper.createFadeRoute(DashboardScreen()),
+                );
+              } else if (state is AuthError) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Đăng nhập không thành công. Lỗi: ${state.message}')),
+                );
+              }
+            },
+          ),
+        ],
       child: Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
@@ -48,7 +49,7 @@ class SigninScreen extends StatelessWidget {
                 children: [
                   LogoHeader(),
                   SizedBox(height: 40),
-                  BlocBuilder<SignInBloc, RegisterState>(
+                  BlocBuilder<SignInBloc, SigninState>(
                     builder: (context, state) {
                       if (state is RegisterLoading) {
                         return CircularProgressIndicator();
@@ -59,7 +60,7 @@ class SigninScreen extends StatelessWidget {
                             SizedBox(height: 20),
                             SocialLoginButtons(
                               onGoogleSignIn: () {
-                                signInBloc.add(GoogleSignInPressed());
+                                signInBloc.add(SignInWithGoogleEvent());
                               },
                             ),
                           ],
@@ -67,7 +68,6 @@ class SigninScreen extends StatelessWidget {
                       }
                     },
                   ),
-
                   SizedBox(height: 20),
                   TermsAndPolicy(),
                 ],
