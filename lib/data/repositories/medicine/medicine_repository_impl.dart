@@ -61,4 +61,19 @@ class MedicineRepositoryImpl extends MedicineRepository {
     } catch (e) {}
   }
 
+  @override
+  Future<void> resetAllUsageStatuses() async {
+    try {
+      QuerySnapshot snapshot = await _medicinesCollection
+          .where('usageStatus', isEqualTo: true)
+          .get();
+      for (var doc in snapshot.docs) {
+        await doc.reference.update({'usageStatus': false});
+      }
+    } catch (e) {
+      print('Error resetting usage statuses: $e');
+    }
+  }
+
+
 }

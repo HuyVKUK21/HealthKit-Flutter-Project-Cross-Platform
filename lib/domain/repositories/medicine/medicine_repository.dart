@@ -6,4 +6,5 @@ abstract class MedicineRepository {
   Future<void> updateOffStatusMedicine(String id, bool offStatus);
   Future<void> updateUsageStatusMedicine(String id, bool used);
   Future<void> deleteMedicine(String id);
+  Future<void> resetAllUsageStatuses();
 }
