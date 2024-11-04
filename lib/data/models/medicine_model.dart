@@ -4,7 +4,7 @@ class MedicineModel {
   final String? id;
   final String medicineName;
   final String dosageTime;
-  final String remainingDoses;
+  final int remainingDoses;
   final DateTime? drugStartTime;
   final DateTime? drugEndTime;
   final String drugForm;
@@ -33,7 +33,7 @@ class MedicineModel {
       id: id,
       medicineName: data['medicineName'] ?? '',
       dosageTime: data['dosageTime'] ?? '',
-      remainingDoses: data['remainingDoses']?.toString() ?? '0', // Convert to String if needed
+      remainingDoses: data['remainingDoses'] ?? 0, // Convert to String if needed
       drugForm: data['drugForm'] is Map ? data['drugForm']['name'] ?? '' : '', // Access the 'name' field in the map
       frequencyUse: data['frequencyUse'] ?? 0,
       drugStartTime: (data['drugStartTime'] is Timestamp) ? (data['drugStartTime'] as Timestamp).toDate() : null,

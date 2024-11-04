@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MedicineCard extends StatelessWidget {
   final String medicineName;
   final String dosageTime;
-  final String remainingDoses;
+  final int remainingDoses;
   final bool? offStatus;
   final bool? usageStatus;
   final String iconRight;

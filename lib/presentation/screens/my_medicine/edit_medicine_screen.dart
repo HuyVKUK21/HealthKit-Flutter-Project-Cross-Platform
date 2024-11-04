@@ -2,9 +2,14 @@ import 'package:fitnessapp/presentation/screens/my_medicine/view_medicine_screen
 import 'package:fitnessapp/utils/page_route_builder.dart';
 import 'package:flutter/material.dart';
 
+import '../../../data/models/medicine_model.dart';
 import '../../widgets/my_medicine/edit_medicine_item.dart';
 
 class EditMedicineScreen extends StatelessWidget {
+  late final MedicineModel medicineInfo;
+
+  EditMedicineScreen({required this.medicineInfo});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +54,7 @@ class EditMedicineScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  EditMedicineItem(icon: Icons.medication, title: "Tên", value: "A.t ibuprofen"),
+                  EditMedicineItem(icon: Icons.medication, title: "Tên", value: "${medicineInfo.medicineName}"),
                   Divider(),
                   EditMedicineItem(icon: Icons.line_weight, title: "Hàm lượng", value: "-"),
                   Divider(),
@@ -57,7 +62,7 @@ class EditMedicineScreen extends StatelessWidget {
                   Divider(),
                   EditMedicineItem(icon: Icons.local_hospital, title: "Điều trị", value: "-"),
                   Divider(),
-                  EditMedicineItem(icon: Icons.inventory, title: "Trong hộp", value: "còn 28"),
+                  EditMedicineItem(icon: Icons.inventory, title: "Trong hộp", value: "còn ${medicineInfo.remainingDoses}"),
                 ],
               ),
             ),
@@ -78,9 +83,9 @@ class EditMedicineScreen extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  EditMedicineItem(icon: Icons.calendar_today, title: "Tần suất", value: "Mỗi ngày"),
+                  EditMedicineItem(icon: Icons.calendar_today, title: "Tần suất", value: "${medicineInfo.frequencyUse} lần/ngày"),
                   Divider(),
-                  EditMedicineItem(icon: Icons.schedule, title: "Đặt lịch", value: "08:00 • Uống 1 viên"),
+                  EditMedicineItem(icon: Icons.schedule, title: "Đặt lịch", value: "${medicineInfo.dosageTime} • Uống 1 viên"),
                 ],
               ),
             ),
