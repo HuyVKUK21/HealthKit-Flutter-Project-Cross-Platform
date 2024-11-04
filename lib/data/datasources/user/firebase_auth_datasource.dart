@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitnessapp/data/models/user_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 @injectable
 class FirebaseAuthDataSource {
@@ -38,6 +39,9 @@ class FirebaseAuthDataSource {
 
   Future<UserModel> signInWithEmailAndPassword(String email, String password) async {
     UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+    String uid = userCredential.user?.uid ?? '';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('user_uid', uid);
     return UserModel.fromFirebaseUser(userCredential.user!);
   }
 

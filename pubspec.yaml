@@ -60,6 +60,7 @@ dependencies:
   
   syncfusion_flutter_gauges: ^20.4.36
   flutter_svg: ^1.0.0
+  shared_preferences: ^2.0.0
 
 
 flutter_native_splash:

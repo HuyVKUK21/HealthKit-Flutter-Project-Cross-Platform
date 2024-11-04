@@ -1,15 +1,12 @@
 import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:fitnessapp/domain/repositories/user/auth_local_data_source.dart';
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/signup/signup_bloc.dart';
-import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_screen.dart';
-import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_screen.dart';
 import 'package:fitnessapp/presentation/screens/home/home_screen.dart';
 import 'package:fitnessapp/presentation/screens/signin/signin_screen.dart';
-import 'package:fitnessapp/presentation/screens/weight/weight_screen.dart';
 import 'package:fitnessapp/routes.dart';
 import 'package:fitnessapp/service_locator.dart';
-// import 'package:fitnessapp/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,11 +21,16 @@ void main() async {
         projectId: "healthkit-flutter"
     )) : await Firebase.initializeApp();
   configureDependencies();
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  final authLocalDataSource = getIt<AuthLocalDataSource>();
+  String? uid = await authLocalDataSource.getUid();
+  runApp(MyApp(initialRoute: uid != null ? HomeScreen.routeName : SigninScreen.routeName));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String initialRoute;
+
+  const MyApp({super.key, required this.initialRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +47,10 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         routes: routes,
         theme: ThemeData(
-          // primaryColor: AppColors.primaryColor1,
           useMaterial3: true,
           fontFamily: "Poppins",
         ),
-        home: SigninScreen(),
+        initialRoute: initialRoute,
       ),
     );
   }
