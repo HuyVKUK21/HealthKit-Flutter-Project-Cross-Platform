@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../data/models/medicine_model.dart';
 import '../../../data/repositories/medicine/medicine_repository_impl.dart';
 import '../../../utils/page_route_builder.dart';
+import '../../dialogs/my_medicine/medicine_dialog.dart';
 import '../../widgets/appbar/custom_app_bar.dart';
 import '../../widgets/my_medicine/medicine_card.dart';
 
@@ -76,7 +77,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                 ),
                 SizedBox(height: 16.0),
                 SizedBox(
-                  height: 80.0,
+                  height: 90.0,
                   child: ListView.builder(
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
@@ -95,6 +96,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                               style: TextStyle(
                                 color: isToday ? Colors.red : Colors.black,
                                 fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
+                                fontSize: 18
                               ),
                             ),
                           ),
@@ -141,9 +143,9 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                            borderRadius: BorderRadius.circular(20.0),
                           ),
-                          padding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 24.0),
+                          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
                         ),
                         onPressed: () {
                           Navigator.pushReplacement(
@@ -154,7 +156,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                         icon: Icon(Icons.edit, color: Colors.white),
                         label: Text(
                           "Chỉnh sửa hộp thuốc",
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
@@ -176,7 +178,18 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                       setState(() {
                         medicineInfo = fetchedMedicineInfo;
                       });
-                      _showMedicineDialog(context, medicineInfo);
+                      showMedicineDialog(
+                          context,
+                          medicineInfo.medicineName,
+                          medicineInfo.usageStatus,
+                          medicineInfo.dosageTime,
+                          () async {
+                            await _medicineUseCase.updateUsageStatusMedicine(medicine.id, medicine.usageStatus);
+                            Navigator.pushReplacement(
+                                context,
+                                RouteHelper.createFadeRoute(MyMedicineScreen())
+                            );
+                          });
                     } catch (e) {
                       print('Error fetching medicine info: $e');
                     }
@@ -189,68 +202,4 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
       ),
     );
   }
-}
-
-void _showMedicineDialog(BuildContext context, MedicineModel medicine) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.0),
-        ),
-        elevation: 3,
-        shadowColor: Colors.grey,
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 40),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircleAvatar(
-                backgroundColor: Colors.grey[200],
-                radius: 36,
-                child: Icon(Icons.more_horiz, size: 36, color: Colors.black),
-              ),
-              SizedBox(height: 16.0),
-              Text(
-                medicine.medicineName,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8.0),
-              Text(
-                medicine.usageStatus == true ?
-                "Đã dùng 1 lần \nlúc ${medicine.dosageTime}" :
-                "Đã bỏ qua 1 lần dùng\nlúc ${medicine.dosageTime}",
-                style: TextStyle(fontSize: 18, color: medicine.usageStatus == true ? Colors.green : Colors.red, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 24.0),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50.0),
-                      side: BorderSide(color: Colors.black, width: 1.0)
-                  ),
-                  padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 20.0),
-                ),
-                child: Icon(medicine.usageStatus == true ? Icons.data_usage_sharp : Icons.check),
-              ),
-              SizedBox(height: 24.0),
-              Text(
-                medicine.usageStatus == true ?
-                "Đổi thành đã bỏ qua" :
-                "Đổi thành đã uống",
-                style: TextStyle(fontSize: 16, color: Colors.black, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
 }

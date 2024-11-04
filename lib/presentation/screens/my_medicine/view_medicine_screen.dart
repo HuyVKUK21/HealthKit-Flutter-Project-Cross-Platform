@@ -71,7 +71,7 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
           children: [
             SizedBox(height: 10),
             SectionHeader(
-              title: 'Còn hạn ($countOffStatusFalse))',
+              title: 'Còn hạn ($countOffStatusFalse)',
               isExpanded: isExpiredSectionExpanded,
               onToggle: () {
                 setState(() {
@@ -122,7 +122,7 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
               ListView.builder(
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+                padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 6.0),
                 itemCount: _medicineList.where((medicine) => medicine.offStatus == true).length,
                 itemBuilder: (context, index) {
                   // Display medicine card
@@ -134,8 +134,16 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
                     offStatus: medicine.offStatus,
                     usageStatus: medicine.usageStatus,
                     iconRight: "edit",
-                    onEditPressed: () {
-                      Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen(medicineInfo: medicineInfo,)));
+                    onEditPressed: () async {
+                      try {
+                        MedicineModel fetchedMedicineInfo = await _medicineUseCase.getMedicineById(medicine.id);
+                        setState(() {
+                          medicineInfo = fetchedMedicineInfo;
+                        });
+                        Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen(medicineInfo: medicineInfo,)));
+                      } catch (e) {
+                        print('Error fetching medicine info: $e');
+                      }
                     },
                   );
                 },
@@ -144,8 +152,8 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {},
-                icon: Icon(Icons.add, color: Colors.white),
-                label: Text('Thêm thuốc', style: TextStyle(color: Colors.white)),
+                icon: Icon(Icons.add, color: Colors.white, size: 28,),
+                label: Text('Thêm thuốc', style: TextStyle(color: Colors.white, fontSize: 20)),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
