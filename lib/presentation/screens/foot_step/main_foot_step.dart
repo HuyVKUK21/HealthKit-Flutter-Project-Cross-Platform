@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:fitnessapp/presentation/screens/foot_step/modal_setting_aim.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pedometer/pedometer.dart';
@@ -18,15 +19,36 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
   late Stream<StepCount> _stepCountStream;
   late Stream<PedestrianStatus> _pedestrianStatusStream;
   String _status = '?', _steps = '?';
+  bool _isTracking = false;
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
+    _checkActivityRecognitionPermission();
+  }
+
+  void startListening() {
+    if (_isTracking) return;
+    setState(() => _isTracking = true);
+
+    _pedestrianStatusStream = Pedometer.pedestrianStatusStream;
+    _pedestrianStatusStream
+        .listen(onPedestrianStatusChanged)
+        .onError(onPedestrianStatusError);
+
+    _stepCountStream = Pedometer.stepCountStream;
+    _stepCountStream.listen(onStepCount).onError(onStepCountError);
+  }
+
+  void stopListening() {
+    setState(() {
+      _isTracking = false;
+      _steps = '?';
+    });
   }
 
   void onStepCount(StepCount event) {
-    print(event);
+    if (!_isTracking) return;
     setState(() {
       _steps = event.steps.toString();
     });
@@ -56,12 +78,10 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
 
   Future<bool> _checkActivityRecognitionPermission() async {
     bool granted = await Permission.activityRecognition.isGranted;
-
     if (!granted) {
       granted = await Permission.activityRecognition.request() ==
           PermissionStatus.granted;
     }
-
     return granted;
   }
 
@@ -81,6 +101,11 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
     if (!mounted) return;
   }
 
+  void _openSettingAimOverlay() {
+    showModalBottomSheet(
+        context: context, builder: (ctx) => const ModalSettingAimWidget());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,9 +119,7 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () {
-              print('Pressed + button');
-            },
+            onPressed: _openSettingAimOverlay,
           ),
         ],
       ),
@@ -159,13 +182,21 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
                 ),
               ),
             ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _isTracking ? stopListening : startListening,
+              child: Text(
+                _isTracking ? 'Stop' : 'Start',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            SizedBox(height: 40),
             SizedBox(
               height: 40,
             ),
-            Text(_steps),
             CircularPercentIndicator(
-              radius: 130.0,
-              lineWidth: 10.0,
+              radius: 170.0,
+              lineWidth: 15.0,
               percent: 0.7,
               animation: true,
               center: Row(
@@ -180,21 +211,100 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
                           color: Colors.black,
                         ),
                         Text(
-                          '1,721',
+                          _steps,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 35),
                         ),
                         const Text(
-                          'Mục tiêu: 500 bước',
-                          style: TextStyle(fontSize: 12),
+                          'Mục tiêu: 30/500 bước',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.w600),
                         )
                       ])
                 ],
               ),
               progressColor: Colors.green,
             ),
+            SizedBox(
+              height: 70.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InfoCard(
+                  icon: Icons.directions_walk,
+                  value: '1,721',
+                  unit: 'bước',
+                ),
+                InfoCard(
+                  icon: Icons.local_fire_department,
+                  value: '42.8',
+                  unit: 'kcal',
+                ),
+                InfoCard(
+                  icon: Icons.arrow_forward,
+                  value: '1.36',
+                  unit: 'km',
+                ),
+                InfoCard(
+                  icon: Icons.access_time,
+                  value: '16',
+                  unit: 'phút',
+                ),
+              ],
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class InfoCard extends StatelessWidget {
+  final IconData icon;
+  final String value;
+  final String unit;
+
+  InfoCard({required this.icon, required this.value, required this.unit});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 80,
+      height: 100,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16.0),
+        color: Colors.white,
+        border: Border.all(color: Colors.blue.shade100, width: 2),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 30, color: Colors.black),
+          SizedBox(height: 8),
+          Text(
+            value,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          Text(
+            unit,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey,
+            ),
+          ),
+        ],
       ),
     );
   }
