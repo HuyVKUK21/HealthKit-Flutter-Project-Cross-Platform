@@ -52,4 +52,13 @@ class MedicineRepositoryImpl extends MedicineRepository {
     } catch (e) {}
   }
 
+  @override
+  Future<void> deleteMedicine(String id) async {
+    try {
+      await _medicinesCollection.doc(id).update({
+        'isDeleted': true,
+      });
+    } catch (e) {}
+  }
+
 }

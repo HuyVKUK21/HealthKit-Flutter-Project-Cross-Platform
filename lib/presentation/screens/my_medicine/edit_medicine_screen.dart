@@ -134,12 +134,18 @@ class _EditMedicineScreenState extends State<EditMedicineScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 60),
+              SizedBox(height: 30),
               if(widget.medicineInfo.offStatus == true)
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      // Handle button press
+                      try {
+                        _medicineUseCase.deleteMedicine(widget.medicineInfo.id);
+                        Navigator.pushReplacement(context,
+                            RouteHelper.createFadeRoute(ViewMedicineScreen()));
+                      } catch (e) {
+                        print('Error fetching medicine info: $e');
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 16.0),
