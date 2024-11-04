@@ -29,27 +29,4 @@ class MedicineRepositoryImpl extends MedicineRepository {
     }
   }
 
-  @override
-  Future<void> updateOffStatusMedicine(String id, bool offStatus) async {
-    try {
-      await _medicinesCollection.doc(id).update({
-        'offStatus': !offStatus,
-      });
-    } catch (e) {}
-  }
-
-  @override
-  Future<void> updateUsageStatusMedicine(String id, bool used) async {
-    try {
-      DocumentSnapshot documentSnapshot = await _medicinesCollection.doc(id).get();
-      if (documentSnapshot.exists) {
-        int currentRemainingDoses = documentSnapshot['remainingDoses'];
-        await _medicinesCollection.doc(id).update({
-          'usageStatus': !used,
-          'remainingDoses': used ? currentRemainingDoses + 1 : currentRemainingDoses - 1,
-        });
-      }
-    } catch (e) {}
-  }
-
 }
