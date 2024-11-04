@@ -16,6 +16,9 @@ class _LoginFormState extends State<SignUpForm> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _fullNameController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +27,9 @@ class _LoginFormState extends State<SignUpForm> {
       TextField(
         controller: _emailController,
         decoration: InputDecoration(
-          hintText: 'Tên đầy đủ',
+          hintText: 'Email người dùng',
           hintStyle: TextStyle(fontSize: 14),
-          prefixIcon: Icon(Icons.account_circle, color: Color(0xFF787878)),
+          prefixIcon: Icon(Icons.mail, color: Color(0xFF787878)),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide(
@@ -38,6 +41,7 @@ class _LoginFormState extends State<SignUpForm> {
       ),
       SizedBox(height: 16),
       TextField(
+        controller: _ageController,
         decoration: InputDecoration(
           hintText: 'Tuổi',
           hintStyle: TextStyle(fontSize: 14),
@@ -53,10 +57,11 @@ class _LoginFormState extends State<SignUpForm> {
       ),
       SizedBox(height: 16),
       TextField(
+        controller: _fullNameController,
         decoration: InputDecoration(
-          hintText: 'Email của bạn',
+          hintText: 'Tên người dùng',
           hintStyle: TextStyle(fontSize: 14),
-          prefixIcon: Icon(Icons.email, color: Color(0xFF787878)),
+          prefixIcon: Icon(Icons.account_circle_sharp, color: Color(0xFF787878)),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: BorderSide(
@@ -68,6 +73,7 @@ class _LoginFormState extends State<SignUpForm> {
       ),
       SizedBox(height: 16),
       TextField(
+        controller: _phoneController,
         decoration: InputDecoration(
           hintText: 'Số điện thoại',
           hintStyle: TextStyle(fontSize: 14),
@@ -141,8 +147,11 @@ class _LoginFormState extends State<SignUpForm> {
         onPressed: () {
          widget.signUpBloc.add(
            ButtonSubmitPressed(
-               email: _emailController.text,
-               password: _passwordController.text
+             fullName: _fullNameController.text,
+                age: _ageController.text,
+                phone: _phoneController.text,
+                email: _emailController.text,
+                password: _passwordController.text,
            )
          );
         },
