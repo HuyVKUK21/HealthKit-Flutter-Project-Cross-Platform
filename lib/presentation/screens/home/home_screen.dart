@@ -17,6 +17,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../utils/page_route_builder.dart';
 import '../my_medicine/my_medicine_screen.dart';
+import '../quit_smoking/smoking_screen.dart';
+
 
 class HomeScreen extends StatefulWidget {
   static String routeName = "/HomeScreen";
@@ -163,6 +165,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             context,
                             RouteHelper.createFadeRoute(MyMedicineScreen()),
                           );
+                        },
+                      ),
+                      HealthMetricCard(
+                        icon: 'assets/icons/no-smoking.png',
+                        color: Colors.grey,
+                        title: "Bỏ thuốc lá",
+                        subtitle: "Hôm nay",
+                        points: "0",
+                        measure: false,
+                        onTap: () => {
+                          Navigator.pushReplacement(
+                            context,
+                            RouteHelper.createFadeRoute(QuitSmokingPage()),
+                          )
                         },
                       ),
                       SizedBox(height: 20),
