@@ -34,7 +34,7 @@ class QuitSmokingPage extends StatelessWidget {
           bottom: TabBar(
             indicator: BoxDecoration(
               color: Colors.black,
-              borderRadius: BorderRadius.circular(25),
+              borderRadius: BorderRadius.circular(10),
             ),
             labelColor: Colors.white,
             unselectedLabelColor: Colors.black,
