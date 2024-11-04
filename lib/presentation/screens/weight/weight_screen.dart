@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class WeightScreen extends StatelessWidget {
   @override
@@ -10,19 +10,20 @@ class WeightScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: _buildAppBar(),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildDateTabs(),
-            _buildWeightStats(),
-            _buildWeightChart(),
-            _buildControlPanel(),
-            _buildBmiSection(),
-            _buildWeightHistory(),
-            _buildRecommendations(),
-            _buildFooter(),
-          ],
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildWeightStats(),
+              _buildWeightChart(),
+              _buildControlPanel(),
+              _buildBmiSection(),
+              _buildWeightHistory(),
+              _buildRecommendations()
+            ],
+          ),
         ),
       ),
     );
@@ -54,26 +55,6 @@ class WeightScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildDateTabs() {
-    return Container(
-      height: 40,
-      margin: EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildTabButton("Ngày", isSelected: true),
-          _buildTabButton("Tuần"),
-          _buildTabButton("Tháng"),
-          _buildTabButton("Năm"),
-        ],
-      ),
-    );
-  }
-
   Widget _buildTabButton(String title, {bool isSelected = false}) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -102,15 +83,17 @@ class WeightScreen extends StatelessWidget {
             children: [
               Text(
                 "TRUNG BÌNH NGÀY",
-                style: TextStyle(fontSize: 12, color: Colors.grey),
+                style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600),
               ),
-              SizedBox(height: 4),
               Row(
                 children: [
                   Text(
                     "86.2",
                     style: TextStyle(
-                      fontSize: 36,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
@@ -120,14 +103,13 @@ class WeightScreen extends StatelessWidget {
                     child: Text(
                       "kg",
                       style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.grey,
+                        fontSize: 14,
+                        color: Colors.black,
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: 4),
               Row(
                 children: [
                   Icon(Icons.circle, color: Colors.amber, size: 8),
@@ -135,44 +117,82 @@ class WeightScreen extends StatelessWidget {
                   Text(
                     "BMI: 25.2",
                     style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.amber[700],
+                      fontSize: 12,
+                      color: Colors.black,
                     ),
                   ),
                 ],
               ),
             ],
           ),
-          DropdownButton<String>(
-            items: <String>['Tất cả'].map((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (_) {},
-            underline: Container(),
-            icon: Icon(Icons.keyboard_arrow_down),
-          ),
+          Center(
+            // Đặt container vào Center để căn giữa
+            child: Container(
+              width: 150,
+              height: 36,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey, width: 0.5),
+                // Màu viền xám, độ dày 0.5
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: DropdownButton<String>(
+                value: 'Hiển thị theo Tuần',
+                // Giá trị mặc định
+                items: <String>[
+                  'Hiển thị theo Tuần'
+                ]
+                    .map((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        value,
+                        style:
+                            TextStyle(fontSize: 8, color: Colors.grey),
+                      ),
+                    ),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                },
+                underline: Container(),
+                // Ẩn underline
+                icon: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Icon(Icons.keyboard_arrow_down, color: Colors.grey,),
+                ),
+                isExpanded: true,
+              ),
+            ),
+          )
         ],
       ),
     );
   }
 
   Widget _buildWeightChart() {
+    int todayIndex =
+        DateTime.now().weekday;
+
     return Container(
-      height: 160,
+      height: 200,
       margin: EdgeInsets.only(bottom: 16),
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 10),
+          BoxShadow(color: Colors.grey.withOpacity(0.15), blurRadius: 12),
         ],
       ),
       child: LineChart(
         LineChartData(
+          minX: 1,
+          maxX: 7,
+          minY: 0,
+          maxY: 200,
+          // Trục Y có giá trị từ 0 đến 200
           lineBarsData: [
             LineChartBarData(
               spots: [
@@ -181,26 +201,63 @@ class WeightScreen extends StatelessWidget {
                 FlSpot(3, 86.1),
                 FlSpot(4, 86.1),
                 FlSpot(5, 86.2),
+                FlSpot(6, 86.3),
+                FlSpot(7, 86.4),
               ],
               isCurved: true,
-              color: Colors.green,
-              dotData: FlDotData(show: true),
-              belowBarData: BarAreaData(show: false),
+              color: Colors.green.shade400,
+              barWidth: 3,
+              dotData: FlDotData(
+                show: true,
+                getDotPainter: (spot, percent, bar, index) {
+                  bool showDot = todayIndex == (index + 1);
+                  return FlDotCirclePainter(
+                    radius: showDot ? 6 : 0,
+                    color: showDot ? Colors.green : Colors.transparent,
+                    strokeWidth: 3,
+                    strokeColor: Colors.green.shade400,
+                  );
+                },
+              ),
+              belowBarData:
+                  BarAreaData(show: false), // Tắt phần tô dưới chấm tròn
             ),
           ],
           titlesData: FlTitlesData(
+            topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            // Ẩn trục Y
             bottomTitles: AxisTitles(
               sideTitles: SideTitles(
                 showTitles: true,
+                interval: 1,
                 getTitlesWidget: (value, _) {
-                  const days = ['T3', 'T2', 'T4', 'T7', 'CN'];
-                  return Text(days[value.toInt() - 1]);
+                  const days = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
+                  bool isToday = (value.toInt() == todayIndex);
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      days[value.toInt() - 1],
+                      style: TextStyle(
+                        color: isToday
+                            ? Colors.green.shade700 // Bôi xanh cho ngày hôm nay
+                            : Colors.grey.shade600.withOpacity(0.5),
+                        // Mờ cho các ngày khác
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  );
                 },
               ),
             ),
-            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           ),
-          gridData: FlGridData(show: true),
+          borderData: FlBorderData(
+            show: true,
+            border: Border.all(color: Colors.grey.shade300, width: 1),
+          ),
+          gridData: FlGridData(show: false), // Tắt lưới
         ),
       ),
     );
@@ -208,52 +265,100 @@ class WeightScreen extends StatelessWidget {
 
   Widget _buildControlPanel() {
     return Container(
-      padding: EdgeInsets.all(16),
-      margin: EdgeInsets.only(bottom: 16),
+      padding: EdgeInsets.all(22),
+      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
-          BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 10),
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            blurRadius: 12,
+            offset: Offset(0, 6),
+          ),
         ],
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.emoji_events, color: Colors.blue, size: 28),
-          SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Kiểm soát cân nặng",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Kiểm soát cân nặng",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.black87,
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
                   ),
                 ),
-                SizedBox(height: 8),
-                Text(
-                  "--.-- kg trước ---- --, ----",
-                  style: TextStyle(color: Colors.grey[600]),
+                child: Text(
+                  "Tạo mới",
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white
+                  ),
                 ),
-                SizedBox(height: 8),
-                Text(
-                  "Tạo kế hoạch để đạt mục tiêu cân nặng lý tưởng.",
-                  style: TextStyle(fontSize: 14, color: Colors.grey[800]),
-                ),
-              ],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.black,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
               ),
-            ),
-            child: Text("Tạo mới"),
+            ],
+          ),
+          SizedBox(height: 16),
+          Row(
+            children: [
+              FaIcon(FontAwesomeIcons.award, color: Colors.blue, size: 24),
+              SizedBox(width: 8),
+              Text(
+                "--.-- kg",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 4),
+              Text(
+                "trước ---- --, ----",
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 18,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16),
+          Divider(),
+          SizedBox(height: 16),
+          // Phần mô tả và hình ảnh
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Text(
+                  "Tạo kế hoạch để đạt mục tiêu cân nặng lý tưởng.",
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
+                  ),
+                ),
+              ),
+              SizedBox(width: 8),
+              Image.asset(
+                'assets/images/doctor_image.png',
+                height: 100,
+                width: 100,
+              ),
+            ],
           ),
         ],
       ),
@@ -272,14 +377,28 @@ class WeightScreen extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Chỉ số khối cơ thể (BMI)",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Chỉ số khối cơ thể (BMI)",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              SizedBox(height: 2,),
+              Text(
+                "3 THG 11,2024",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey,
+                  fontSize: 12,
+                ),
+              )
+            ],
           ),
           SizedBox(height: 12),
           SfRadialGauge(
@@ -287,10 +406,13 @@ class WeightScreen extends StatelessWidget {
               RadialAxis(
                 minimum: 0,
                 maximum: 40,
+                radiusFactor: 0.8,
                 ranges: <GaugeRange>[
                   GaugeRange(startValue: 0, endValue: 18.5, color: Colors.blue),
-                  GaugeRange(startValue: 18.5, endValue: 24.9, color: Colors.green),
-                  GaugeRange(startValue: 24.9, endValue: 29.9, color: Colors.orange),
+                  GaugeRange(
+                      startValue: 18.5, endValue: 24.9, color: Colors.green),
+                  GaugeRange(
+                      startValue: 24.9, endValue: 29.9, color: Colors.orange),
                   GaugeRange(startValue: 29.9, endValue: 40, color: Colors.red),
                 ],
                 pointers: <GaugePointer>[
@@ -304,7 +426,7 @@ class WeightScreen extends StatelessWidget {
                         Text(
                           '25.3',
                           style: TextStyle(
-                            fontSize: 30,
+                            fontSize: 28,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
@@ -312,8 +434,9 @@ class WeightScreen extends StatelessWidget {
                         Text(
                           'Thừa cân',
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 24,
                             color: Colors.amber,
+                            fontWeight: FontWeight.w700
                           ),
                         ),
                       ],
@@ -404,28 +527,9 @@ class WeightScreen extends StatelessWidget {
             ),
           ),
           SizedBox(height: 12),
-          Text("• Duy trì cân nặng hiện tại bằng cách tăng cường tập thể dục và ăn uống hợp lý."),
+          Text(
+              "• Duy trì cân nặng hiện tại bằng cách tăng cường tập thể dục và ăn uống hợp lý."),
           Text("• Giảm cân từ từ để đạt mục tiêu BMI trong vùng lý tưởng."),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFooter() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 24),
-      alignment: Alignment.center,
-      child: Column(
-        children: [
-          Text(
-            "Cập nhật: 11/2023",
-            style: TextStyle(color: Colors.grey, fontSize: 14),
-          ),
-          SizedBox(height: 8),
-          Text(
-            "Nguồn dữ liệu: Health App",
-            style: TextStyle(color: Colors.grey, fontSize: 14),
-          ),
         ],
       ),
     );
