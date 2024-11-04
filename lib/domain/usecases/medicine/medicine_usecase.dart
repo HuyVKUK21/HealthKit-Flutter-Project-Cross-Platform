@@ -16,4 +16,12 @@ class MedicineUseCase {
     return await _medicineReponsitory.getMedicineById(id!);
   }
 
+  Future<void> updateOffStatusMedicine(String? id, bool? offStatus) async {
+    await _medicineReponsitory.updateOffStatusMedicine(id!, offStatus!);
+  }
+
+  Future<void> updateUsageStatusMedicine(String? id, bool? used) async {
+    await _medicineReponsitory.updateUsageStatusMedicine(id!, used!);
+  }
+
 }

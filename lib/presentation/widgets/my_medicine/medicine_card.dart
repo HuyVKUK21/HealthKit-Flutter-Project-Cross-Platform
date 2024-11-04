@@ -29,7 +29,7 @@ class MedicineCard extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 4.0),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: BorderRadius.circular(20.0),
           border: Border.all(color: offStatus == false ? (usageStatus == true ? Colors.green : Colors.red) : Colors.grey, width: 2.0),
         ),
         child: Row(
@@ -50,13 +50,13 @@ class MedicineCard extends StatelessWidget {
                 children: [
                   Text(
                     medicineName,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 4.0),
                   Text(offStatus == false ?
                   (usageStatus == true ? "Đã uống vào lúc $dosageTime" : "Bỏ qua vào $dosageTime") :
-                  "Chưa có nhắc nhở nào được đặt", style: TextStyle(fontSize: 14)),
-                  Text("$remainingDoses lần dùng còn lại", style: TextStyle(fontSize: 14)),
+                  "Chưa có nhắc nhở nào được đặt", style: TextStyle(fontSize: 18)),
+                  Text("$remainingDoses lần dùng còn lại", style: TextStyle(fontSize: 18)),
                 ],
               ),
             ),

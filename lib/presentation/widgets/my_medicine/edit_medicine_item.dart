@@ -16,11 +16,11 @@ class EditMedicineItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: Icon(icon, size: 28),
-      title: Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+      title: Text(title, style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Colors.grey.shade700)),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(value, style: TextStyle(fontSize: 16, color: Colors.grey)),
+          Text(value, style: TextStyle(fontSize: 18, color: Colors.black)),
           SizedBox(width: 8),
           Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
         ],
