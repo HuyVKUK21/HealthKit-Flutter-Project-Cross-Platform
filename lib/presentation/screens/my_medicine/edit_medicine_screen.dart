@@ -1,4 +1,4 @@
-import 'package:fitnessapp/presentation/screens/my_medicine/ViewMedicineScreen.dart';
+import 'package:fitnessapp/presentation/screens/my_medicine/view_medicine_screen.dart';
 import 'package:fitnessapp/utils/page_route_builder.dart';
 import 'package:flutter/material.dart';
 

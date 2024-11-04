@@ -1,7 +1,8 @@
-import 'package:fitnessapp/presentation/screens/my_medicine/ViewMedicineScreen.dart';
+import 'package:fitnessapp/domain/usecases/medicine/medicine_usecase.dart';
+import 'package:fitnessapp/presentation/screens/my_medicine/view_medicine_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../../../data/models/MedicineModel.dart';
+import '../../../data/models/medicine_model.dart';
 import '../../../utils/page_route_builder.dart';
 import '../../widgets/appbar/custom_app_bar.dart';
 import '../../widgets/my_medicine/medicine_card.dart';
@@ -17,11 +18,12 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
   final DateTime today = DateTime.now();
   final List<String> weekdays = ["CN", "TH 2", "TH 3", "TH 4", "TH 5", "TH 6", "TH 7"];
   final ScrollController _scrollController = ScrollController();
+  late final MedicineUseCase _medicineUseCase;
 
   // demo
-  List<Medicine> yourListOfMedicineData() {
+  List<MedicineModel> yourListOfMedicineData() {
     return [
-      Medicine(
+      MedicineModel(
         medicineName: "A.t Ibuprofen 1",
         dosageTime: "8:00",
         remainingDoses: "30",
@@ -29,8 +31,9 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
         frequencyUse: 1,
         offStatus: false,
         usageStatus: true,
+        idUser: ""
       ),
-      Medicine(
+      MedicineModel(
         medicineName: "A.t Ibuprofen 2",
         dosageTime: "8:00",
         remainingDoses: "29",
@@ -38,8 +41,9 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
         frequencyUse: 1,
         offStatus: false,
         usageStatus: false,
+        idUser: ""
       ),
-      Medicine(
+      MedicineModel(
         medicineName: "A.t Ibuprofen 3",
         dosageTime: "8:00",
         remainingDoses: "29",
@@ -47,6 +51,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
         frequencyUse: 1,
         offStatus: true,
         usageStatus: false,
+        idUser: ""
       ),
     ];
   }
@@ -55,6 +60,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToCurrentDay());
+    _medicineUseCase = MedicineUseCase();
   }
 
   void _scrollToCurrentDay() {

@@ -1,9 +1,9 @@
-import 'package:fitnessapp/presentation/screens/my_medicine/EditMedicineScreen.dart';
-import 'package:fitnessapp/presentation/screens/my_medicine/MyMedicineScreen.dart';
+import 'package:fitnessapp/presentation/screens/my_medicine/edit_medicine_screen.dart';
+import 'package:fitnessapp/presentation/screens/my_medicine/my_medicine_screen.dart';
 import 'package:fitnessapp/utils/page_route_builder.dart';
 import 'package:flutter/material.dart';
 
-import '../../../data/models/MedicineModel.dart';
+import '../../../data/models/medicine_model.dart';
 import '../../widgets/my_medicine/medicine_card.dart';
 import '../../widgets/my_medicine/session_header.dart';
 
@@ -14,12 +14,12 @@ class ViewMedicineScreen extends StatefulWidget {
 
 class _ViewMedicineScreen extends State<ViewMedicineScreen> {
   bool isExpiredSectionExpanded = true;
-  bool isInactiveSectionExpanded = true;
+  bool isInactiveSectionExpanded = false;
 
   // demo
-  List<Medicine> yourListOfMedicineData() {
+  List<MedicineModel> yourListOfMedicineData() {
     return [
-      Medicine(
+      MedicineModel(
         medicineName: "A.t Ibuprofen 1",
         dosageTime: "8:00",
         remainingDoses: "30",
@@ -27,8 +27,9 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
         frequencyUse: 1,
         offStatus: false,
         usageStatus: true,
+        idUser: ""
       ),
-      Medicine(
+      MedicineModel(
         medicineName: "A.t Ibuprofen 2",
         dosageTime: "8:00",
         remainingDoses: "29",
@@ -36,8 +37,9 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
         frequencyUse: 1,
         offStatus: false,
         usageStatus: false,
+        idUser: ""
       ),
-      Medicine(
+      MedicineModel(
         medicineName: "A.t Ibuprofen 3",
         dosageTime: "8:00",
         remainingDoses: "29",
@@ -45,6 +47,7 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
         frequencyUse: 1,
         offStatus: true,
         usageStatus: false,
+        idUser: ""
       ),
     ];
   }
@@ -135,7 +138,9 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
                         offStatus: medicine.offStatus,
                         usageStatus: medicine.usageStatus,
                         iconRight: "edit",
-                        onEditPressed: () {},
+                        onEditPressed: () {
+                          Navigator.pushReplacement(context, RouteHelper.createFadeRoute(EditMedicineScreen()));
+                        },
                       );
                     }),
                   ]
