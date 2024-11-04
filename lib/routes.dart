@@ -3,8 +3,8 @@ import 'package:fitnessapp/presentation/screens/dashboard/dashboard_screen.dart'
 import 'package:fitnessapp/presentation/screens/finish_workout/finish_workout_screen.dart';
 import 'package:fitnessapp/presentation/screens/foot_step/main_foot_step.dart';
 import 'package:fitnessapp/presentation/screens/home/home_screen.dart';
-import 'package:fitnessapp/presentation/screens/my_medicine/ViewMedicineScreen.dart';
-import 'package:fitnessapp/presentation/screens/my_medicine/MyMedicineScreen.dart';
+import 'package:fitnessapp/presentation/screens/my_medicine/view_medicine_screen.dart';
+import 'package:fitnessapp/presentation/screens/my_medicine/my_medicine_screen.dart';
 import 'package:fitnessapp/presentation/screens/notification/notification_screen.dart';
 import 'package:fitnessapp/presentation/screens/on_boarding/on_boarding_screen.dart';
 import 'package:fitnessapp/presentation/screens/on_boarding/start_screen.dart';
