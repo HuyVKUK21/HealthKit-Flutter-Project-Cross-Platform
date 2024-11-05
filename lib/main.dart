@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fitnessapp/data/repositories/user/auth_local_data_source_impl.dart';
 import 'package:fitnessapp/domain/repositories/user/auth_local_data_source.dart';
+import 'package:fitnessapp/firebase_options.dart';
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/signup/signup_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
@@ -26,7 +27,9 @@ void main() async {
         appId: "1:539525530321:android:80fdb2100f11d2c57abbf0",
         messagingSenderId: "539525530321",
         projectId: "healthkit-flutter"
-    )) : await Firebase.initializeApp();
+    )) : await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
   configureDependencies();
   WidgetsFlutterBinding.ensureInitialized();
   final authLocalDataSource = getIt<AuthLocalDataSource>();
