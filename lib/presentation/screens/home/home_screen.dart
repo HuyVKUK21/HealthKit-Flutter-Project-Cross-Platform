@@ -18,8 +18,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../utils/page_route_builder.dart';
 import '../my_medicine/my_medicine_screen.dart';
-import '../quit_smoking/smoking_screen.dart';
-
 
 class HomeScreen extends StatefulWidget {
   static String routeName = "/HomeScreen";
@@ -168,20 +166,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         },
                       ),
-                      HealthMetricCard(
-                        icon: 'assets/icons/no-smoking.png',
-                        color: Colors.grey,
-                        title: "Bỏ thuốc lá",
-                        subtitle: "Hôm nay",
-                        points: "0",
-                        measure: false,
-                        onTap: () => {
-                          Navigator.pushReplacement(
-                            context,
-                            RouteHelper.createFadeRoute(QuitSmokingPage()),
-                          )
-                        },
-                      ),
                       SizedBox(height: 20),
                       Text(
                         "Mục tiêu sức khỏe",
@@ -226,13 +210,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(height: 10),
                       ActivityReminderCard(
                         title: "Uống nước đủ mỗi ngày",
-                        imageUrl: "https://images.pexels.com/photos/5934516/pexels-photo-5934516.jpeg",
+                        imageUrl: "https://media.self.com/photos/57d883a224fe9dae328312d6/master/pass/Drinking-Water_Feat.jpg",
                         description: "Uống ít nhất 8 ly nước mỗi ngày để cơ thể luôn giữ được độ ẩm và sức sống.",
                       ),
                       SizedBox(height: 10),
                       ActivityReminderCard(
                         title: "Thời gian ngủ đủ giấc",
-                        imageUrl: "https://images.pexels.com/photos/3754490/pexels-photo-3754490.jpeg",
+                        imageUrl: "https://photo.znews.vn/w660/Uploaded/sgorvz/2023_12_12/giac_ngu_ngon_1.jpg",
                         description: "Ngủ ít nhất 7-8 tiếng mỗi đêm để cơ thể được nghỉ ngơi và phục hồi.",
                       ),
                       SizedBox(height: 10),
