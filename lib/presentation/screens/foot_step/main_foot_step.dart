@@ -37,7 +37,7 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
     super.initState();
 
     _footStepData = FootStepModel(
-      idUser: 'user_id_123',
+      userId: 'user_id_123',
       aim: 500,
       stepOfDay: [],
     );
@@ -64,7 +64,7 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
           StepOfDay newStepOfDay = result.stepOfDay;
 
           _footStepData = FootStepModel(
-            idUser: _footStepData.idUser,
+            userId: _footStepData.userId,
             aim: _footStepData.aim,
             stepOfDay: [..._footStepData.stepOfDay, newStepOfDay],
           );
@@ -92,6 +92,7 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
     setState(() {
       _footStepData = _footStepData.copyWith(newAim: aim);
     });
+    Navigator.pop(context);
   }
 
   Future<void> updateWhenStopWalk() async {
