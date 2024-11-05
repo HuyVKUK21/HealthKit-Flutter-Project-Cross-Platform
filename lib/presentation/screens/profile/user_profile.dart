@@ -1,3 +1,4 @@
+import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -6,26 +7,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Cài đặt',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.pink,
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.qr_code, color: Colors.white),
-            onPressed: () {
-              // Xử lý QR code action
-            },
-          ),
-        ],
-      ),
+      appBar: CustomAppBar(),
       body: Container(
         color: Colors.grey[200],
         padding: const EdgeInsets.all(16.0),
