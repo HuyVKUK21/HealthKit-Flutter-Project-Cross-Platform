@@ -25,7 +25,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     const HomeScreen(),
     const HealthManagementScreen(),
     MyMedicineScreen(),
-    const SettingsScreen()
+    SettingsScreen()
   ];
 
   @override
@@ -47,9 +47,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               color: AppColors.whiteColor,
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 2,
-                    offset: Offset(0, -2))
+                    color: Colors.black12, blurRadius: 2, offset: Offset(0, -2))
               ]),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -140,8 +138,7 @@ class TabButton extends StatelessWidget {
               width: 4,
               height: 4,
               decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(2)),
+                  color: Colors.green, borderRadius: BorderRadius.circular(2)),
             ),
           )
         ],
