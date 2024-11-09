@@ -26,4 +26,8 @@ class FootStepUsecase {
     return await _footStepReponsitory.updateStepOfDayWhenStopByIdUser(
         id, stepOfDay);
   }
+
+  Future<List<StepOfDay>> getStepInTheWeekByUser(String id) async {
+    return await _footStepReponsitory.getStepInTheWeekByUser(id);
+  }
 }
