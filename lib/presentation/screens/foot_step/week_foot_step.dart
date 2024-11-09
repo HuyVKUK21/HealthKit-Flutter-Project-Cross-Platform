@@ -1,10 +1,22 @@
+import 'package:fitnessapp/data/models/meansure_foot_step.dart';
+import 'package:fitnessapp/presentation/screens/foot_step/day_foot_step.dart';
 import 'package:flutter/material.dart';
 
 class WeekFootStep extends StatelessWidget {
+  const WeekFootStep({super.key, required this.stepOfWeek});
+  final List<StepOfDay> stepOfWeek;
   @override
   Widget build(BuildContext context) {
-    // Danh sách số bước tương ứng với mỗi ngày
-    final steps = [2058, 1496, 1895, 0, 0, 0, 0];
+    final steps = [];
+    int max = 0;
+    int total = 0;
+    for (StepOfDay st in stepOfWeek) {
+      if (max < st.step) {
+        max = st.step;
+      }
+      total += st.step;
+      steps.add(st.step);
+    }
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -17,11 +29,11 @@ class WeekFootStep extends StatelessWidget {
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
             Text(
-              '5,449 bước',
+              '$total bước',
               style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
             ),
             Text(
-              '4 - 10 thg 11',
+              '${stepOfWeek.first.date.substring(0, 2).contains('/') ? stepOfWeek.first.date.substring(0, 1) : stepOfWeek.first.date.substring(0, 2)} - ${stepOfWeek.last.date.substring(0, 2).contains('/') ? stepOfWeek.last.date.substring(0, 1) : stepOfWeek.last.date.substring(0, 2)}  thg 11',
               style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
             SizedBox(height: 16),
@@ -46,9 +58,10 @@ class WeekFootStep extends StatelessWidget {
                   children: [
                     Container(
                       width: 16,
-                      height: steps[index] /
-                          1000 *
-                          50, // Điều chỉnh chiều cao dựa vào số bước
+                      height: steps[index] != 0
+                          ? steps[index] * 18 / 10
+                          : max * 18 / 10,
+                      // Điều chỉnh chiều cao dựa vào số bước
                       decoration: BoxDecoration(
                         color: steps[index] > 0
                             ? Colors.blue.withOpacity(0.5)
@@ -68,6 +81,36 @@ class WeekFootStep extends StatelessWidget {
                   ],
                 );
               }),
+            ),
+            SizedBox(
+              height: 70.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InfoCard(
+                  icon: Icons.directions_walk,
+                  value: '$total',
+                  unit: 'bước',
+                ),
+                InfoCard(
+                  icon: Icons.local_fire_department,
+                  value:
+                      (65 * ((total * 0.75) / 1000) * 0.57).toStringAsFixed(2),
+                  unit: 'kcal',
+                ),
+                InfoCard(
+                  icon: Icons.arrow_forward,
+                  value: ((total * 0.75) / 1000).toStringAsFixed(2),
+                  unit: 'km',
+                ),
+                InfoCard(
+                  icon: Icons.access_time,
+                  value:
+                      ((((total * 0.75) / 1000) / 5) * 60).toStringAsFixed(1),
+                  unit: 'phút',
+                ),
+              ],
             ),
           ],
         ),

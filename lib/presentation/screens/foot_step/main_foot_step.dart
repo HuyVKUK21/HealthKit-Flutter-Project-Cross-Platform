@@ -34,6 +34,7 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
   late FootStepUsecase _footStepUsecase;
   late FootStepModel _footStepData;
   late StepOfDay _stepOfToday = StepOfDay(date: '00/00/2000', step: 0);
+  late List<StepOfDay> _stepOfCurrentWeek = [];
 
   @override
   void initState() {
@@ -48,11 +49,20 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
     _checkActivityRecognitionPermission();
     _footStepUsecase = FootStepUsecase(FootStepRepositoryImpl());
     fetchFootStepByUserId();
+    fetchStepOfCurrentWeek();
   }
 
   void switchScreen(String screenName) {
     setState(() {
       screen = screenName;
+    });
+  }
+
+  Future<void> fetchStepOfCurrentWeek() async {
+    List<StepOfDay> stepCurrentWeek = await _footStepUsecase
+        .getStepInTheWeekByUser(FirebaseAuth.instance.currentUser!.uid);
+    setState(() {
+      _stepOfCurrentWeek = stepCurrentWeek;
     });
   }
 
@@ -64,7 +74,7 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
         _footStepData = model!;
         Result result = _footStepData.findStepOfToday();
         _stepOfToday = result.stepOfDay;
-        _km = ((_stepOfToday.step * 0.75) * 100).toStringAsFixed(2);
+        _km = ((_stepOfToday.step * 0.75) / 1000).toStringAsFixed(2);
         _calories = (65 * ((_stepOfToday.step * 0.75) / 1000) * 0.57)
             .toStringAsFixed(2);
         _time =
@@ -140,7 +150,7 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
       _steps = event.steps.toString();
       int step = _stepOfToday.getStep() + int.parse(_steps);
       _stepOfToday = _stepOfToday.copyWith(step: step);
-      _km = ((_stepOfToday.step * 0.75) * 100).toStringAsFixed(2);
+      _km = ((_stepOfToday.step * 0.75) / 1000).toStringAsFixed(2);
       _calories =
           (65 * ((_stepOfToday.step * 0.75) / 1000) * 0.57).toStringAsFixed(2);
       _time =
@@ -263,7 +273,9 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
                     footStepData: _footStepData,
                     steps: _steps,
                     stepOfToday: _stepOfToday)
-                : WeekFootStep()
+                : WeekFootStep(
+                    stepOfWeek: _stepOfCurrentWeek,
+                  )
           ],
         ),
       ),
