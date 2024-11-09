@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitnessapp/data/models/meansure_foot_step.dart';
 import 'package:fitnessapp/domain/repositories/foot_step/foot_step_repository.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl/intl.dart';
 
 @LazySingleton(as: FootStepRepository)
 class FootStepRepositoryImpl extends FootStepRepository {
@@ -163,5 +164,53 @@ class FootStepRepositoryImpl extends FootStepRepository {
       print('Lỗi khi cập nhật StepOfDays: $e');
       throw Exception('Lỗi khi cập nhật StepOfDays: $e');
     }
+  }
+
+  List<DateTime> getDaysInCurrentWeek() {
+    DateTime today = DateTime.now();
+
+    // Tìm ngày đầu tiên của tuần hiện tại (thứ Hai)
+    DateTime firstDayOfWeek = today.subtract(Duration(days: today.weekday - 1));
+
+    // Tạo danh sách chứa tất cả các ngày trong tuần
+    List<DateTime> daysInWeek = [];
+    for (int i = 0; i < 7; i++) {
+      daysInWeek.add(firstDayOfWeek.add(Duration(days: i)));
+    }
+
+    return daysInWeek;
+  }
+
+  @override
+  Future<List<StepOfDay>> getStepInTheWeekByUser(String id) async {
+    DateTime now = DateTime.now();
+    int currentWeekDay = now.weekday;
+    List<StepOfDay> stepsForWeek = [];
+
+    for (int i = 1; i <= 7; i++) {
+      DateTime day = now.add(Duration(days: i - currentWeekDay));
+      String formattedDate = DateFormat('d/M/yyyy').format(day);
+      stepsForWeek.add(StepOfDay(date: formattedDate, step: 0));
+    }
+
+    QuerySnapshot querySnapshot =
+        await _footStepCollection.where('userId', isEqualTo: id).get();
+    if (querySnapshot.docs.isNotEmpty) {
+      var footStepDoc = querySnapshot.docs.first;
+      List<dynamic> stepOfDayList = footStepDoc['stepOfDay'];
+
+      for (var stepData in stepOfDayList) {
+        for (int i = 0; i < stepsForWeek.length; i++) {
+          if (stepsForWeek[i].date == stepData['date']) {
+            stepsForWeek[i] = stepsForWeek[i].copyWith(step: stepData['step']);
+            break;
+          }
+        }
+      }
+    } else {
+      print("No footSteps data found for this user.");
+    }
+
+    return stepsForWeek;
   }
 }

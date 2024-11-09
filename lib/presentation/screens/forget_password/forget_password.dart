@@ -1,9 +1,13 @@
+import 'package:fitnessapp/data/models/user_model.dart';
+import 'package:fitnessapp/data/repositories/user/forget_password_impl.dart';
+import 'package:fitnessapp/domain/usecases/user/forget_password_usercase.dart';
 import 'package:flutter/material.dart';
+
 
 class ForgetPassword extends StatefulWidget {
   const ForgetPassword({super.key});
   static String routeName = '/ForgetPasswordScreen';
-  
+
   @override
   State<StatefulWidget> createState() {
     return _ForgetPassword();
@@ -12,6 +16,26 @@ class ForgetPassword extends StatefulWidget {
 
 class _ForgetPassword extends State<ForgetPassword> {
   final TextEditingController _emailController = TextEditingController();
+  final ForgetPasswordUsercase _forgetPasswordUsercase =
+      ForgetPasswordUsercase(ForgetPasswordImpl());
+
+  Future<void> checkGmailUserForgetPassword() async {
+    Map<String?, bool> userInfor =
+        await _forgetPasswordUsercase.findUserByEmail(_emailController.text);
+    final firstEntry = userInfor.entries.first;
+    String? verifyId = firstEntry.key;
+    bool isValid = firstEntry.value;
+    
+    print(isValid);
+    if (!isValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Email không tồn tại trong hệ thống. ')),
+      );
+    }
+  }
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +66,7 @@ class _ForgetPassword extends State<ForgetPassword> {
             SizedBox(height: 8),
             SizedBox(height: 16),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: checkGmailUserForgetPassword,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF118036),
                 minimumSize: Size(double.infinity, 50),
@@ -52,7 +76,7 @@ class _ForgetPassword extends State<ForgetPassword> {
                 elevation: 10,
                 shadowColor: Color(0xFF118036),
               ),
-              child: Text("Đăng nhập",
+              child: Text("Xác nhận",
                   style: TextStyle(fontSize: 14, color: Colors.white)),
             ),
             SizedBox(height: 40),
