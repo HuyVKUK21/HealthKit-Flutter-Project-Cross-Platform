@@ -7,7 +7,7 @@ class ForgetPasswordUsercase {
   late ForgetPasswordRespository _forgetPasswordRespository;
   ForgetPasswordUsercase(this._forgetPasswordRespository);
 
-  Future<Map<UserModel?, bool>> findUserByEmail(String email) {
+  Future<Map<String?, bool>> findUserByEmail(String email) {
     return _forgetPasswordRespository.findUserByEmail(email);
   }
 
