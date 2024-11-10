@@ -154,7 +154,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                 child: ListView.builder(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   itemCount: _medicineList.length + 1,
                   itemBuilder: (context, index) {
                     if (index == _medicineList.length) {
@@ -220,7 +220,6 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                             }
                           },
                         ),
-                        SizedBox(height: 12,)
                       ],
                     );
                   },
