@@ -46,7 +46,7 @@ class WeekFootStep extends StatelessWidget {
                 ),
               ),
               onPressed: () {},
-              child: Text('Trung bình 1,816'),
+              child: Text('Trung bình $total'),
             ),
             SizedBox(height: 16),
             Row(
