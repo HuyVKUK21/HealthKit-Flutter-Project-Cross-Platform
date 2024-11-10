@@ -24,7 +24,7 @@ class QuitSmokingPage extends StatelessWidget {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(builder: (context) => HomeScreen()),
-                    (route) => false,
+                    (route) => false, // Xóa tất cả các trang khỏi stack
               );
             },
           ),
