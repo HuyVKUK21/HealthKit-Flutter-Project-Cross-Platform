@@ -4,53 +4,9 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="edb42507-eb4c-42b9-9652-7245f33c6456" name="Changes" comment="change file">
-      <change afterPath="$PROJECT_DIR$/.idea/appInsightsSettings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/other.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Flutter/Generated.xcconfig" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Flutter/GoogleService-Info.plist" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ios/Flutter/flutter_export_environment.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/data/repositories/user/forget_password_impl.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/domain/repositories/user/forget_password_respository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/domain/usecases/user/forget_password_usercase.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/presentation/screens/bloodsure/bloodsure_measure_screen.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/presentation/screens/foot_step/day_foot_step.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/presentation/screens/foot_step/week_foot_step.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/presentation/screens/forget_password/enter_otp.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/presentation/screens/forget_password/forget_password.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/presentation/widgets/my_medicine/session_medicine_lists.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/ios/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Flutter/AppFrameworkInfo.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Flutter/AppFrameworkInfo.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Flutter/Debug.xcconfig" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Flutter/Debug.xcconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Flutter/Release.xcconfig" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Flutter/Release.xcconfig" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Podfile" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Podfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Podfile.lock" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/xcshareddata/xcschemes/Runner.xcscheme" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/AppDelegate.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/AppDelegate.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/models/meansure_foot_step.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/models/meansure_foot_step.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/models/medicine_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/models/medicine_model.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/repositories/foot_step/foot_step_repository_impl.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/repositories/foot_step/foot_step_repository_impl.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/data/repositories/medicine/medicine_repository_impl.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/data/repositories/medicine/medicine_repository_impl.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/domain/repositories/foot_step/foot_step_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/domain/repositories/foot_step/foot_step_repository.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/domain/repositories/medicine/medicine_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/domain/repositories/medicine/medicine_repository.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/domain/usecases/foot_step/foot_step_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/domain/usecases/foot_step/foot_step_usecase.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/domain/usecases/medicine/medicine_usecase.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/domain/usecases/medicine/medicine_usecase.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/presentation/screens/dashboard/dashboard_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/presentation/screens/dashboard/dashboard_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/presentation/screens/foot_step/main_foot_step.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/presentation/screens/foot_step/main_foot_step.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/presentation/screens/home/home_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/presentation/screens/home/home_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/presentation/screens/my_medicine/edit_medicine_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/presentation/screens/my_medicine/edit_medicine_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/presentation/screens/my_medicine/my_medicine_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/presentation/screens/my_medicine/my_medicine_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/presentation/screens/my_medicine/view_medicine_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/presentation/screens/my_medicine/view_medicine_screen.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/presentation/screens/profile/user_profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/presentation/screens/profile/user_profile.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/presentation/widgets/my_medicine/medicine_card.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/presentation/widgets/my_medicine/medicine_card.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/presentation/widgets/signin/signin_form.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/presentation/widgets/signin/signin_form.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/routes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/routes.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+    <list default="true" id="edb42507-eb4c-42b9-9652-7245f33c6456" name="Changes" comment="up date code">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/presentation/screens/quit_smoking/smoking_screen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/presentation/screens/quit_smoking/smoking_screen.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -122,7 +78,7 @@
     "cidr.known.project.marker": "true",
     "com.google.services.firebase.aqiPopupShown": "true",
     "dart.analysis.tool.window.visible": "false",
-    "git-widget-placeholder": "Merging docholag",
+    "git-widget-placeholder": "docholag",
     "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/dart-sdk",
@@ -207,7 +163,15 @@
       <option name="project" value="LOCAL" />
       <updated>1731212574950</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="up date code">
+      <option name="closed" value="true" />
+      <created>1731214345555</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1731214345555</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -225,6 +189,7 @@
     <MESSAGE value="Merge pull request #66 from HuyVKUK21/dev/Pho&#10;&#10;UI BloodSugarMeasureScreen" />
     <MESSAGE value="add smoking by Do" />
     <MESSAGE value="change file" />
-    <option name="LAST_COMMIT_MESSAGE" value="change file" />
+    <MESSAGE value="up date code" />
+    <option name="LAST_COMMIT_MESSAGE" value="up date code" />
   </component>
 </project>
