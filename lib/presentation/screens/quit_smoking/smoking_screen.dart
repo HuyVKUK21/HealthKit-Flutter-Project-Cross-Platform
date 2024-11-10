@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
+import '../home/home_screen.dart';
+
 class QuitSmokingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -19,8 +21,11 @@ class QuitSmokingPage extends StatelessWidget {
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () {
-              Navigator.pop(
-                  context); // Navigate back to the previous or home page
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+                    (route) => false,
+              );
             },
           ),
           actions: [
