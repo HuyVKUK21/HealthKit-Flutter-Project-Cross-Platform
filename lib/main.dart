@@ -19,7 +19,6 @@ import 'package:get_it/get_it.dart';
 final GetIt getIt = GetIt.instance;
 
 void main() async {
-  
   WidgetsFlutterBinding.ensureInitialized();
   Platform.isAndroid ? await Firebase.initializeApp(
     options: const FirebaseOptions(
