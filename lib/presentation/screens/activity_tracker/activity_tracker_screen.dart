@@ -13,7 +13,7 @@ class ActivityTrackerScreen extends StatefulWidget {
 }
 
 class _ActivityTrackerScreenState extends State<ActivityTrackerScreen> {
-//dsds
+
   int touchedIndex = -1;
 
   List latestArr = [
