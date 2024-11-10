@@ -6,19 +6,19 @@ class Result {
 }
 
 class FootStepModel {
-  final String idUser;
+  final String userId;
   final int aim;
   final List<StepOfDay> stepOfDay;
 
   FootStepModel({
-    required this.idUser,
+    required this.userId,
     required this.aim,
     required this.stepOfDay,
   });
 
   FootStepModel copyWith({int? newAim}) {
     return FootStepModel(
-      idUser: idUser,
+      userId: userId,
       aim: newAim ?? aim, // Nếu newAim là null, giữ nguyên aim hiện tại
       stepOfDay: stepOfDay,
     );
@@ -26,7 +26,7 @@ class FootStepModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'idUser': idUser,
+      'userId': userId,
       'aim': aim,
       'stepOfDay': stepOfDay.map((step) => step.toMap()).toList(),
     };

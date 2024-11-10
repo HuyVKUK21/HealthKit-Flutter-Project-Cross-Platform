@@ -12,6 +12,7 @@ class MedicineModel {
   final bool? offStatus;
   final bool? usageStatus;
   final String idUser;
+  final bool? isDeleted;
 
   MedicineModel({
     this.id,
@@ -25,22 +26,23 @@ class MedicineModel {
     this.offStatus,
     this.usageStatus,
     required this.idUser,
+    this.isDeleted,
   });
 
-  // Chuyển dữ liệu từ Firestore thành đối tượng MedicineModel
   factory MedicineModel.fromFirebaseMedicine(Map<String, dynamic> data, String id) {
     return MedicineModel(
-      id: id,
-      medicineName: data['medicineName'] ?? '',
-      dosageTime: data['dosageTime'] ?? '',
-      remainingDoses: data['remainingDoses'] ?? 0, // Convert to String if needed
-      drugForm: data['drugForm'] is Map ? data['drugForm']['name'] ?? '' : '', // Access the 'name' field in the map
-      frequencyUse: data['frequencyUse'] ?? 0,
-      drugStartTime: (data['drugStartTime'] is Timestamp) ? (data['drugStartTime'] as Timestamp).toDate() : null,
-      drugEndTime: (data['drugEndTime'] is Timestamp) ? (data['drugEndTime'] as Timestamp).toDate() : null,
-      offStatus: data['offStatus'] ?? false,
-      usageStatus: data['usageStatus'] ?? false,
-      idUser: data['idUser'] ?? '',
+        id: id,
+        medicineName: data['medicineName'] ?? '',
+        dosageTime: data['dosageTime'] ?? '',
+        remainingDoses: data['remainingDoses'] ?? 0, // Convert to String if needed
+        drugForm: data['drugForm'] is Map ? data['drugForm']['name'] ?? '' : '', // Access the 'name' field in the map
+        frequencyUse: data['frequencyUse'] ?? 0,
+        drugStartTime: (data['drugStartTime'] is Timestamp) ? (data['drugStartTime'] as Timestamp).toDate() : null,
+        drugEndTime: (data['drugEndTime'] is Timestamp) ? (data['drugEndTime'] as Timestamp).toDate() : null,
+        offStatus: data['offStatus'] ?? false,
+        usageStatus: data['usageStatus'] ?? false,
+        idUser: data['idUser'] ?? '',
+        isDeleted: data['isDeleted'] ?? false,
     );
   }
 }

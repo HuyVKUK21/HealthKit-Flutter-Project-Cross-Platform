@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:fitnessapp/domain/usecases/medicine/medicine_usecase.dart';
 import 'package:fitnessapp/presentation/screens/my_medicine/view_medicine_screen.dart';
 import 'package:flutter/material.dart';
@@ -24,25 +26,42 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
   late MedicineUseCase _medicineUseCase;
   late MedicineModel medicineInfo;
 
+  // Khởi tạo
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToCurrentDay());
     _medicineUseCase = MedicineUseCase(MedicineRepositoryImpl());
     _fetchMedicines();
+    _scheduleMidnightReset();
   }
 
+  // Duyệt danh sách dữ liệu thuốc
   Future<void> _fetchMedicines() async {
     try {
       List<MedicineModel> medicines = await _medicineUseCase.getMedicineData("nvCeupX3wCTu30uoXbDh");
       setState(() {
-        _medicineList = medicines;
+        _medicineList = medicines.where((medicine) => !medicine.offStatus! && !(medicine.isDeleted ?? false)).toList();
       });
     } catch (e) {
       print('Error fetching medicines: $e');
     }
   }
 
+  // reset lượt uống sau 12h đêm
+  void _scheduleMidnightReset() {
+    DateTime now = DateTime.now();
+    DateTime nextMidnight = DateTime(now.year, now.month, now.day + 1);
+
+    Duration timeUntilMidnight = nextMidnight.difference(now);
+
+    Timer(timeUntilMidnight, () async {
+      await _medicineUseCase.resetAllUsageStatuses();
+      _scheduleMidnightReset();
+    });
+  }
+
+  // Ngày hiện tại (tính toán + animation)
   void _scrollToCurrentDay() {
     double screenWidth = MediaQuery.of(context).size.width;
     double itemWidth = 58.0;
@@ -59,146 +78,157 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            color: Colors.white,
-            padding: EdgeInsets.symmetric(vertical: 16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Text(
-                    'Thuốc của tôi',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                SizedBox(height: 16.0),
-                SizedBox(
-                  height: 90.0,
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 30,
-                    itemBuilder: (context, index) {
-                      DateTime date = today.add(Duration(days: index - today.weekday + 1));
-                      String dayOfWeek = weekdays[date.weekday % 7];
-                      String formattedDate = DateFormat('dd').format(date);
-                      bool isToday = date.day == today.day && date.month == today.month && date.year == today.year;
-
-                      return Column(
-                        children: [
-                          Center(
-                            child: Text(
-                              isToday ? "\t\t\t\t\t${formattedDate}\nHôm nay" : formattedDate + "\n",
-                              style: TextStyle(
-                                color: isToday ? Colors.red : Colors.black,
-                                fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
-                                fontSize: 18
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 50.0,
-                            margin: EdgeInsets.symmetric(horizontal: 4.0, vertical: 6.0),
-                            decoration: BoxDecoration(
-                              color: isToday ? Colors.grey[300] : Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Text(
-                                dayOfWeek,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: isToday ? FontWeight.w500 : FontWeight.normal,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 20.0),
-          Expanded(
-            child: ListView.builder(
-              physics: NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
-              itemCount: _medicineList.where((medicine) => medicine.offStatus == false).length + 1,
-              itemBuilder: (context, index) {
-                if (index == _medicineList.where((medicine) => medicine.offStatus == false).length) {
-                  // Last item for the button
-                  return Container(
-                    margin: EdgeInsets.symmetric(vertical: 20.0),
-                    child: Center(
-                      child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-                        ),
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            RouteHelper.createFadeRoute(ViewMedicineScreen()),
-                          );
-                        },
-                        icon: Icon(Icons.edit, color: Colors.white),
-                        label: Text(
-                          "Chỉnh sửa hộp thuốc",
-                          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600),
-                        ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(vertical: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Text(
+                        'Thuốc của tôi',
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ),
-                  );
-                }
+                    SizedBox(height: 24.0),
+                    SizedBox(
+                      height: 90.0,
+                      child: ListView.builder(
+                        controller: _scrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 30,
+                        itemBuilder: (context, index) {
+                          DateTime date = today.add(Duration(days: index - today.weekday + 1));
+                          String dayOfWeek = weekdays[date.weekday % 7];
+                          String formattedDate = DateFormat('dd').format(date);
+                          bool isToday = date.day == today.day && date.month == today.month && date.year == today.year;
 
-                // Display medicine card
-                MedicineModel medicine = _medicineList.where((medicine) => medicine.offStatus == false).elementAt(index);
-                return MedicineCard(
-                  medicineName: medicine.medicineName,
-                  dosageTime: medicine.dosageTime,
-                  remainingDoses: medicine.remainingDoses,
-                  offStatus: medicine.offStatus,
-                  usageStatus: medicine.usageStatus,
-                  iconRight: "check",
-                  onEditPressed: () async {
-                    try {
-                      MedicineModel fetchedMedicineInfo = await _medicineUseCase.getMedicineById(medicine.id);
-                      setState(() {
-                        medicineInfo = fetchedMedicineInfo;
-                      });
-                      showMedicineDialog(
-                          context,
-                          medicineInfo.medicineName,
-                          medicineInfo.usageStatus,
-                          medicineInfo.dosageTime,
-                          () async {
-                            await _medicineUseCase.updateUsageStatusMedicine(medicine.id, medicine.usageStatus);
-                            Navigator.pushReplacement(
+                          return Column(
+                            children: [
+                              Center(
+                                child: Text(
+                                  isToday ? "\t\t\t\t\t${formattedDate}\nHôm nay" : formattedDate + "\n",
+                                  style: TextStyle(
+                                    color: isToday ? Colors.green : Colors.black,
+                                    fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
+                                    fontSize: 12
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: 50.0,
+                                margin: EdgeInsets.symmetric(horizontal: 4.0, vertical: 6.0),
+                                decoration: BoxDecoration(
+                                  color: isToday ? Colors.grey[300] : Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    dayOfWeek,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: isToday ? FontWeight.w500 : FontWeight.normal,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 12.0),
+              Expanded(
+                child: ListView.builder(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  itemCount: _medicineList.length + 1,
+                  itemBuilder: (context, index) {
+                    if (index == _medicineList.length) {
+                      // Last item for the button
+                      return Container(
+                        margin: EdgeInsets.symmetric(vertical: 20.0),
+                        child: Center(
+                          child: ElevatedButton.icon(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+                            ),
+                            onPressed: () {
+                              Navigator.pushReplacement(
                                 context,
-                                RouteHelper.createFadeRoute(MyMedicineScreen())
-                            );
-                          });
-                    } catch (e) {
-                      print('Error fetching medicine info: $e');
+                                RouteHelper.createFadeRoute(ViewMedicineScreen()),
+                              );
+                            },
+                            icon: Icon(Icons.edit, color: Colors.white),
+                            label: Text(
+                              "Chỉnh sửa hộp thuốc",
+                              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+                            ),
+                          ),
+                        ),
+                      );
                     }
+
+                    // Display medicine card
+                    MedicineModel medicine = _medicineList.elementAt(index);
+                    return Column(
+                      children: [
+                        MedicineCard(
+                          medicineName: medicine.medicineName,
+                          dosageTime: medicine.dosageTime,
+                          remainingDoses: medicine.remainingDoses,
+                          offStatus: medicine.offStatus,
+                          usageStatus: medicine.usageStatus,
+                          iconRight: "check",
+                          onEditPressed: () async {
+                            try {
+                              MedicineModel fetchedMedicineInfo = await _medicineUseCase.getMedicineById(medicine.id);
+                              setState(() {
+                                medicineInfo = fetchedMedicineInfo;
+                              });
+                              showMedicineDialog(
+                                  context,
+                                  medicineInfo.medicineName,
+                                  medicineInfo.usageStatus,
+                                  medicineInfo.dosageTime,
+                                  () async {
+                                    await _medicineUseCase.updateUsageStatusMedicine(medicine.id, medicine.usageStatus);
+                                    Navigator.pushReplacement(
+                                        context,
+                                        RouteHelper.createFadeRoute(MyMedicineScreen())
+                                    );
+                                  });
+                            } catch (e) {
+                              print('Error fetching medicine info: $e');
+                            }
+                          },
+                        ),
+                        SizedBox(height: 12,)
+                      ],
+                    );
                   },
-                );
-              },
-            ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

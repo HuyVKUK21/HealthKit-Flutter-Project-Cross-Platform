@@ -18,7 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../utils/page_route_builder.dart';
 import '../my_medicine/my_medicine_screen.dart';
 import '../quit_smoking/smoking_screen.dart';
-//hello
+
 
 class HomeScreen extends StatefulWidget {
   static String routeName = "/HomeScreen";

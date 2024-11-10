@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fitnessapp/data/models/meansure_foot_step.dart';
 import 'package:fitnessapp/data/repositories/foot_step/foot_step_repository_impl.dart';
 import 'package:fitnessapp/domain/usecases/foot_step/foot_step_usecase.dart';
+import 'package:fitnessapp/presentation/screens/foot_step/day_foot_step.dart';
 import 'package:fitnessapp/presentation/screens/foot_step/modal_setting_aim.dart';
+import 'package:fitnessapp/presentation/screens/foot_step/week_foot_step.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pedometer/pedometer.dart';
@@ -24,20 +26,22 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
   late Stream<PedestrianStatus> _pedestrianStatusStream;
   String _status = '?', _steps = '?';
   bool _isTracking = false;
-
   String _km = "0";
   String _calories = "0";
   String _time = "0";
+  String screen = "day";
+
   late FootStepUsecase _footStepUsecase;
   late FootStepModel _footStepData;
   late StepOfDay _stepOfToday = StepOfDay(date: '00/00/2000', step: 0);
+  late List<StepOfDay> _stepOfCurrentWeek = [];
 
   @override
   void initState() {
     super.initState();
 
     _footStepData = FootStepModel(
-      idUser: 'user_id_123',
+      userId: 'user_id_123',
       aim: 500,
       stepOfDay: [],
     );
@@ -45,6 +49,21 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
     _checkActivityRecognitionPermission();
     _footStepUsecase = FootStepUsecase(FootStepRepositoryImpl());
     fetchFootStepByUserId();
+    fetchStepOfCurrentWeek();
+  }
+
+  void switchScreen(String screenName) {
+    setState(() {
+      screen = screenName;
+    });
+  }
+
+  Future<void> fetchStepOfCurrentWeek() async {
+    List<StepOfDay> stepCurrentWeek = await _footStepUsecase
+        .getStepInTheWeekByUser(FirebaseAuth.instance.currentUser!.uid);
+    setState(() {
+      _stepOfCurrentWeek = stepCurrentWeek;
+    });
   }
 
   Future<void> fetchFootStepByUserId() async {
@@ -55,7 +74,7 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
         _footStepData = model!;
         Result result = _footStepData.findStepOfToday();
         _stepOfToday = result.stepOfDay;
-        _km = ((_stepOfToday.step * 0.75) * 100).toStringAsFixed(2);
+        _km = ((_stepOfToday.step * 0.75) / 1000).toStringAsFixed(2);
         _calories = (65 * ((_stepOfToday.step * 0.75) / 1000) * 0.57)
             .toStringAsFixed(2);
         _time =
@@ -64,7 +83,7 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
           StepOfDay newStepOfDay = result.stepOfDay;
 
           _footStepData = FootStepModel(
-            idUser: _footStepData.idUser,
+            userId: _footStepData.userId,
             aim: _footStepData.aim,
             stepOfDay: [..._footStepData.stepOfDay, newStepOfDay],
           );
@@ -92,6 +111,7 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
     setState(() {
       _footStepData = _footStepData.copyWith(newAim: aim);
     });
+    Navigator.pop(context);
   }
 
   Future<void> updateWhenStopWalk() async {
@@ -130,7 +150,7 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
       _steps = event.steps.toString();
       int step = _stepOfToday.getStep() + int.parse(_steps);
       _stepOfToday = _stepOfToday.copyWith(step: step);
-      _km = ((_stepOfToday.step * 0.75) * 100).toStringAsFixed(2);
+      _km = ((_stepOfToday.step * 0.75) / 1000).toStringAsFixed(2);
       _calories =
           (65 * ((_stepOfToday.step * 0.75) / 1000) * 0.57).toStringAsFixed(2);
       _time =
@@ -220,180 +240,44 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
                     borderRadius: BorderRadius.circular(20.0),
                     color: const Color(0xFFD4DFEE),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: ToggleButtons(
                     children: [
-                      ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              side: BorderSide.none),
-                          child: Text(
-                            'NGÀY',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          )),
-                      ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFD4DFEE),
-                            side: BorderSide.none),
-                        child: Text(
-                          'TUẦN',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFD4DFEE),
-                              side: BorderSide.none),
-                          child: Text(
-                            'THÁNG',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )),
-                      ElevatedButton(
-                          onPressed: () {},
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFFD4DFEE),
-                              side: BorderSide.none),
-                          child: Text(
-                            'NĂM',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          )),
+                      Text('NGÀY'),
+                      Text('TUẦN'),
                     ],
+                    isSelected: [screen == 'day', screen == 'week'],
+                    onPressed: (int index) {
+                      setState(() {
+                        if (index == 0) {
+                          screen = "day";
+                        } else if (index == 1) {
+                          screen = "week";
+                        }
+                      });
+                    },
+                    borderRadius: BorderRadius.circular(20),
+                    selectedColor: Colors.white,
+                    fillColor: Colors.black,
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _isTracking ? stopListening : startListening,
-              child: Text(
-                _isTracking ? 'Stop' : 'Start',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            SizedBox(height: 40),
-            SizedBox(
-              height: 40,
-            ),
-            CircularPercentIndicator(
-              radius: 170.0,
-              lineWidth: 15.0,
-              percent: _footStepData.aim > 0
-                  ? (_stepOfToday.step / _footStepData.aim).clamp(0.0, 1.0)
-                  : 0.0,
-              animation: true,
-              center: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          FontAwesomeIcons.personWalking,
-                          size: 30.0,
-                          color: Colors.black,
-                        ),
-                        Text(
-                          _steps,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 35),
-                        ),
-                        Text(
-                          'Mục tiêu: ${_stepOfToday.step} / ${_footStepData.aim} bước',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
-                        )
-                      ])
-                ],
-              ),
-              progressColor: Colors.green,
-            ),
-            SizedBox(
-              height: 70.0,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                InfoCard(
-                  icon: Icons.directions_walk,
-                  value: '${_stepOfToday.step}',
-                  unit: 'bước',
-                ),
-                InfoCard(
-                  icon: Icons.local_fire_department,
-                  value: _calories,
-                  unit: 'kcal',
-                ),
-                InfoCard(
-                  icon: Icons.arrow_forward,
-                  value: _km,
-                  unit: 'km',
-                ),
-                InfoCard(
-                  icon: Icons.access_time,
-                  value: _time,
-                  unit: 'phút',
-                ),
-              ],
-            ),
+            screen == 'day'
+                ? DayFootStep(
+                    stopListening: stopListening,
+                    startListening: startListening,
+                    isTracking: _isTracking,
+                    km: _km,
+                    calories: _calories,
+                    time: _time,
+                    footStepData: _footStepData,
+                    steps: _steps,
+                    stepOfToday: _stepOfToday)
+                : WeekFootStep(
+                    stepOfWeek: _stepOfCurrentWeek,
+                  )
           ],
         ),
-      ),
-    );
-  }
-}
-
-class InfoCard extends StatelessWidget {
-  final IconData icon;
-  final String value;
-  final String unit;
-
-  InfoCard({required this.icon, required this.value, required this.unit});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 80,
-      height: 100,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.0),
-        color: Colors.white,
-        border: Border.all(color: Colors.blue.shade100, width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, size: 30, color: Colors.black),
-          SizedBox(height: 8),
-          Text(
-            value,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 18,
-            ),
-          ),
-          Text(
-            unit,
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.grey,
-            ),
-          ),
-        ],
       ),
     );
   }

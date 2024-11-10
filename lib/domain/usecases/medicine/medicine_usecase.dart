@@ -24,4 +24,12 @@ class MedicineUseCase {
     await _medicineReponsitory.updateUsageStatusMedicine(id!, used!);
   }
 
+  Future<void> deleteMedicine(String? id) async {
+    await _medicineReponsitory.deleteMedicine(id!);
+  }
+
+  Future<void> resetAllUsageStatuses() async {
+    await _medicineReponsitory.resetAllUsageStatuses();
+  }
+
 }
