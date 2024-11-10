@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitnessapp/data/models/meansure_foot_step.dart';
 import 'package:fitnessapp/domain/repositories/foot_step/foot_step_repository.dart';
 import 'package:injectable/injectable.dart';
+import 'package:intl/intl.dart';
 
 @LazySingleton(as: FootStepRepository)
 class FootStepRepositoryImpl extends FootStepRepository {
@@ -14,14 +15,14 @@ class FootStepRepositoryImpl extends FootStepRepository {
 
     try {
       QuerySnapshot querySnapshot =
-          await footStepCollection.where('idUser', isEqualTo: id).get();
+          await footStepCollection.where('userId', isEqualTo: id).get();
 
       if (querySnapshot.docs.isNotEmpty) {
         final doc = querySnapshot.docs[0];
         final data = doc.data() as Map<String, dynamic>;
 
         FootStepModel model = FootStepModel(
-          idUser: data['idUser'] ?? '',
+          userId: data['userId'] ?? '',
           aim: data['aim'] ?? 0,
           stepOfDay: (data['stepOfDay'] as List<dynamic>?)?.map((item) {
                 String date = item['date'] ?? '';
@@ -32,10 +33,14 @@ class FootStepRepositoryImpl extends FootStepRepository {
         );
         return model;
       } else {
+        StepOfDay newStepOfToday = StepOfDay(
+            date:
+                '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}',
+            step: 0);
         FootStepModel newModel = FootStepModel(
-          idUser: id,
+          userId: id,
           aim: 0, // Có thể thay đổi giá trị này nếu cần
-          stepOfDay: [], // Khởi tạo mảng trống
+          stepOfDay: [newStepOfToday], // Khởi tạo mảng trống
         );
 
         // Lưu tài liệu mới vào Firestore
@@ -55,7 +60,7 @@ class FootStepRepositoryImpl extends FootStepRepository {
   Future<void> updateAimByIdUser(String id, int aim) async {
     try {
       QuerySnapshot querySnapshot =
-          await _footStepCollection.where('idUser', isEqualTo: id).get();
+          await _footStepCollection.where('userId', isEqualTo: id).get();
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot doc = querySnapshot.docs.first;
 
@@ -77,7 +82,7 @@ class FootStepRepositoryImpl extends FootStepRepository {
       String id, List<Map<String, dynamic>> stepOfDays) async {
     try {
       QuerySnapshot querySnapshot =
-          await _footStepCollection.where('idUser', isEqualTo: id).get();
+          await _footStepCollection.where('userId', isEqualTo: id).get();
       if (querySnapshot.docs.isNotEmpty) {
         DocumentSnapshot doc = querySnapshot.docs.first;
 
@@ -100,7 +105,7 @@ class FootStepRepositoryImpl extends FootStepRepository {
     try {
       // Tìm document trong Firestore dựa vào `idUser`
       QuerySnapshot querySnapshot =
-          await _footStepCollection.where('idUser', isEqualTo: id).get();
+          await _footStepCollection.where('userId', isEqualTo: id).get();
 
       if (querySnapshot.docs.isNotEmpty) {
         // Lấy document đầu tiên trong danh sách kết quả
@@ -117,7 +122,6 @@ class FootStepRepositoryImpl extends FootStepRepository {
           );
         }).toList();
 
-        // Tìm `StepOfDay` theo ngày hiện tại, nếu tìm thấy thì cập nhật bước, nếu không thì thêm mới
         String today =
             '${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}';
         bool updated = false;
@@ -127,7 +131,6 @@ class FootStepRepositoryImpl extends FootStepRepository {
 
         for (var i = 0; i < stepOfDays.length; i++) {
           if (stepOfDays[i].date == today) {
-            // Nếu tìm thấy ngày hôm nay, cập nhật bước và đặt `updated` là true
             updatedStepOfDay = StepOfDay(date: today, step: stepOfDay.step);
             stepOfDays[i] = updatedStepOfDay;
             updated = true;
@@ -136,12 +139,10 @@ class FootStepRepositoryImpl extends FootStepRepository {
         }
 
         if (!updated) {
-          // Nếu không tìm thấy ngày hiện tại, thêm mới
           updatedStepOfDay = StepOfDay(date: today, step: stepOfDay.step);
           stepOfDays.add(updatedStepOfDay);
         }
 
-        // Cập nhật danh sách `stepOfDay` trong Firestore
         await _footStepCollection.doc(doc.id).update({
           'stepOfDay': stepOfDays
               .map((step) => {
@@ -163,5 +164,53 @@ class FootStepRepositoryImpl extends FootStepRepository {
       print('Lỗi khi cập nhật StepOfDays: $e');
       throw Exception('Lỗi khi cập nhật StepOfDays: $e');
     }
+  }
+
+  List<DateTime> getDaysInCurrentWeek() {
+    DateTime today = DateTime.now();
+
+    // Tìm ngày đầu tiên của tuần hiện tại (thứ Hai)
+    DateTime firstDayOfWeek = today.subtract(Duration(days: today.weekday - 1));
+
+    // Tạo danh sách chứa tất cả các ngày trong tuần
+    List<DateTime> daysInWeek = [];
+    for (int i = 0; i < 7; i++) {
+      daysInWeek.add(firstDayOfWeek.add(Duration(days: i)));
+    }
+
+    return daysInWeek;
+  }
+
+  @override
+  Future<List<StepOfDay>> getStepInTheWeekByUser(String id) async {
+    DateTime now = DateTime.now();
+    int currentWeekDay = now.weekday;
+    List<StepOfDay> stepsForWeek = [];
+
+    for (int i = 1; i <= 7; i++) {
+      DateTime day = now.add(Duration(days: i - currentWeekDay));
+      String formattedDate = DateFormat('d/M/yyyy').format(day);
+      stepsForWeek.add(StepOfDay(date: formattedDate, step: 0));
+    }
+
+    QuerySnapshot querySnapshot =
+        await _footStepCollection.where('userId', isEqualTo: id).get();
+    if (querySnapshot.docs.isNotEmpty) {
+      var footStepDoc = querySnapshot.docs.first;
+      List<dynamic> stepOfDayList = footStepDoc['stepOfDay'];
+
+      for (var stepData in stepOfDayList) {
+        for (int i = 0; i < stepsForWeek.length; i++) {
+          if (stepsForWeek[i].date == stepData['date']) {
+            stepsForWeek[i] = stepsForWeek[i].copyWith(step: stepData['step']);
+            break;
+          }
+        }
+      }
+    } else {
+      print("No footSteps data found for this user.");
+    }
+
+    return stepsForWeek;
   }
 }
