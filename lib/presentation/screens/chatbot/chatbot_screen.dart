@@ -57,8 +57,12 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bot chăm sóc sức khoẻ của bạn'),
+        title: const Text('HealthKit Chatbot',
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold),),
+          centerTitle: true,
       ),
+
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
