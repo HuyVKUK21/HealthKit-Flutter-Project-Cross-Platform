@@ -440,9 +440,9 @@ class QuitSmokingPage extends StatelessWidget {
     );
   }
 
-  void main() {
-    runApp(MaterialApp(
-      home: QuitSmokingPage(),
-    ));
-  }
+//   void main() {
+//     runApp(MaterialApp(
+//       home: QuitSmokingPage(),
+//     ));
+//   }
 }

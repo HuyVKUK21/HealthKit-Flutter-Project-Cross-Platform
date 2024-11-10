@@ -68,8 +68,7 @@ class _ChatScreenState extends State<ChatScreen> {
               itemBuilder: (context, index) {
                 final message = _messages[index];
                 return Messages(
-                  isUser: message.isUser,
-                  message: message.message,
+                  isUser: message.isUser,                  message: message.message,
                   date: DateFormat('HH:mm').format(message.date),
                 );
               },
