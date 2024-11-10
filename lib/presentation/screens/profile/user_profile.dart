@@ -6,6 +6,8 @@ import 'package:fitnessapp/domain/repositories/user/auth_local_data_source.dart'
 import 'package:fitnessapp/domain/repositories/user/user_repository.dart';
 import 'package:fitnessapp/domain/usecases/user/forget_password_usercase.dart';
 import 'package:fitnessapp/domain/usecases/user/user_usecase.dart';
+import 'package:fitnessapp/presentation/screens/change_password/detail_profile_screen.dart';
+import 'package:fitnessapp/presentation/screens/profile/complete_profile_screen.dart';
 import 'package:fitnessapp/presentation/screens/signin/signin_screen.dart';
 import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
 import 'package:fitnessapp/utils/page_route_builder.dart';
@@ -29,8 +31,17 @@ class SettingsScreen extends StatelessWidget {
             const SizedBox(height: 24.0),
             SettingsCategory(
               title: 'Chung',
-              items: const [
-                SettingsItem(icon: Icons.person, title: 'Hồ sơ'),
+              items: [
+                SettingsItem(
+                  icon: Icons.person,
+                  title: 'Hồ sơ',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      RouteHelper.createFadeRoute(DetailProfileScreen()),
+                    );
+                  },
+                ),
                 SettingsItem(icon: Icons.info, title: 'Phiên bản ứng dụng'),
                 SettingsItem(icon: Icons.cloud, title: 'Tài khoản & dữ liệu'),
                 SettingsItem(icon: Icons.language, title: 'Ngôn ngữ'),
