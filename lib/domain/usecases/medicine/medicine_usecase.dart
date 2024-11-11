@@ -32,6 +32,10 @@ class MedicineUseCase {
     await _medicineReponsitory.resetAllUsageStatuses();
   }
 
+  Future<void> insertMedicine(MedicineModel medicine) async {
+    return await _medicineReponsitory.insertMedicine(medicine);
+  }
+
   Future<bool> isExistMedicine(String idUser) async {
     return await _medicineReponsitory.isExistMedicine(idUser);
   }
