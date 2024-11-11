@@ -82,7 +82,7 @@ class _DetailProfileScreen extends State<DetailProfileScreen> {
         await docRef.update({
           'fullName': _fullnameController.text,
           'phone': _phoneController.text,
-          'age': int.tryParse(_ageController.text) ?? 0,
+          'age': _ageController.text.toString() ?? '0',
         });
 
         setState(() {

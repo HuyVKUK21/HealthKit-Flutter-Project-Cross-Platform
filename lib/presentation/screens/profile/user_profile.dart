@@ -1,4 +1,4 @@
-import 'package:fitnessapp/data/datasources/user/firebase_auth_datasource.dart';
+
 import 'package:fitnessapp/data/repositories/user/auth_local_data_source_impl.dart';
 import 'package:fitnessapp/data/repositories/user/forget_password_impl.dart';
 import 'package:fitnessapp/data/repositories/user/user_repository_impl.dart';
@@ -8,7 +8,7 @@ import 'package:fitnessapp/domain/usecases/user/forget_password_usercase.dart';
 import 'package:fitnessapp/domain/usecases/user/user_usecase.dart';
 import 'package:fitnessapp/presentation/screens/change_password/change_password_screen.dart';
 import 'package:fitnessapp/presentation/screens/change_password/detail_profile_screen.dart';
-import 'package:fitnessapp/presentation/screens/profile/complete_profile_screen.dart';
+
 import 'package:fitnessapp/presentation/screens/signin/signin_screen.dart';
 import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
 import 'package:fitnessapp/utils/page_route_builder.dart';
