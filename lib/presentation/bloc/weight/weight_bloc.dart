@@ -12,7 +12,6 @@ import 'package:injectable/injectable.dart';
 class WeightBloc extends Bloc<WeightEvent, WeightState> {
   final GetWeightUsecase getWeightUseCase;
   final SetWeightUsecase setWeightUseCase;
-  // final CheckWeightUsecase checkWeightUsecase;
 
   WeightBloc(this.getWeightUseCase, this.setWeightUseCase)
       : super(WeightInitial()) {
@@ -35,7 +34,8 @@ class WeightBloc extends Bloc<WeightEvent, WeightState> {
     on<SaveWeightHeightData>((event, emit) async {
       emit(WeightLoading());
       try {
-        final userId = await GlobalUtil.getUserId();
+        final account = await GlobalUtil.getAccount();
+        final userId = account?.userId;
         final bmi = event.weight / ((event.height / 100) * (event.height / 100));
         final weightEntity = WeightEntity(
           userId: userId ?? '',
