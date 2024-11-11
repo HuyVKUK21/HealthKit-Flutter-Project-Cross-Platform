@@ -45,6 +45,7 @@ class _HeightMeasureScreenState extends State<HeightMeasureScreen> {
     final weight = ModalRoute.of(context)!.settings.arguments as double;
     return BlocListener<WeightBloc, WeightState>(
       listener: (context, state) {
+        print("Hello" + state.toString());
         if (state is WeightUpdated) {
           Navigator.pushReplacementNamed(
             context,
