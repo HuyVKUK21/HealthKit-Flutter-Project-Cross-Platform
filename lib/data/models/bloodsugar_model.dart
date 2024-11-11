@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitnessapp/domain/entities/bloodsugar_entity.dart';
 
 class BloodsugarModel extends BloodsugarEntity {
@@ -46,7 +47,9 @@ class BloodsugarModel extends BloodsugarEntity {
       index: json['index'],
       status: json['status'],
       statusMeasure: json['statusMeasure'],
-      dateTime: json['dateTime'],
+      dateTime: json['dateTime'] is Timestamp
+          ? (json['dateTime'] as Timestamp).toDate()
+          : null,
       measurementFrequency: json['measurementFrequency'],
     );
   }
