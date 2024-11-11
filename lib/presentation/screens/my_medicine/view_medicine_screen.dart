@@ -9,6 +9,10 @@ import '../../../domain/usecases/medicine/medicine_usecase.dart';
 import '../../widgets/my_medicine/session_medicine_lists.dart';
 
 class ViewMedicineScreen extends StatefulWidget {
+  final String idUser;
+
+  ViewMedicineScreen({required this.idUser});
+
   @override
   _ViewMedicineScreen createState() => _ViewMedicineScreen();
 }
@@ -28,7 +32,7 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
 
   Future<void> _fetchMedicines() async {
     try {
-      List<MedicineModel> medicines = await _medicineUseCase.getMedicineData("nvCeupX3wCTu30uoXbDh");
+      List<MedicineModel> medicines = await _medicineUseCase.getMedicineData(widget.idUser);
       setState(() {
         _medicineList = medicines;
       });
@@ -49,7 +53,7 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
           padding: EdgeInsets.symmetric(vertical: 30),
           icon: Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pushReplacement(context, RouteHelper.createFadeRoute(MyMedicineScreen()));
+            Navigator.pushReplacement(context, RouteHelper.createFadeRoute(MyMedicineScreen(idUser: widget.idUser,)));
           },
         ),
         title: Container(

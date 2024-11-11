@@ -10,6 +10,10 @@ import '../../widgets/quit_smoking/general_progress.dart';
 import '../home/home_screen.dart';
 
 class QuitSmokingPage extends StatefulWidget {
+  final String idUser;
+
+  QuitSmokingPage({required this.idUser});
+
   @override
   _QuitSmokingPageState createState() => _QuitSmokingPageState();
 }
@@ -18,7 +22,18 @@ class _QuitSmokingPageState extends State<QuitSmokingPage> {
   String _selectedFilter = "Tất cả";
   int _amountReport = 0;
   late CigaretteUseCase _cigaretteUseCase;
-  late CigaretteModel cigaretteInfo;
+  late CigaretteModel cigaretteInfo = CigaretteModel(
+      smokingStatusToday: false,
+      price: 0,
+      cigaretteInPack: 0,
+      remainingCigarette: 0,
+      startDate: '',
+      endDate: '',
+      smokeDaily: 0,
+      amountQuitSmoking: 0,
+      amountDayQuit: 0,
+      idUser: widget.idUser
+  );
 
   // Khởi tạo
   @override
@@ -30,7 +45,7 @@ class _QuitSmokingPageState extends State<QuitSmokingPage> {
 
   Future<void> _fetchCigaretteInfo() async {
     try {
-      CigaretteModel cigarette = await _cigaretteUseCase.getCigaretteByUserId("nvCeupX3wCTu30uoXbDh");
+      CigaretteModel cigarette = await _cigaretteUseCase.getCigaretteByUserId(widget.idUser);
       setState(() {
         cigaretteInfo = cigarette;
         _amountReport = cigaretteInfo.amountAvoidedReport! + cigaretteInfo.amountSmokedReport!;
@@ -118,7 +133,8 @@ class _QuitSmokingPageState extends State<QuitSmokingPage> {
                                       fontSize: 14, color: Colors.grey)),
                                 ],
                               ),
-                              SizedBox(height: 4,),
+                            SizedBox(height: 4,),
+                            if(_selectedFilter == 'Tất cả')
                               Row(
                                 children: [
                                   Container(
@@ -158,11 +174,11 @@ class _QuitSmokingPageState extends State<QuitSmokingPage> {
                                     height: 10,
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
-                                      color: Colors.grey,
+                                      color: Colors.red,
                                     ),
                                   ),
                                   SizedBox(width: 4),
-                                  Text("Cơn thèm", style: TextStyle(
+                                  Text("đã hút      ", style: TextStyle(
                                       fontSize: 14, color: Colors.grey)),
                                 ],
                               ),

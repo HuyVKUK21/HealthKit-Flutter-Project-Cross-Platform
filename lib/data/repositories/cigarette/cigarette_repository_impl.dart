@@ -20,4 +20,9 @@ class CigaretteRepositoryImpl extends CigaretteRepository {
       throw Exception('Cigarette not found or already completed');
     }
   }
+
+  @override
+  Future<void> insertCigarette(CigaretteModel cigarette) async {
+    await _cigaretteCollection.add(cigarette.toFirebaseCigarette());
+  }
 }

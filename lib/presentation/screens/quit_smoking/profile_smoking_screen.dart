@@ -1,14 +1,41 @@
+import 'package:fitnessapp/data/models/cigarette_model.dart';
+import 'package:fitnessapp/presentation/screens/quit_smoking/smoking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../../data/repositories/cigarette/cigarette_repository_impl.dart';
+import '../../../domain/usecases/cigarette/cigarette_usecase.dart';
+import '../../../utils/page_route_builder.dart';
+
 class ProfileSmokingScreen extends StatefulWidget {
+  final String idUser;
+
+  ProfileSmokingScreen({required this.idUser});
+
   @override
   _ProfileSmokingScreenState createState() => _ProfileSmokingScreenState();
 }
 
 class _ProfileSmokingScreenState extends State<ProfileSmokingScreen> {
   DateTime? _selectedDate;
+  String? _day;
+  String? _month;
+  String? _year;
+
+  // Controllers for input fields
+  final TextEditingController _dailyConsumptionController = TextEditingController();
+  final TextEditingController _cigarettesPerPackController = TextEditingController();
+  final TextEditingController _pricePerPackController = TextEditingController();
+
+  late CigaretteUseCase _cigaretteUseCase;
+
+  // Khởi tạo
+  @override
+  void initState()  {
+    super.initState();
+    _cigaretteUseCase = CigaretteUseCase(CigaretteRepositoryImpl());
+  }
 
   void _showDatePicker(BuildContext context) {
     showModalBottomSheet(
@@ -43,6 +70,9 @@ class _ProfileSmokingScreenState extends State<ProfileSmokingScreen> {
                   onDateTimeChanged: (DateTime newDate) {
                     setState(() {
                       _selectedDate = newDate;
+                      _day = _selectedDate!.day.toString();
+                      _month = _selectedDate!.month.toString();
+                      _year = _selectedDate!.year.toString();
                     });
                   },
                 ),
@@ -107,7 +137,6 @@ class _ProfileSmokingScreenState extends State<ProfileSmokingScreen> {
                 ),
               ),
               SizedBox(height: 60),
-
               Text(
                 "Khi nào bạn muốn bỏ thuốc?",
                 style: TextStyle(
@@ -143,26 +172,26 @@ class _ProfileSmokingScreenState extends State<ProfileSmokingScreen> {
                   ),
                 ),
               ),
-
               _buildInputField(
                 icon: Icons.smoking_rooms,
                 hintText: "Nhập mức tiêu thụ hàng ngày",
                 labelText: "Bạn hút bao nhiêu điếu mỗi ngày?",
+                controller: _dailyConsumptionController,
               ),
               _buildInputField(
                 icon: Icons.local_offer, // Icon gói thuốc
                 hintText: "Nhập số (ví dụ: 20)",
                 labelText: "Số điếu trong một gói",
+                controller: _cigarettesPerPackController,
               ),
               _buildInputField(
                 icon: Icons.flag, // Icon cờ Việt Nam
                 hintText: "Nhập giá",
                 labelText: "Giá một gói thuốc",
+                controller: _pricePerPackController,
                 currencyIcon: Icons.flag,
               ),
-
               Spacer(),
-
               Row(
                 children: [
                   IconButton(
@@ -173,7 +202,42 @@ class _ProfileSmokingScreenState extends State<ProfileSmokingScreen> {
                   ),
                   Expanded(
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (_pricePerPackController.text.isEmpty ||
+                            _cigarettesPerPackController.text.isEmpty ||
+                            _dailyConsumptionController.text.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Vui lòng điền đầy đủ thông tin'),
+                            ),
+                          );
+                          return;
+                        }
+
+                        CigaretteModel cigarette = CigaretteModel(
+                          smokingStatusToday: false,
+                          completedStatus: false,
+                          price: int.parse(_pricePerPackController.text),
+                          cigaretteInPack: int.parse(_cigarettesPerPackController.text),
+                          remainingCigarette: int.parse(_cigarettesPerPackController.text),
+                          endDate: '$_day thg $_month, $_year',
+                          startDate: '${DateTime.now().day} thg ${DateTime.now().month}, ${DateTime.now().year}',
+                          smokeDaily: int.parse(_dailyConsumptionController.text),
+                          amountAvoidedReport: 0,
+                          amountSmokedReport: 0,
+                          amountQuitSmoking: 0,
+                          amountDayQuit: 0,
+                          idUser: widget.idUser,
+                        );
+
+                        try {
+                          await _cigaretteUseCase.insertCigarette(cigarette);
+                          Navigator.pushReplacement(
+                            context,
+                            RouteHelper.createFadeRoute(QuitSmokingPage(idUser: widget.idUser,))
+                          );
+                        } catch (e) {}
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
@@ -201,6 +265,7 @@ class _ProfileSmokingScreenState extends State<ProfileSmokingScreen> {
     required IconData icon,
     required String hintText,
     required String labelText,
+    required TextEditingController controller,
     IconData? currencyIcon,
   }) {
     return Padding(
@@ -223,6 +288,7 @@ class _ProfileSmokingScreenState extends State<ProfileSmokingScreen> {
               border: Border.all(color: Colors.grey.shade300),
             ),
             child: TextField(
+              controller: controller,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               textAlign: TextAlign.right,

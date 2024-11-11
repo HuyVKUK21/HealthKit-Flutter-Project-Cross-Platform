@@ -33,7 +33,6 @@ final Map<String, WidgetBuilder> routes = {
   ActivityTrackerScreen.routeName: (context) => const ActivityTrackerScreen(),
   WorkoutScheduleView.routeName: (context) => const WorkoutScheduleView(),
   HomeScreen.routeName: (context) => HomeScreen(),
-  MyMedicineScreen.routeName: (context) => ViewMedicineScreen(),
   MainFootStepScreen.routeName: (context) => MainFootStepScreen(),
   WeightMeasureScreen.routeName: (context) => WeightMeasureScreen(),
   HeightMeasureScreen.routeName: (context) => HeightMeasureScreen(),

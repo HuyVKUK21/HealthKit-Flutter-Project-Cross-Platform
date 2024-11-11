@@ -38,7 +38,7 @@ class _EditMedicineScreenState extends State<EditMedicineScreen> {
             icon: Icon(Icons.close, color: Colors.black),
             onPressed: () {
               Navigator.pushReplacement(
-                  context, RouteHelper.createFadeRoute(ViewMedicineScreen()));
+                  context, RouteHelper.createFadeRoute(ViewMedicineScreen(idUser: widget.medicineInfo.idUser,)));
             },
           ),
         ],
@@ -142,7 +142,7 @@ class _EditMedicineScreenState extends State<EditMedicineScreen> {
                       try {
                         _medicineUseCase.deleteMedicine(widget.medicineInfo.id);
                         Navigator.pushReplacement(context,
-                            RouteHelper.createFadeRoute(ViewMedicineScreen()));
+                            RouteHelper.createFadeRoute(ViewMedicineScreen(idUser: widget.medicineInfo.idUser,)));
                       } catch (e) {
                         print('Error fetching medicine info: $e');
                       }
@@ -180,7 +180,7 @@ class _EditMedicineScreenState extends State<EditMedicineScreen> {
                             widget.medicineInfo.id,
                             widget.medicineInfo.offStatus);
                         Navigator.pushReplacement(context,
-                            RouteHelper.createFadeRoute(ViewMedicineScreen()));
+                            RouteHelper.createFadeRoute(ViewMedicineScreen(idUser: widget.medicineInfo.idUser,)));
                       } catch (e) {
                         print('Error fetching medicine info: $e');
                       }
@@ -218,7 +218,7 @@ class _EditMedicineScreenState extends State<EditMedicineScreen> {
                               widget.medicineInfo.offStatus);
                           Navigator.pushReplacement(
                             context,
-                            RouteHelper.createFadeRoute(ViewMedicineScreen()),
+                            RouteHelper.createFadeRoute(ViewMedicineScreen(idUser: widget.medicineInfo.idUser,)),
                           );
                         } catch (e) {
                           print('Error updating medicine status: $e');

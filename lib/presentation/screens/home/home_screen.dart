@@ -18,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../utils/page_route_builder.dart';
 import '../my_medicine/my_medicine_screen.dart';
+import '../quit_smoking/profile_smoking_screen.dart';
 import '../quit_smoking/smoking_screen.dart';
 
 
@@ -171,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            RouteHelper.createFadeRoute(MyMedicineScreen()),
+                            RouteHelper.createFadeRoute(MyMedicineScreen(idUser: "nvCeupX3wCTu30uoXbDh",)),
                           );
                         },
                       ),
@@ -185,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () => {
                           Navigator.pushReplacement(
                             context,
-                            RouteHelper.createFadeRoute(QuitSmokingPage()),
+                            RouteHelper.createFadeRoute(ProfileSmokingScreen(idUser: "nvCeupX3wCTu30uoXbDh",)),
                           )
                         },
                       ),
