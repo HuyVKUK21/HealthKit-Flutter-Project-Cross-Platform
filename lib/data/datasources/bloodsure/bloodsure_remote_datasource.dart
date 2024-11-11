@@ -11,20 +11,20 @@ class BloodsureRemoteDatasource {
 
   BloodsureRemoteDatasource(this.firestore);
   //
-  // Future<BloodsureEntity?> getBloodEntity(String userId) async {
-  //   try {
-  //     DocumentSnapshot snapshot = await firestore.collection('weights').doc(userId).get();
-  //
-  //     if (snapshot.exists) {
-  //       WeightModel weightModel = WeightModel.fromJson(snapshot.data() as Map<String, dynamic>);
-  //       return weightModel.toEntity();
-  //     } else {
-  //       return null;
-  //     }
-  //   } catch (e) {
-  //     throw Exception("Error getting weight data: $e");
-  //   }
-  // }
+  Future<BloodsureEntity?> getBloodsureEntity(String userId) async {
+    try {
+      DocumentSnapshot snapshot = await firestore.collection('bloodsure').doc(userId).get();
+
+      if (snapshot.exists) {
+        BloodsureModel bloodsureModel = BloodsureModel.fromJson(snapshot.data() as Map<String, dynamic>);
+        return bloodsureModel.toEntity();
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw Exception("Error getting bloodsure data: $e");
+    }
+  }
 
   Future<void> addOrUpdateBloodsureEntity(BloodsureEntity bloodsureEntity) async {
     try {

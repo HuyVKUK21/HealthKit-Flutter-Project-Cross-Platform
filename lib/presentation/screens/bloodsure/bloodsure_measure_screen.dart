@@ -1,5 +1,7 @@
 import 'package:fitnessapp/presentation/bloc/bloodsure/bloodsure_bloc.dart';
 import 'package:fitnessapp/presentation/events/bloodsure/bloodsure_event.dart';
+import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_screen.dart';
+import 'package:fitnessapp/presentation/state/bloodsure/bloodsure_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -114,137 +116,147 @@ class _BloodSureMeasureScreenState extends State<BloodSureMeasureScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        toolbarHeight: 50,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.close, color: Colors.black),
-            onPressed: () => Navigator.pop(context),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.bloodtype, color: Colors.red, size: 30),
-                SizedBox(width: 10),
-                Text(
-                  "Nhập số đo huyết áp",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                ),
-              ],
+    return BlocListener<BloodsureBloc, BloodsureState>(
+      listener: (context, state) {
+        if (state is BloodsureUpdated) {
+          Navigator.pushReplacementNamed(
+            context,
+            BloodsureScreen.routeName,
+          );
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.grey[100],
+        appBar: AppBar(
+          toolbarHeight: 50,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.close, color: Colors.black),
+              onPressed: () => Navigator.pop(context),
             ),
-            SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                // Ô nhập Tâm thu
-                Column(
-                  children: [
-                    _buildInputField(
-                      controller: _systolicController,
-                      focusNode: _systolicFocus,
-                      label: "Tâm thu",
-                    ),
-                    Text(
-                      "Tâm thu",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ],
-                ),
-
-                // Ô nhập Tâm trương
-                Column(
-                  children: [
-                    _buildInputField(
-                      controller: _diastolicController,
-                      focusNode: _diastolicFocus,
-                      label: "Tâm trương",
-                    ),
-                    Text(
-                      "Tâm trương",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ],
-                ),
-
-                // Ô nhập Nhịp tim
-                Column(
-                  children: [
-                    _buildInputField(
-                      controller: _heartRateController,
-                      focusNode: _heartRateFocus,
-                      label: "Nhịp tim",
-                    ),
-                    Text(
-                      "Nhịp tim",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.black87,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            // Hiển thị thông tin bổ sung
-            Text(
-              _infoText,
-              style: TextStyle(color: Colors.grey[600], fontSize: 10),
-            ),
-            Spacer(),
-            GestureDetector(
-              onTap: () {
-                // Thêm chức năng khi bấm vào
-              },
-              child: Row(
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.help_outline, color: Colors.grey),
-                  SizedBox(width: 8),
+                  Icon(Icons.bloodtype, color: Colors.red, size: 30),
+                  SizedBox(width: 10),
                   Text(
-                    "Đo huyết áp như thế nào là chính xác?",
-                    style: TextStyle(color: Colors.black, fontSize: 15),
+                    "Nhập số đo huyết áp",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+              SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  // Ô nhập Tâm thu
+                  Column(
+                    children: [
+                      _buildInputField(
+                        controller: _systolicController,
+                        focusNode: _systolicFocus,
+                        label: "Tâm thu",
+                      ),
+                      Text(
+                        "Tâm thu",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  // Ô nhập Tâm trương
+                  Column(
+                    children: [
+                      _buildInputField(
+                        controller: _diastolicController,
+                        focusNode: _diastolicFocus,
+                        label: "Tâm trương",
+                      ),
+                      Text(
+                        "Tâm trương",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  // Ô nhập Nhịp tim
+                  Column(
+                    children: [
+                      _buildInputField(
+                        controller: _heartRateController,
+                        focusNode: _heartRateFocus,
+                        label: "Nhịp tim",
+                      ),
+                      Text(
+                        "Nhịp tim",
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              // Hiển thị thông tin bổ sung
+              Text(
+                _infoText,
+                style: TextStyle(color: Colors.grey[600], fontSize: 10),
+              ),
+              Spacer(),
+              GestureDetector(
+                onTap: () {
+                  // Thêm chức năng khi bấm vào
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.help_outline, color: Colors.grey),
+                    SizedBox(width: 8),
+                    Text(
+                      "Đo huyết áp như thế nào là chính xác?",
+                      style: TextStyle(color: Colors.black, fontSize: 15),
+                    ),
+                  ],
                 ),
-                minimumSize: Size(double.infinity, 50),
               ),
-              onPressed: () {
-                context.read<BloodsureBloc>().add(SaveBloodsureData(systolic: int.tryParse(_systolicController.text) ?? 0, diastolic:  int.tryParse(_diastolicController.text) ?? 0, heartRate:  int.tryParse(_heartRateController.text) ?? 0));
-              },
-              child: Text(
-                "Hoàn tất",
-                style: TextStyle(fontSize: 18, color: Colors.white),
+              SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  minimumSize: Size(double.infinity, 50),
+                ),
+                onPressed: () {
+                  context.read<BloodsureBloc>().add(SaveBloodsureData(systolic: int.tryParse(_systolicController.text) ?? 0, diastolic:  int.tryParse(_diastolicController.text) ?? 0, heartRate:  int.tryParse(_heartRateController.text) ?? 0));
+                },
+                child: Text(
+                  "Hoàn tất",
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-          ],
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );

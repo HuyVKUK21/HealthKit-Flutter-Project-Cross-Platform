@@ -48,6 +48,8 @@ import 'package:fitnessapp/domain/repositories/user/user_repository.dart'
     as _i645;
 import 'package:fitnessapp/domain/repositories/weight/weight_repository.dart'
     as _i191;
+import 'package:fitnessapp/domain/usecases/bloodsure/get_bloodsure_usecase.dart'
+    as _i399;
 import 'package:fitnessapp/domain/usecases/bloodsure/set_bloodsure_usecase.dart'
     as _i945;
 import 'package:fitnessapp/domain/usecases/cigarette/cigarette_usecase.dart'
@@ -119,17 +121,21 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i520.CigaretteUseCase(gh<_i1069.CigaretteRepository>()));
     gh.factory<_i945.SetBloodsureUsecase>(
         () => _i945.SetBloodsureUsecase(gh<_i27.BloodsureRepository>()));
+    gh.factory<_i399.GetBloodsureUsecase>(
+        () => _i399.GetBloodsureUsecase(gh<_i27.BloodsureRepository>()));
     gh.factory<_i229.WeightBloc>(() => _i229.WeightBloc(
           gh<_i379.GetWeightUsecase>(),
           gh<_i804.SetWeightUsecase>(),
         ));
     gh.factory<_i432.ForgetPasswordUsercase>(() =>
         _i432.ForgetPasswordUsercase(gh<_i1069.ForgetPasswordRespository>()));
-    gh.factory<_i320.BloodsureBloc>(
-        () => _i320.BloodsureBloc(gh<_i945.SetBloodsureUsecase>()));
     gh.lazySingleton<_i645.UserRepository>(() => _i960.UserRepositoryImpl(
           gh<_i1071.FirebaseAuthDataSource>(),
           gh<_i397.AuthLocalDataSource>(),
+        ));
+    gh.factory<_i320.BloodsureBloc>(() => _i320.BloodsureBloc(
+          gh<_i945.SetBloodsureUsecase>(),
+          gh<_i399.GetBloodsureUsecase>(),
         ));
     gh.factory<_i635.UserUseCase>(() => _i635.UserUseCase(
           gh<_i645.UserRepository>(),

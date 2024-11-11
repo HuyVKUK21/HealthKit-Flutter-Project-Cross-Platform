@@ -1,200 +1,257 @@
+import 'package:fitnessapp/domain/entities/account_entity.dart';
+import 'package:fitnessapp/domain/entities/bloodsure_entity.dart';
+import 'package:fitnessapp/presentation/bloc/bloodsure/bloodsure_bloc.dart';
+import 'package:fitnessapp/presentation/events/bloodsure/bloodsure_event.dart';
 import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_screen.dart';
+import 'package:fitnessapp/presentation/state/bloodsure/bloodsure_state.dart';
 import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
+import 'package:fitnessapp/utils/global/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-class BloodsureScreen extends StatelessWidget {
+class BloodsureScreen extends StatefulWidget {
+  static String routeName = "/BloodsureScreen";
+
   const BloodsureScreen({super.key});
+
+  @override
+  _BloodsureScreenState createState() => _BloodsureScreenState();
+}
+
+
+class _BloodsureScreenState extends State<BloodsureScreen> {
+
+  late String userId = "";
+  String? _targetScreen;
+  AccountEntity? account;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserId();
+
+  }
+
+  Future<void> _getUserId() async {
+    final fetchedAccount = await GlobalUtil.getAccount();
+    setState(() {
+      account = fetchedAccount;
+      if (account != null) {
+        userId = account!.userId;
+      }
+    });
+    context.read<BloodsureBloc>().add(LoadBloodsureData(userId));
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.2),
-                          spreadRadius: 2,
-                          blurRadius: 10,
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Chỉ số huyết áp",
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold)),
-                                Text("THG 10 2024",
-                                    style: TextStyle(color: Colors.grey)),
-                              ],
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text("90 / 60 ",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black)),
-                                    FaIcon(
-                                      FontAwesomeIcons.heart,
-                                      color: Colors.red,
-                                      size: 16.0,
-                                    ),
-                                    Text(" 90",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black)),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(height: 20),
-                                IndicatorText(
-                                    label: "Rất thấp", color: Colors.blue),
-                                SizedBox(height: 14),
-                                IndicatorText(
-                                    label: "Thấp", color: Colors.lightBlue),
-                                SizedBox(height: 14),
-                                IndicatorText(
-                                    label: "Bình thường", color: Colors.green),
-                                SizedBox(height: 14),
-                                IndicatorText(
-                                    label: "Hơi cao", color: Colors.yellow),
-                                SizedBox(height: 14),
-                                IndicatorText(
-                                    label: "Cao", color: Colors.deepOrangeAccent),
-                                SizedBox(height: 14),
-                                IndicatorText(
-                                    label: "Rất cao", color: Colors.deepOrange),
-                                SizedBox(height: 14),
-                                IndicatorText(
-                                    label: "Cực kỳ cao", color: Colors.red),
-                              ],
-                            ),
-                            Center(
-                              child: CircularPercentIndicator(
-                                radius: 100.0,
-                                lineWidth: 15.0,
-                                percent: 1.0,
-                                center: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("100%",
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold)),
-                                    Text("đạt mục tiêu",
-                                        style: TextStyle(color: Colors.grey)),
-                                  ],
-                                ),
-                                progressColor: Colors.green,
-                                backgroundColor: Colors.grey[200]!,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            BloodPressureLevelsTable(), // New table widget
-            Padding(
-              padding: const EdgeInsets.only(top: 0, bottom: 24, left: 24, right: 24),
-              child: Container(
-                padding: EdgeInsets.all(24),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      blurRadius: 12,
-                      offset: Offset(0, 6),
-                    ),
-                  ],
-                ),
+      body: BlocBuilder<BloodsureBloc, BloodsureState>(
+        builder: (context, state) {
+            if(state is BloodsureLoading) {
+              return Center(child: CircularProgressIndicator());
+            }
+            else if (state is BloodsureLoaded){
+
+              final bloodData = state.bloodsureEntity;
+
+              return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Những thông số huyết áp này của tôi nghĩa là gì?",
-                                style: TextStyle(
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black87,
+                    Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  spreadRadius: 2,
+                                  blurRadius: 10,
                                 ),
-                              ),
-                              SizedBox(height: 20),
-                              Text(
-                                "Tìm hiểu ngay",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.green,
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text("Chỉ số huyết áp",
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold)),
+                                        Text("THG 10 2024",
+                                            style: TextStyle(color: Colors.grey)),
+                                      ],
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text("${bloodData.systolic} / ${bloodData.diastolic} ",
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black)),
+                                            FaIcon(
+                                              FontAwesomeIcons.heart,
+                                              color: Colors.red,
+                                              size: 16.0,
+                                            ),
+                                            Text(" ${bloodData.heartRate}",
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                                SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 20),
+                                        IndicatorText(
+                                            label: "Rất thấp", color: Colors.blue),
+                                        SizedBox(height: 14),
+                                        IndicatorText(
+                                            label: "Thấp", color: Colors.lightBlue),
+                                        SizedBox(height: 14),
+                                        IndicatorText(
+                                            label: "Bình thường", color: Colors.green),
+                                        SizedBox(height: 14),
+                                        IndicatorText(
+                                            label: "Hơi cao", color: Colors.yellow),
+                                        SizedBox(height: 14),
+                                        IndicatorText(
+                                            label: "Cao", color: Colors.deepOrangeAccent),
+                                        SizedBox(height: 14),
+                                        IndicatorText(
+                                            label: "Rất cao", color: Colors.deepOrange),
+                                        SizedBox(height: 14),
+                                        IndicatorText(
+                                            label: "Cực kỳ cao", color: Colors.red),
+                                      ],
+                                    ),
+                                    Center(
+                                      child: CircularPercentIndicator(
+                                        radius: 100.0,
+                                        lineWidth: 15.0,
+                                        percent: 1.0,
+                                        center: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text("100%",
+                                                style: TextStyle(
+                                                    fontSize: 24,
+                                                    fontWeight: FontWeight.bold)),
+                                            Text("đạt mục tiêu",
+                                                style: TextStyle(color: Colors.grey)),
+                                          ],
+                                        ),
+                                        progressColor: Colors.green,
+                                        backgroundColor: Colors.grey[200]!,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
+                        ],
+                      ),
+                    ),
+                    BloodPressureLevelsTable(), // New table widget
+                    Padding(
+                      padding: const EdgeInsets.only(top: 0, bottom: 24, left: 24, right: 24),
+                      child: Container(
+                        padding: EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              blurRadius: 12,
+                              offset: Offset(0, 6),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 8),
-                        Image.asset(
-                          'assets/images/doctor_image.png',
-                          height: 100,
-                          width: 100,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Những thông số huyết áp này của tôi nghĩa là gì?",
+                                        style: TextStyle(
+                                          fontSize: 19,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                      SizedBox(height: 20),
+                                      Text(
+                                        "Tìm hiểu ngay",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.green,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(width: 8),
+                                Image.asset(
+                                  'assets/images/doctor_image.png',
+                                  height: 100,
+                                  width: 100,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
-              ),
-            ),
-          ],
-        ),
+              );
+            }
+            else {
+              return Center(child: Text('Có lỗi xảy ra'));
+            }
+
+
+        },
       ),
     );
   }
@@ -298,3 +355,4 @@ class IndicatorText extends StatelessWidget {
     );
   }
 }
+

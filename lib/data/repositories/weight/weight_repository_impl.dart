@@ -13,7 +13,6 @@ class WeightRepositoryImpl implements WeightRepository {
   @override
   Future<WeightEntity?> getWeightEntity(String userId) async {
     final weightEntity = await weightRemoteDatasource.getWeightEntity(userId);
-    print("Dữ liệu trả về: $weightEntity");
     return weightEntity;
   }
 
