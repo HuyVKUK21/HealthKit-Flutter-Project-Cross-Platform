@@ -6,6 +6,8 @@ import 'package:fitnessapp/presentation/screens/my_medicine/my_medicine_screen.d
 import 'package:fitnessapp/presentation/screens/profile/user_profile.dart';
 import 'package:fitnessapp/utils/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:fitnessapp/presentation/screens/chatbot/chatbot_screen.dart';
+
 
 import '../home/home_screen.dart';
 
@@ -24,7 +26,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
     const HealthManagementScreen(),
-    MyMedicineScreen(),
+    MyMedicineScreen(idUser: "nvCeupX3wCTu30uoXbDh"),
+    ChatScreen(),
     SettingsScreen()
   ];
 
@@ -86,13 +89,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     }
                   }),
               TabButton(
-                  icon: "assets/icons/user_icon.png",
-                  selectIcon: "assets/icons/user_select_icon.png",
+                  icon: "assets/icons/chatbot.png",
+                  selectIcon: "assets/icons/chatbot.png",
                   isActive: selectTab == 3,
                   onTap: () {
                     if (mounted) {
                       setState(() {
                         selectTab = 3;
+                      });
+                    }
+                  }),
+              TabButton(
+                  icon: "assets/icons/user_icon.png",
+                  selectIcon: "assets/icons/user_select_icon.png",
+                  isActive: selectTab == 4,
+                  onTap: () {
+                    if (mounted) {
+                      setState(() {
+                        selectTab = 4;
                       });
                     }
                   }),

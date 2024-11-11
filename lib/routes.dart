@@ -11,7 +11,6 @@ import 'package:fitnessapp/presentation/screens/my_medicine/my_medicine_screen.d
 import 'package:fitnessapp/presentation/screens/notification/notification_screen.dart';
 import 'package:fitnessapp/presentation/screens/on_boarding/on_boarding_screen.dart';
 import 'package:fitnessapp/presentation/screens/on_boarding/start_screen.dart';
-import 'package:fitnessapp/presentation/screens/profile/complete_profile_screen.dart';
 import 'package:fitnessapp/presentation/screens/signin/signin_screen.dart';
 import 'package:fitnessapp/presentation/screens/signup/signup_screen.dart';
 import 'package:fitnessapp/presentation/screens/weight/height_measure_screen.dart';
@@ -27,7 +26,6 @@ final Map<String, WidgetBuilder> routes = {
   SigninScreen.routeName: (context) => const SigninScreen(),
   StartScreen.routeName: (context) => const StartScreen(),
   SignupScreen.routeName: (context) => const SignupScreen(),
-  CompleteProfileScreen.routeName: (context) => const CompleteProfileScreen(),
   YourGoalScreen.routeName: (context) => const YourGoalScreen(),
   WelcomeScreen.routeName: (context) => const WelcomeScreen(),
   DashboardScreen.routeName: (context) => const DashboardScreen(),
@@ -36,7 +34,6 @@ final Map<String, WidgetBuilder> routes = {
   ActivityTrackerScreen.routeName: (context) => const ActivityTrackerScreen(),
   WorkoutScheduleView.routeName: (context) => const WorkoutScheduleView(),
   HomeScreen.routeName: (context) => HomeScreen(),
-  MyMedicineScreen.routeName: (context) => ViewMedicineScreen(),
   MainFootStepScreen.routeName: (context) => MainFootStepScreen(),
   WeightMeasureScreen.routeName: (context) => WeightMeasureScreen(),
   HeightMeasureScreen.routeName: (context) => HeightMeasureScreen(),

@@ -1,6 +1,6 @@
+import 'package:fitnessapp/domain/entities/account_entity.dart';
 import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
 import 'package:fitnessapp/presentation/events/weight/weight_event.dart';
-import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_measure_screen.dart';
 import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_screen.dart';
 import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_screen.dart';
 import 'package:fitnessapp/presentation/screens/foot_step/main_foot_step.dart';
@@ -18,6 +18,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../utils/page_route_builder.dart';
 import '../my_medicine/my_medicine_screen.dart';
+import '../quit_smoking/profile_smoking_screen.dart';
+import '../quit_smoking/smoking_screen.dart';
+
 
 class HomeScreen extends StatefulWidget {
   static String routeName = "/HomeScreen";
@@ -31,6 +34,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late String userId = "";
   String? _targetScreen;
+  AccountEntity? account;
 
   @override
   void initState() {
@@ -40,9 +44,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _getUserId() async {
-    userId = (await GlobalUtil.getUserId())!;
-
+    final fetchedAccount = await GlobalUtil.getAccount();
+    setState(() {
+      account = fetchedAccount;
+      if (account != null) {
+        userId = account!.userId;
+      }
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 SizedBox(height: 10),
                 GreetWithTemperature(
-                  greetingMessage: "Xin chào, Huy!",
+                  greetingMessage: "Xin chào, ${account?.fullName}!",
                   welcomeMessage: "Chào mừng bạn đến với HealthKit",
                   temperature: 21,
                 ),
@@ -120,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            RouteHelper.createFadeRoute(BloodSugarMeasureScreen()),
+                            RouteHelper.createFadeRoute(BloodsureScreen()),
                           );
                         },
                       ),
@@ -162,8 +172,22 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            RouteHelper.createFadeRoute(MyMedicineScreen()),
+                            RouteHelper.createFadeRoute(MyMedicineScreen(idUser: "nvCeupX3wCTu30uoXbDh",)),
                           );
+                        },
+                      ),
+                      HealthMetricCard(
+                        icon: 'assets/icons/no-smoking.png',
+                        color: Colors.grey,
+                        title: "Bỏ thuốc lá",
+                        subtitle: "Hôm nay",
+                        points: "0",
+                        measure: false,
+                        onTap: () => {
+                          Navigator.pushReplacement(
+                            context,
+                            RouteHelper.createFadeRoute(ProfileSmokingScreen(idUser: "nvCeupX3wCTu30uoXbDh",)),
+                          )
                         },
                       ),
                       SizedBox(height: 20),
@@ -210,13 +234,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(height: 10),
                       ActivityReminderCard(
                         title: "Uống nước đủ mỗi ngày",
-                        imageUrl: "https://media.self.com/photos/57d883a224fe9dae328312d6/master/pass/Drinking-Water_Feat.jpg",
+                        imageUrl: "https://images.pexels.com/photos/5934516/pexels-photo-5934516.jpeg",
                         description: "Uống ít nhất 8 ly nước mỗi ngày để cơ thể luôn giữ được độ ẩm và sức sống.",
                       ),
                       SizedBox(height: 10),
                       ActivityReminderCard(
                         title: "Thời gian ngủ đủ giấc",
-                        imageUrl: "https://photo.znews.vn/w660/Uploaded/sgorvz/2023_12_12/giac_ngu_ngon_1.jpg",
+                        imageUrl: "https://images.pexels.com/photos/3754490/pexels-photo-3754490.jpeg",
                         description: "Ngủ ít nhất 7-8 tiếng mỗi đêm để cơ thể được nghỉ ngơi và phục hồi.",
                       ),
                       SizedBox(height: 10),
@@ -237,4 +261,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

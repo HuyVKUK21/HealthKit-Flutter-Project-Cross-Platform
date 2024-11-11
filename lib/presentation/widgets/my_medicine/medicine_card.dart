@@ -25,7 +25,7 @@ class MedicineCard extends StatelessWidget {
     return GestureDetector(
       onTap: onEditPressed,
       child: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(20.0),
         margin: EdgeInsets.symmetric(vertical: 4.0),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -73,7 +73,6 @@ class MedicineCard extends StatelessWidget {
               Icon(Icons.cancel, color: Colors.red,)) :
               Icon(Icons.chevron_right, color: Colors.grey,),
             ),
-
           ],
         ),
 

@@ -1,3 +1,4 @@
+import 'package:fitnessapp/domain/entities/account_entity.dart';
 import 'package:fitnessapp/domain/entities/user_entity.dart';
 import 'package:fitnessapp/domain/repositories/user/auth_local_data_source.dart';
 import 'package:fitnessapp/domain/repositories/user/user_repository.dart';
@@ -16,13 +17,15 @@ class UserUseCase {
 
   Future<UserEntity> callSignIn(String email, String password) async {
     final userEntity = await _userRepository.signIn(email, password);
-    await _authLocalDataSource.saveUid(userEntity.uid);
+    final userAccount = await _userRepository.saveInfoAccount(userEntity.uid);
+    await _authLocalDataSource.saveLocalAccount(userAccount!);
     return userEntity;
   }
 
   Future<UserEntity> callsignInWithGoogle() async {
     final userEntity = await _userRepository.signInWithGoogle();
-    await _authLocalDataSource.saveUid(userEntity.uid);
+    final userAccount = await _userRepository.saveInfoAccount(userEntity.uid);
+    await _authLocalDataSource.saveLocalAccount(userAccount!);
     return userEntity;
   }
 }
