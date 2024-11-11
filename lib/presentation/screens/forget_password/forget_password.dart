@@ -21,6 +21,7 @@ class _ForgetPassword extends State<ForgetPassword> {
 
   Future<void> checkGmailUserForgetPassword() async {
     final email = _emailController.text.trim();
+    print("abc");
     if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Vui lòng nhập email của bạn.')),
