@@ -14,6 +14,7 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPassword extends State<ForgetPassword> {
+
   final TextEditingController _emailController = TextEditingController();
   final ForgetPasswordUsercase _forgetPasswordUsercase =
   ForgetPasswordUsercase(ForgetPasswordImpl());
@@ -36,6 +37,7 @@ class _ForgetPassword extends State<ForgetPassword> {
 
     if (!isValid) {
       ScaffoldMessenger.of(context).showSnackBar(
+
         SnackBar(content: Text('Email không tồn tại trong hệ thống.')),
       );
       return;
@@ -72,7 +74,9 @@ class _ForgetPassword extends State<ForgetPassword> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+
           children: [
+
             TextField(
               controller: _emailController,
               decoration: InputDecoration(
