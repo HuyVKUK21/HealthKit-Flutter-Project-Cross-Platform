@@ -1,4 +1,5 @@
 import 'package:fitnessapp/presentation/screens/activity_tracker/activity_tracker_screen.dart';
+import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_screen.dart';
 import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_measure_screen.dart';
 import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_screen.dart';
 import 'package:fitnessapp/presentation/screens/change_password/change_password_screen.dart';
@@ -24,6 +25,7 @@ import 'package:fitnessapp/presentation/screens/your_goal/your_goal_screen.dart'
 import 'package:flutter/cupertino.dart';
 
 final Map<String, WidgetBuilder> routes = {
+  BloodSugarScreen.routeName: (context) => const BloodSugarScreen(),
   BloodsureScreen.routeName: (context) => const BloodsureScreen(),
   BloodSureMeasureScreen.routeName: (context) =>  BloodSureMeasureScreen(),
   OnBoardingScreen.routeName: (context) => const OnBoardingScreen(),

@@ -54,6 +54,8 @@ import 'package:fitnessapp/domain/repositories/user/user_repository.dart'
     as _i645;
 import 'package:fitnessapp/domain/repositories/weight/weight_repository.dart'
     as _i191;
+import 'package:fitnessapp/domain/usecases/bloodsugar/get_bloodsugar_usecase.dart'
+    as _i894;
 import 'package:fitnessapp/domain/usecases/bloodsugar/set_bloodsugar_usecase.dart'
     as _i212;
 import 'package:fitnessapp/domain/usecases/bloodsure/get_bloodsure_usecase.dart'
@@ -145,8 +147,12 @@ extension GetItInjectableX on _i174.GetIt {
         _i432.ForgetPasswordUsercase(gh<_i1069.ForgetPasswordRespository>()));
     gh.factory<_i212.SetBloodsugarUsecase>(
         () => _i212.SetBloodsugarUsecase(gh<_i294.BloodsugarRepository>()));
-    gh.factory<_i663.BloodsugarBloc>(
-        () => _i663.BloodsugarBloc(gh<_i212.SetBloodsugarUsecase>()));
+    gh.factory<_i894.GetBloodsugarUsecase>(
+        () => _i894.GetBloodsugarUsecase(gh<_i294.BloodsugarRepository>()));
+    gh.factory<_i663.BloodsugarBloc>(() => _i663.BloodsugarBloc(
+          gh<_i212.SetBloodsugarUsecase>(),
+          gh<_i894.GetBloodsugarUsecase>(),
+        ));
     gh.lazySingleton<_i645.UserRepository>(() => _i960.UserRepositoryImpl(
           gh<_i1071.FirebaseAuthDataSource>(),
           gh<_i397.AuthLocalDataSource>(),
