@@ -34,8 +34,8 @@ class MedicineModel {
         id: id,
         medicineName: data['medicineName'] ?? '',
         dosageTime: data['dosageTime'] ?? '',
-        remainingDoses: data['remainingDoses'] ?? 0, // Convert to String if needed
-        drugForm: data['drugForm'] is Map ? data['drugForm']['name'] ?? '' : '', // Access the 'name' field in the map
+        remainingDoses: data['remainingDoses'] ?? 0,
+        drugForm: data['drugForm'] ?? '',
         frequencyUse: data['frequencyUse'] ?? 0,
         drugStartTime: (data['drugStartTime'] is Timestamp) ? (data['drugStartTime'] as Timestamp).toDate() : null,
         drugEndTime: (data['drugEndTime'] is Timestamp) ? (data['drugEndTime'] as Timestamp).toDate() : null,

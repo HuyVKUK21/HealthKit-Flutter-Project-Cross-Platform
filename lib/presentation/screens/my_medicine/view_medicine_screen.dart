@@ -7,6 +7,7 @@ import '../../../data/models/medicine_model.dart';
 import '../../../data/repositories/medicine/medicine_repository_impl.dart';
 import '../../../domain/usecases/medicine/medicine_usecase.dart';
 import '../../widgets/my_medicine/session_medicine_lists.dart';
+import 'add_medicine_screen.dart';
 
 class ViewMedicineScreen extends StatefulWidget {
   final String idUser;
@@ -89,7 +90,10 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
-                  
+                  Navigator.pushReplacement(
+                      context,
+                      RouteHelper.createFadeRoute(AddMedicineScreen(idUser: widget.idUser,))
+                  );
                 },
                 icon: Icon(Icons.add, color: Colors.white, size: 20),
                 label: Text('Thêm thuốc', style: TextStyle(color: Colors.white, fontSize: 16)),
