@@ -21,7 +21,7 @@ class _BloodSugarMeasureScreenState extends State<BloodSugarMeasureScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF4F5F9), // Màu nền giống với ảnh mẫu
+      backgroundColor: Color(0xFFF4F5F9),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
