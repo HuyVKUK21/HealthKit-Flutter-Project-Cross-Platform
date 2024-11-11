@@ -1,4 +1,3 @@
-import 'package:fitnessapp/data/models/user_model.dart';
 import 'package:fitnessapp/data/repositories/user/forget_password_impl.dart';
 import 'package:fitnessapp/domain/usecases/user/forget_password_usercase.dart';
 import 'package:flutter/material.dart';
