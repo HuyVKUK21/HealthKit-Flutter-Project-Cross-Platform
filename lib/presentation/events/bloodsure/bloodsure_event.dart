@@ -15,11 +15,6 @@ class UpdateBloodsureData extends BloodsureEvent {
   UpdateBloodsureData(this.bloodsureEntity);
 }
 
-class CheckWeightDataEvent extends BloodsureEvent {
-  final String userId;
-
-  CheckWeightDataEvent(this.userId);
-}
 
 
 class SaveBloodsureData extends BloodsureEvent {
