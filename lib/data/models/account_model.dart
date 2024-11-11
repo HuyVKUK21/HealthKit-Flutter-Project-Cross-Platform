@@ -3,14 +3,14 @@ import 'package:fitnessapp/domain/entities/account_entity.dart';
 class AccountModel {
 
   final String userId;
-  final String fullName;
-  final String email;
-  final String age;
-  final String phone;
+  final String? fullName;
+  final String? email;
+  final String? age;
+  final String? phone;
 
 
 
-  AccountModel({required this.userId, required this.fullName,required this.email,required this.age,required this.phone, });
+  AccountModel({required this.userId, this.fullName ,this.email, this.age, this.phone});
 
   factory AccountModel.fromJson(Map<String, dynamic> json) {
     return AccountModel(

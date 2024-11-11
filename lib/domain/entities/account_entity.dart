@@ -3,14 +3,18 @@ import 'dart:convert';
 class AccountEntity {
 
   final String userId;
-  final String fullName;
-  final String email;
-  final String age;
-  final String phone;
+  final String? fullName;
+  final String? email;
+  final String? age;
+  final String? phone;
 
-
-
-  AccountEntity({required this.userId, required this.fullName,required this.email,required this.age,required this.phone, });
+  AccountEntity({
+    required this.userId,
+    required this.fullName,
+    this.email,
+    this.age,
+    this.phone,
+  });
 
   Map<String, dynamic> toMap() {
     return {

@@ -47,7 +47,6 @@ class LogoHeaderSignUp extends StatelessWidget {
                 ),
               ),
             )
-
           ],
         ),
         SizedBox(height: 12),
