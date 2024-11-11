@@ -102,37 +102,70 @@ class _QuitSmokingPageState extends State<QuitSmokingPage> {
                         ),
                         Column(
                           children: [
-                            Row(
-                              children: [
-                                Container(
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.grey,
+                            if(_selectedFilter == 'Tất cả')
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.grey,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 4),
-                                Text("Cơn thèm", style: TextStyle(
-                                    fontSize: 14, color: Colors.grey)),
-                              ],
-                            ),
-                            SizedBox(height: 4,),
-                            Row(
-                              children: [
-                                Container(
-                                  width: 10,
-                                  height: 10,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.red,
+                                  SizedBox(width: 4),
+                                  Text("Cơn thèm", style: TextStyle(
+                                      fontSize: 14, color: Colors.grey)),
+                                ],
+                              ),
+                              SizedBox(height: 4,),
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.red,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 4),
-                                Text("đã hút      ", style: TextStyle(
-                                    fontSize: 14, color: Colors.grey)),
-                              ],
-                            )
+                                  SizedBox(width: 4),
+                                  Text("đã hút      ", style: TextStyle(
+                                      fontSize: 14, color: Colors.grey)),
+                                ],
+                              ),
+                            if(_selectedFilter == 'Cơn thèm')
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text("Cơn thèm", style: TextStyle(
+                                      fontSize: 14, color: Colors.grey)),
+                                ],
+                              ),
+                            if(_selectedFilter == 'Đã hút')
+                              Row(
+                                children: [
+                                  Container(
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  SizedBox(width: 4),
+                                  Text("Cơn thèm", style: TextStyle(
+                                      fontSize: 14, color: Colors.grey)),
+                                ],
+                              ),
                           ],
                         ),
                       ],
@@ -157,13 +190,13 @@ class _QuitSmokingPageState extends State<QuitSmokingPage> {
                         onChanged: (value) {
                           setState(() {
                             _selectedFilter = value!;
-                            if(value == 'Tất cả') {
+                            if(_selectedFilter == 'Tất cả') {
                               _amountReport = cigaretteInfo.amountAvoidedReport! + cigaretteInfo.amountSmokedReport!;
                             }
-                            if(value == 'Cơn thèm') {
+                            if(_selectedFilter == 'Cơn thèm') {
                               _amountReport = cigaretteInfo.amountAvoidedReport!;
                             }
-                            if(value == 'Đã hút') {
+                            if(_selectedFilter == 'Đã hút') {
                               _amountReport = cigaretteInfo.amountSmokedReport!;
                             }
                           });
