@@ -23,8 +23,9 @@ class WeightBloc extends Bloc<WeightEvent, WeightState> {
         final weightData = await getWeightUseCase(event.userId);
         if (weightData != null) {
           emit(WeightLoaded(weightData));
-        } else {
-          emit(WeightError("No weight data found for this user."));
+        }
+        else {
+          emit(WeightError("No weight data found for this auth."));
         }
       } catch (e) {
         emit(WeightError("Failed to load weight data: $e"));
@@ -37,7 +38,7 @@ class WeightBloc extends Bloc<WeightEvent, WeightState> {
         final userId = await GlobalUtil.getUserId();
         final bmi = event.weight / ((event.height / 100) * (event.height / 100));
         final weightEntity = WeightEntity(
-          userId: userId ?? '', // Get from GlobalUtil or authentication logic
+          userId: userId ?? '',
           currentWeight: event.weight,
           height: event.height,
           bmi: bmi,
