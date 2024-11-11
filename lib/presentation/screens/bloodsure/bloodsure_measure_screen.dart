@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BloodSureMeasureScreen extends StatefulWidget {
+
+  static String routeName = "/BloodsureMeasureScreen";
+
+
   @override
   _BloodSureMeasureScreenState createState() => _BloodSureMeasureScreenState();
 }

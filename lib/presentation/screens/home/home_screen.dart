@@ -1,7 +1,9 @@
 import 'package:fitnessapp/data/repositories/medicine/medicine_repository_impl.dart';
 import 'package:fitnessapp/domain/entities/account_entity.dart';
 import 'package:fitnessapp/domain/usecases/medicine/medicine_usecase.dart';
+import 'package:fitnessapp/presentation/bloc/bloodsure/bloodsure_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
+import 'package:fitnessapp/presentation/events/bloodsure/bloodsure_event.dart';
 import 'package:fitnessapp/presentation/events/weight/weight_event.dart';
 import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_screen.dart';
 import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_measure_screen.dart';
@@ -9,6 +11,7 @@ import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_screen.dart'
 import 'package:fitnessapp/presentation/screens/foot_step/main_foot_step.dart';
 import 'package:fitnessapp/presentation/screens/weight/weight_measure_screen.dart';
 import 'package:fitnessapp/presentation/screens/weight/weight_screen.dart';
+import 'package:fitnessapp/presentation/state/bloodsure/bloodsure_state.dart';
 import 'package:fitnessapp/presentation/state/weight/weight_state.dart';
 import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
 import 'package:fitnessapp/presentation/widgets/home/activity_reminder_card.dart';
@@ -38,7 +41,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late String userId = "";
-  String? _targetScreen;
+  String? _targetScreenWeight;
+  String? _targetScreenBloodsure;
   AccountEntity? account;
   late CigaretteUseCase _cigaretteUseCase;
   late MedicineUseCase _medicineUseCase;
@@ -79,14 +83,28 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     context.read<WeightBloc>().add(LoadWeightData(userId));
-    return BlocListener<WeightBloc, WeightState>(
-      listener: (context, state) {
-        if (state is WeightLoaded) {
-          _targetScreen = WeightScreen.routeName;
-        } else if (state is WeightError) {
-          _targetScreen = WeightMeasureScreen.routeName;
-        }
-      },
+    context.read<BloodsureBloc>().add(LoadBloodsureData(userId));
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<WeightBloc, WeightState>(
+          listener: (context, state) {
+            if (state is WeightLoaded) {
+              _targetScreenWeight = WeightScreen.routeName;
+            } else if (state is WeightError) {
+              _targetScreenWeight = WeightMeasureScreen.routeName;
+            }
+          },
+        ),
+        BlocListener<BloodsureBloc, BloodsureState>(
+          listener: (context, state) {
+            if (state is BloodsureLoaded) {
+              _targetScreenBloodsure = BloodsureScreen.routeName;
+            } else if (state is BloodsureError) {
+              _targetScreenBloodsure = BloodSureMeasureScreen.routeName;
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         appBar: CustomAppBar(),
         body: Padding(
@@ -150,10 +168,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         points: "56",
                         measure: "Đo ngay",
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            RouteHelper.createFadeRoute(BloodSureMeasureScreen()),
-                          );
+                          if (_targetScreenBloodsure != null) {
+                            Navigator.pushNamed(context, _targetScreenBloodsure!);
+                          }
                         },
                       ),
                       HealthMetricCard(
@@ -164,9 +181,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         points: "114",
                         measure: "Đo ngay",
                         onTap: () {
-                          print("dạng" + _targetScreen.toString());
-                          if (_targetScreen != null) {
-                            Navigator.pushNamed(context, _targetScreen!);
+                          if (_targetScreenWeight != null) {
+                            Navigator.pushNamed(context, _targetScreenWeight!);
                           }
                         },
                       ),
