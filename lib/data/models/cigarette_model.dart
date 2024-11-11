@@ -57,5 +57,4 @@ class CigaretteModel {
       idUser: data['user_id'] ?? '',
     );
   }
-
 }

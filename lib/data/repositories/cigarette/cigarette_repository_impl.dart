@@ -11,6 +11,7 @@ class CigaretteRepositoryImpl extends CigaretteRepository {
         .where('user_id', isEqualTo: idUser)
         .get();
 
+
     if (querySnapshot.docs.isNotEmpty) {
       DocumentSnapshot doc = querySnapshot.docs.first;
       print('pass');
