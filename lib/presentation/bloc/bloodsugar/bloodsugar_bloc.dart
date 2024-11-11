@@ -1,6 +1,7 @@
 import 'package:fitnessapp/domain/entities/bloodsugar_entity.dart';
 import 'package:fitnessapp/domain/entities/bloodsure_entity.dart';
 import 'package:fitnessapp/domain/entities/weight_entity.dart';
+import 'package:fitnessapp/domain/usecases/bloodsugar/get_bloodsugar_usecase.dart';
 import 'package:fitnessapp/domain/usecases/bloodsugar/set_bloodsugar_usecase.dart';
 import 'package:fitnessapp/domain/usecases/bloodsure/get_bloodsure_usecase.dart';
 import 'package:fitnessapp/domain/usecases/bloodsure/set_bloodsure_usecase.dart';
@@ -20,23 +21,24 @@ import 'package:injectable/injectable.dart';
 @injectable
 class BloodsugarBloc extends Bloc<BloodsugarEvent, BloodsugarState> {
   final SetBloodsugarUsecase setBloodsugarUsecase;
+  final GetBloodsugarUsecase getBloodsugarUsecase;
 
-  BloodsugarBloc(this.setBloodsugarUsecase) : super(BloodsugarInitial()) {
+  BloodsugarBloc(this.setBloodsugarUsecase, this.getBloodsugarUsecase) : super(BloodsugarInitial()) {
 
-    // on<LoadBloodsureData>((event, emit) async {
-    //   emit(BloodsureLoading());
-    //   try {
-    //     final bloodsureData = await getBloodsureUsecase(event.userId);
-    //     if (bloodsureData != null) {
-    //       emit(BloodsureLoaded(bloodsureData));
-    //     }
-    //     else {
-    //       emit(BloodsureError("No bloodsure data found for this auth."));
-    //     }
-    //   } catch (e) {
-    //     emit(BloodsureError("Failed to load weight data: $e"));
-    //   }
-    // });
+    on<LoadBloodsugarData>((event, emit) async {
+      emit(BloodsugarLoading());
+      try {
+        final bloodsureData = await getBloodsugarUsecase(event.userId);
+        if (bloodsureData != null) {
+          emit(BloodsugarLoaded(bloodsureData));
+        }
+        else {
+          emit(BloodsugarError("No bloodsugar data found for this auth."));
+        }
+      } catch (e) {
+        emit(BloodsugarError("Failed to load bloodsugar data: $e"));
+      }
+    });
 
     on<SaveBloodsugarData>((event, emit) async {
       emit(BloodsugarLoading());

@@ -11,7 +11,6 @@ class LoadBloodsugarData extends BloodsugarEvent {
 
 class UpdateBloodsugarData extends BloodsugarEvent {
   final BloodsugarEntity bloodsugarEntity;
-
   UpdateBloodsugarData(this.bloodsugarEntity);
 }
 
