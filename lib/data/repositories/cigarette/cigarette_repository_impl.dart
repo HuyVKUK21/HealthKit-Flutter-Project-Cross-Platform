@@ -25,4 +25,15 @@ class CigaretteRepositoryImpl extends CigaretteRepository {
   Future<void> insertCigarette(CigaretteModel cigarette) async {
     await _cigaretteCollection.add(cigarette.toFirebaseCigarette());
   }
+
+  @override
+  Future<bool> isExistCigarette(String idUser) async {
+    final querySnapshot = await _cigaretteCollection
+        .where('user_id', isEqualTo: idUser)
+        .where('completed_status', isEqualTo: false)
+        .limit(1)
+        .get();
+
+    return querySnapshot.docs.isNotEmpty;
+  }
 }

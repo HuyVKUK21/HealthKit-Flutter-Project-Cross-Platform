@@ -16,4 +16,8 @@ class CigaretteUseCase {
   Future<void> insertCigarette(CigaretteModel cigarette) async {
     return await _cigaretteRepository.insertCigarette(cigarette);
   }
+
+  Future<bool> isExistCigarette(String idUser) async {
+    return await _cigaretteRepository.isExistCigarette(idUser);
+  }
 }
