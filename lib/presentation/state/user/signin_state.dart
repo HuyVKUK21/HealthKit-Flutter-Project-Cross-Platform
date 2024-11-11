@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:fitnessapp/domain/entities/account_entity.dart';
 import 'package:fitnessapp/domain/entities/user_entity.dart';
 
 
@@ -12,12 +13,12 @@ class AuthInitial extends SigninState {}
 class AuthLoading extends SigninState {}
 
 class AuthAuthenticated extends SigninState {
-  final UserEntity user;
+  final UserEntity userEntity;
 
-  AuthAuthenticated(this.user);
+  AuthAuthenticated(this.userEntity);
 
   @override
-  List<Object?> get props => [user];
+  List<Object?> get props => [userEntity];
 }
 
 class AuthError extends SigninState {

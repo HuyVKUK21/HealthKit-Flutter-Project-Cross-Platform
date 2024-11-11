@@ -1,3 +1,4 @@
+import 'package:fitnessapp/domain/entities/account_entity.dart';
 import 'package:fitnessapp/domain/entities/weight_entity.dart';
 import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
 import 'package:fitnessapp/presentation/events/weight/weight_event.dart';
@@ -22,6 +23,8 @@ class WeightScreen extends StatefulWidget {
 class _WeightScreenState extends State<WeightScreen> {
   late String userId = "";
   String? _targetScreen;
+  AccountEntity? account;
+
 
   @override
   void initState() {
@@ -31,7 +34,13 @@ class _WeightScreenState extends State<WeightScreen> {
   }
 
   Future<void> _getUserId() async {
-    userId = (await GlobalUtil.getUserId())!;
+    final fetchedAccount = await GlobalUtil.getAccount();
+    setState(() {
+      account = fetchedAccount;
+      if (account != null) {
+        userId = account!.userId;
+      }
+    });
     context.read<WeightBloc>().add(LoadWeightData(userId));
   }
 

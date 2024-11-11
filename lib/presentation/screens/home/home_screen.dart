@@ -1,3 +1,4 @@
+import 'package:fitnessapp/domain/entities/account_entity.dart';
 import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
 import 'package:fitnessapp/presentation/events/weight/weight_event.dart';
 import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_screen.dart';
@@ -32,6 +33,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late String userId = "";
   String? _targetScreen;
+  AccountEntity? account;
 
   @override
   void initState() {
@@ -41,9 +43,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _getUserId() async {
-    userId = (await GlobalUtil.getUserId())!;
-
+    final fetchedAccount = await GlobalUtil.getAccount();
+    setState(() {
+      account = fetchedAccount;
+      if (account != null) {
+        userId = account!.userId;
+      }
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 SizedBox(height: 10),
                 GreetWithTemperature(
-                  greetingMessage: "Xin chào, Huy!",
+                  greetingMessage: "Xin chào, ${account?.fullName}!",
                   welcomeMessage: "Chào mừng bạn đến với HealthKit",
                   temperature: 21,
                 ),
