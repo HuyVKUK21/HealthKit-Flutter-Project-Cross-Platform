@@ -11,6 +11,7 @@ class GetBloodsugarUsecase {
   GetBloodsugarUsecase(this.bloodsugarRepository);
 
   Future<BloodsugarEntity?> call(String userId) async {
+    print("usecase  " + bloodsugarRepository.getBloodsugarEntity(userId).toString());
     return await bloodsugarRepository.getBloodsugarEntity(userId);
   }
 }

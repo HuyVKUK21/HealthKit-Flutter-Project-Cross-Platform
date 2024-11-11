@@ -9,6 +9,7 @@ class GetBloodsureUsecase {
   GetBloodsureUsecase(this.bloodsureRepository);
 
   Future<BloodsureEntity?> call(String userId) async {
+    print("usecase  " + bloodsureRepository.getBloodsureEntity(userId).toString());
     return await bloodsureRepository.getBloodsureEntity(userId);
   }
 }
