@@ -14,6 +14,10 @@ import '../../widgets/my_medicine/medicine_card.dart';
 class MyMedicineScreen extends StatefulWidget {
   static String routeName = "/MyMedicineScreen";
 
+  final String idUser;
+
+  MyMedicineScreen({required this.idUser});
+
   @override
   State<MyMedicineScreen> createState() => _MyMedicineScreenState();
 }
@@ -39,7 +43,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
   // Duyệt danh sách dữ liệu thuốc
   Future<void> _fetchMedicines() async {
     try {
-      List<MedicineModel> medicines = await _medicineUseCase.getMedicineData("nvCeupX3wCTu30uoXbDh");
+      List<MedicineModel> medicines = await _medicineUseCase.getMedicineData(widget.idUser);
       setState(() {
         _medicineList = medicines.where((medicine) => !medicine.offStatus! && !(medicine.isDeleted ?? false)).toList();
       });
@@ -173,7 +177,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                             onPressed: () {
                               Navigator.pushReplacement(
                                 context,
-                                RouteHelper.createFadeRoute(ViewMedicineScreen()),
+                                RouteHelper.createFadeRoute(ViewMedicineScreen(idUser: widget.idUser,)),
                               );
                             },
                             icon: Icon(Icons.edit, color: Colors.white),
@@ -212,7 +216,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                                     await _medicineUseCase.updateUsageStatusMedicine(medicine.id, medicine.usageStatus);
                                     Navigator.pushReplacement(
                                         context,
-                                        RouteHelper.createFadeRoute(MyMedicineScreen())
+                                        RouteHelper.createFadeRoute(MyMedicineScreen(idUser: widget.idUser,))
                                     );
                                   });
                             } catch (e) {

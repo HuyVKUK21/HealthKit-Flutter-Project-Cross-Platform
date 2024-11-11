@@ -26,7 +26,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
     const HealthManagementScreen(),
-    MyMedicineScreen(),
+    MyMedicineScreen(idUser: "nvCeupX3wCTu30uoXbDh"),
     ChatScreen(),
     SettingsScreen()
   ];
