@@ -1,3 +1,5 @@
+import 'package:fitnessapp/presentation/screens/signin/signin_screen.dart';
+import 'package:fitnessapp/utils/page_route_builder.dart';
 import 'package:flutter/material.dart';
 
 class LogoHeaderSignUp extends StatelessWidget {
@@ -29,14 +31,23 @@ class LogoHeaderSignUp extends StatelessWidget {
 
               ],
             ),
-            Text(
-              "Đăng nhập",
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF043723),
+            TextButton(
+              onPressed: () {
+                Navigator.pushReplacement(
+                  context,
+                  RouteHelper.createFadeRoute(SigninScreen()),
+                );
+              },
+              child: Text(
+                "Đăng nhập",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF043723),
+                ),
               ),
-            ),
+            )
+
           ],
         ),
         SizedBox(height: 12),
