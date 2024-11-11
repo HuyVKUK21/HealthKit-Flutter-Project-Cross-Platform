@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class BloodSugarMeasureScreen extends StatefulWidget {
+  static String routeName = "/BloodSugarMeasureScreen";
   @override
   _BloodSugarMeasureScreenState createState() => _BloodSugarMeasureScreenState();
 }

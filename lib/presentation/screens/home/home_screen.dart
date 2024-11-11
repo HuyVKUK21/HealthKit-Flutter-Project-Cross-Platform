@@ -6,16 +6,20 @@ import 'package:fitnessapp/data/repositories/medicine/medicine_repository_impl.d
 import 'package:fitnessapp/domain/entities/account_entity.dart';
 import 'package:fitnessapp/domain/usecases/foot_step/foot_step_usecase.dart';
 import 'package:fitnessapp/domain/usecases/medicine/medicine_usecase.dart';
+import 'package:fitnessapp/presentation/bloc/bloodsugar/bloodsugar_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/bloodsure/bloodsure_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
+import 'package:fitnessapp/presentation/events/bloodsugar/bloodsugar_event.dart';
 import 'package:fitnessapp/presentation/events/bloodsure/bloodsure_event.dart';
 import 'package:fitnessapp/presentation/events/weight/weight_event.dart';
+import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_measure_screen.dart';
 import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_screen.dart';
 import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_measure_screen.dart';
 import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_screen.dart';
 import 'package:fitnessapp/presentation/screens/foot_step/main_foot_step.dart';
 import 'package:fitnessapp/presentation/screens/weight/weight_measure_screen.dart';
 import 'package:fitnessapp/presentation/screens/weight/weight_screen.dart';
+import 'package:fitnessapp/presentation/state/bloodsugar/bloodsugar_state.dart';
 import 'package:fitnessapp/presentation/state/bloodsure/bloodsure_state.dart';
 import 'package:fitnessapp/presentation/state/weight/weight_state.dart';
 import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
@@ -47,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late String userId = "";
   String? _targetScreenWeight;
   String? _targetScreenBloodsure;
+  String? _targetScreenBloodSugar;
   AccountEntity? account;
   late CigaretteUseCase _cigaretteUseCase;
   late MedicineUseCase _medicineUseCase;
@@ -116,6 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     context.read<WeightBloc>().add(LoadWeightData(userId));
     context.read<BloodsureBloc>().add(LoadBloodsureData(userId));
+    context.read<BloodsugarBloc>().add(LoadBloodsugarData(userId));
     return MultiBlocListener(
       listeners: [
         BlocListener<WeightBloc, WeightState>(
@@ -133,6 +139,15 @@ class _HomeScreenState extends State<HomeScreen> {
               _targetScreenBloodsure = BloodsureScreen.routeName;
             } else if (state is BloodsureError) {
               _targetScreenBloodsure = BloodSureMeasureScreen.routeName;
+            }
+          },
+        ),
+        BlocListener<BloodsugarBloc, BloodsugarState>(
+          listener: (context, state) {
+            if (state is BloodsugarLoaded) {
+              _targetScreenBloodSugar = BloodSugarScreen.routeName;
+            } else if (state is BloodsugarError) {
+              _targetScreenBloodSugar = BloodSugarMeasureScreen.routeName;
             }
           },
         ),
@@ -227,10 +242,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         points: "168",
                         measure: "Đo ngay",
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            RouteHelper.createFadeRoute(BloodSugarScreen()),
-                          );
+                          if (_targetScreenBloodSugar != null) {
+                            Navigator.pushNamed(context, _targetScreenBloodSugar!);
+                          }
                         },
                       ),
                       HealthMetricCard(
