@@ -1,37 +1,22 @@
-import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
-
+//
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
-final List<Message> _messages = [];
-
-
-
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _userMessage = TextEditingController();
 
-  static const apiKey = "AIzaSyCNwjAtu1K0bqTZtOVG4bakfLlFwouiV08";
+  static const apiKey = "AIzaSyCNwjAtu1K0bqTZtOVG4bakfLlFwouiV08"; // Đảm bảo API key là hợp lệ
 
   final model = GenerativeModel(model: 'gemini-pro', apiKey: apiKey);
 
-
-
-  @override
-  void initState() {
-    super.initState();
-    _messages.add(Message(
-      isUser: false,
-      message: "Chào mừng bạn đến với HealthKit Chatbot, nếu có yêu cầu hay hỏi đáp về sức khỏe gì vui lòng chat với tôi!",
-      date: DateTime.now(),
-    ));
-  }
+  final List<Message> _messages = [];
 
   Future<void> sendMessage() async {
     final message = _userMessage.text;
@@ -71,7 +56,13 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: AppBar(
+        title: const Text('HealthKit Chatbot',
+          style: TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold),),
+          centerTitle: true,
+      ),
+
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
@@ -98,7 +89,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(50)),
-                      label: const Text("Nhập tin nhắn vào đây"),
+                      label: const Text("Enter your message"),
                     ),
                   ),
                 ),
