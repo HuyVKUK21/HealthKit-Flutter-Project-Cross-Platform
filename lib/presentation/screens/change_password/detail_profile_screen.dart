@@ -48,6 +48,56 @@ class _DetailProfileScreen extends State<DetailProfileScreen> {
     }
   }
 
+  Future<void> _updateUserInfo() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      final userData = await _firestore
+          .collection('users')
+          .where('userId', isEqualTo: user.uid)
+          .limit(1)
+          .get();
+
+      if (userData.docs.isNotEmpty) {
+        final data = userData.docs.first.data();
+
+        if (_fullnameController.text.isEmpty ||
+            _phoneController.text.isEmpty ||
+            _ageController.text.isEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Vui lòng điền đầy đủ thông tin.')),
+          );
+          return;
+        }
+
+        if (_fullnameController.text == data['fullname'] &&
+            _phoneController.text == data['phone'] &&
+            int.tryParse(_ageController.text) == data['age']) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Không có thay đổi nào để cập nhật.')),
+          );
+          return;
+        }
+
+        final docRef = userData.docs.first.reference;
+        await docRef.update({
+          'fullName': _fullnameController.text,
+          'phone': _phoneController.text,
+          'age': int.tryParse(_ageController.text) ?? 0,
+        });
+
+        setState(() {
+          _fullnameController.text = _fullnameController.text;
+          _phoneController.text = _phoneController.text;
+          _ageController.text = _ageController.text;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Thông tin người dùng đã được cập nhật!')),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +108,7 @@ class _DetailProfileScreen extends State<DetailProfileScreen> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
         ),
         centerTitle: true,
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.green,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.0),
@@ -116,16 +166,19 @@ class _DetailProfileScreen extends State<DetailProfileScreen> {
               width: double.infinity, // This ensures full width
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blueAccent,
+                  backgroundColor: Colors.green,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                   padding: EdgeInsets.symmetric(vertical: 15),
                 ),
-                onPressed: () {},
+                onPressed: _updateUserInfo,
                 child: Text(
                   'Xác nhận',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700),
                 ),
               ),
             )
@@ -148,22 +201,22 @@ class _DetailProfileScreen extends State<DetailProfileScreen> {
       keyboardType: keyboardType,
       style: TextStyle(fontSize: 16),
       decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: Colors.blueAccent),
+        prefixIcon: Icon(icon, color: Colors.green),
         labelText: label,
-        labelStyle: TextStyle(color: Colors.blueAccent),
+        labelStyle: TextStyle(color: Colors.green),
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.blueAccent),
+          borderSide: BorderSide(color: Colors.green),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.blueAccent, width: 2),
+          borderSide: BorderSide(color: Colors.green, width: 2),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.blueAccent, width: 1),
+          borderSide: BorderSide(color: Colors.green, width: 1),
         ),
       ),
     );

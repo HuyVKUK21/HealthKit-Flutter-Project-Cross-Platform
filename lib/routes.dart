@@ -1,4 +1,5 @@
 import 'package:fitnessapp/presentation/screens/activity_tracker/activity_tracker_screen.dart';
+import 'package:fitnessapp/presentation/screens/change_password/change_password_screen.dart';
 import 'package:fitnessapp/presentation/screens/change_password/detail_profile_screen.dart';
 import 'package:fitnessapp/presentation/screens/dashboard/dashboard_screen.dart';
 import 'package:fitnessapp/presentation/screens/finish_workout/finish_workout_screen.dart';
@@ -39,4 +40,5 @@ final Map<String, WidgetBuilder> routes = {
   WeightScreen.routeName: (context) => WeightScreen(),
   ForgetPassword.routeName: (context) => ForgetPassword(),
   DetailProfileScreen.routeName: (context) => DetailProfileScreen(),
+  ChangePasswordScreen.routeName: (context) => ChangePasswordScreen(),
 };

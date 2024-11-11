@@ -1,43 +1,24 @@
-
+import 'package:fitnessapp/data/datasources/user/firebase_auth_datasource.dart';
+import 'package:fitnessapp/data/repositories/user/auth_local_data_source_impl.dart';
 import 'package:fitnessapp/data/repositories/user/forget_password_impl.dart';
-import 'package:fitnessapp/domain/entities/account_entity.dart';
+import 'package:fitnessapp/data/repositories/user/user_repository_impl.dart';
+import 'package:fitnessapp/domain/repositories/user/auth_local_data_source.dart';
+import 'package:fitnessapp/domain/repositories/user/user_repository.dart';
 import 'package:fitnessapp/domain/usecases/user/forget_password_usercase.dart';
+import 'package:fitnessapp/domain/usecases/user/user_usecase.dart';
+import 'package:fitnessapp/presentation/screens/change_password/change_password_screen.dart';
 import 'package:fitnessapp/presentation/screens/change_password/detail_profile_screen.dart';
+import 'package:fitnessapp/presentation/screens/profile/complete_profile_screen.dart';
 import 'package:fitnessapp/presentation/screens/signin/signin_screen.dart';
 import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
-import 'package:fitnessapp/utils/global/user.dart';
 import 'package:fitnessapp/utils/page_route_builder.dart';
 import 'package:flutter/material.dart';
 
-class SettingsScreen extends StatefulWidget {
-
+class SettingsScreen extends StatelessWidget {
   SettingsScreen({Key? key}) : super(key: key);
 
-  @override
-  _SettingsScreenState createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen>{
-
-  late String userId = "";
-  String? _targetScreen;
-  AccountEntity? account;
-  final ForgetPasswordUsercase _forgetPasswordUsercase = ForgetPasswordUsercase(ForgetPasswordImpl());
-
-  @override
-  void initState() {
-    super.initState();
-    _getUserId();
-  }
-
-  Future<void> _getUserId() async {
-    final fetchedAccount = await GlobalUtil.getAccount();
-    setState(() {
-      account = fetchedAccount;
-
-    });
-  }
-
+  final ForgetPasswordUsercase _forgetPasswordUsercase =
+      ForgetPasswordUsercase(ForgetPasswordImpl());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,8 +28,8 @@ class _SettingsScreenState extends State<SettingsScreen>{
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            ProfileSection(accountEntity: account!),
-            const SizedBox(height: 10.0),
+            const ProfileSection(),
+            const SizedBox(height: 24.0),
             SettingsCategory(
               title: 'Chung',
               items: [
@@ -68,7 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen>{
                 SettingsItem(icon: Icons.public, title: 'Quốc gia'),
               ],
             ),
-            const SizedBox(height: 10.0),
+            const SizedBox(height: 24.0),
             SettingsCategory(
               title: 'Sức khoẻ',
               items: const [
@@ -82,7 +63,7 @@ class _SettingsScreenState extends State<SettingsScreen>{
                 SettingsItem(icon: Icons.book, title: 'Hướng dẫn sức khoẻ'),
               ],
             ),
-            const SizedBox(height: 10.0),
+            const SizedBox(height: 24.0),
             SettingsCategory(
               title: 'Quyền truy cập',
               items: const [
@@ -93,7 +74,7 @@ class _SettingsScreenState extends State<SettingsScreen>{
                     icon: Icons.bluetooth, title: 'Thiết bị Bluetooth'),
               ],
             ),
-            const SizedBox(height: 10.0),
+            const SizedBox(height: 24.0),
             SettingsCategory(
               title: 'Giới thiệu',
               items: [
@@ -106,7 +87,16 @@ class _SettingsScreenState extends State<SettingsScreen>{
                 SettingsItem(
                     icon: Icons.privacy_tip, title: 'Chính sách bảo mật'),
                 SettingsItem(icon: Icons.games, title: 'Quy tắc Trò chơi hoá'),
-                SettingsItem(icon: Icons.cookie, title: 'Chính sách Cookie'),
+                SettingsItem(
+                  icon: Icons.password,
+                  title: 'Thay đổi mật khẩu',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      RouteHelper.createFadeRoute(ChangePasswordScreen()),
+                    );
+                  },
+                ),
                 SettingsItem(
                   icon: Icons.logout,
                   title: 'Đăng xuất',
@@ -128,12 +118,7 @@ class _SettingsScreenState extends State<SettingsScreen>{
 }
 
 class ProfileSection extends StatelessWidget {
-  final AccountEntity accountEntity;
-
-  const ProfileSection({
-    Key? key,
-    required this.accountEntity,
-  }) : super(key: key);
+  const ProfileSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -153,19 +138,33 @@ class ProfileSection extends StatelessWidget {
         children: [
           const CircleAvatar(
             radius: 40,
-            backgroundImage: AssetImage('assets/images/profile_user.png'),
+            backgroundImage: AssetImage('assets/profile_picture.png'),
           ),
           const SizedBox(height: 8.0),
-          Text(
-            accountEntity.fullName!,
+          const Text(
+            'Phó',
             style: TextStyle(
-                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green),
+                fontSize: 28, fontWeight: FontWeight.bold, color: Colors.pink),
           ),
           const Text(
-            'Thành viên HealthKit',
-            style: TextStyle(fontSize: 14, color: Colors.grey),
+            'Thành viên',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
           const SizedBox(height: 16.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Cấp độ: 5',
+                style: TextStyle(fontSize: 16, color: Colors.pink[300]),
+              ),
+              const SizedBox(width: 16.0),
+              Text(
+                'Hoàn thành: 70%',
+                style: TextStyle(fontSize: 16, color: Colors.pink[300]),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -205,9 +204,9 @@ class SettingsCategory extends StatelessWidget {
           ),
           ...items
               .map((item) => Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: item,
-          ))
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: item,
+                  ))
               .toList(),
         ],
       ),
@@ -227,14 +226,11 @@ class SettingsItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: Colors.green),
+      leading: Icon(icon, color: Colors.purple),
       title: Text(title, style: const TextStyle(fontSize: 16)),
       trailing:
-      const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
+          const Icon(Icons.arrow_forward_ios, color: Colors.grey, size: 16),
       onTap: onTap,
     );
   }
 }
-
-
-
