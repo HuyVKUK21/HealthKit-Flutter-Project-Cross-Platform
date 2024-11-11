@@ -46,6 +46,90 @@ class _BloodsureScreenState extends State<BloodsureScreen> {
     context.read<BloodsureBloc>().add(LoadBloodsureData(userId));
   }
 
+  double calculateIdealBloodPressurePercent(int systolic, int diastolic) {
+    double percentSystolic = _calculateSystolicPercent(systolic);
+    double percentDiastolic = _calculateDiastolicPercent(diastolic);
+
+
+    return (percentSystolic + percentDiastolic) / 2;
+  }
+
+  double _calculateSystolicPercent(int systolic) {
+    if (systolic >= 90 && systolic <= 129) {
+      return 1.0; // 100% lý tưởng
+    } else if (systolic < 90) {
+      return systolic / 90;
+    } else if (systolic <= 159) {
+      return 1.0 - ((systolic - 129) / (159 - 129) * 0.5);
+    } else if (systolic <= 179) {
+      return 0.5 - ((systolic - 159) / (179 - 159) * 0.5);
+    } else {
+      return 0.0;
+    }
+  }
+
+  double _calculateDiastolicPercent(int diastolic) {
+    if (diastolic >= 60 && diastolic <= 84) {
+      return 1.0; // 100% lý tưởng
+    } else if (diastolic < 60) {
+      return diastolic / 60; // Dưới mức tối ưu
+    } else if (diastolic <= 99) {
+      return 1.0 - ((diastolic - 84) / (99 - 84) * 0.5); // Tăng huyết áp giai đoạn 1
+    } else if (diastolic <= 109) {
+      return 0.5 - ((diastolic - 99) / (109 - 99) * 0.5); // Tăng huyết áp giai đoạn 2
+    } else {
+      return 0.0; // Tăng huyết áp giai đoạn 3
+    }
+  }
+
+
+  double calculateBloodPressurePercentage(int systolic, int diastolic) {
+    if (systolic < 90 && diastolic < 60) return 0.1;
+    if (systolic < 120 && diastolic < 80) return 0.3;
+    if (systolic < 130 && diastolic < 85) return 0.5;
+    if (systolic < 140 && diastolic < 90) return 0.7;
+    if (systolic < 160 && diastolic < 100) return 0.8;
+    if (systolic < 180 && diastolic < 110) return 0.9;
+    return 1.0;
+  }
+
+  Color getBloodPressureColor(int systolic, int diastolic) {
+    if (systolic < 90 || diastolic < 60) {
+      return Colors.blue;
+    } else if (systolic <= 119 && diastolic <= 79) {
+      return Colors.green;
+    } else if (systolic <= 129 && diastolic <= 84) {
+      return Colors.lightGreen;
+    } else if ((systolic <= 139 || diastolic <= 89)) {
+      return Colors.yellow;
+    } else if ((systolic <= 159 || diastolic <= 99)) {
+      return Colors.orange;
+    } else if ((systolic <= 179 || diastolic <= 109)) {
+      return Colors.red;
+    } else {
+      return Colors.purple;
+    }
+  }
+
+  String getBloodPressureStatus(int systolic, int diastolic) {
+    if (systolic < 90 || diastolic < 60) {
+      return "Huyết áp thấp";
+    } else if (systolic <= 119 && diastolic <= 79) {
+      return "Lý tưởng";
+    } else if (systolic <= 129 && diastolic <= 84) {
+      return "Bình thường";
+    } else if ((systolic <= 139 || diastolic <= 89)) {
+      return "Tiền cao huyết áp";
+    } else if ((systolic <= 159 || diastolic <= 99)) {
+      return "Tăng huyết áp giai đoạn 1";
+    } else if ((systolic <= 179 || diastolic <= 109)) {
+      return "Tăng huyết áp giai đoạn 2";
+    } else {
+      return "Tăng huyết áp giai đoạn 3";
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +143,10 @@ class _BloodsureScreenState extends State<BloodsureScreen> {
             else if (state is BloodsureLoaded){
 
               final bloodData = state.bloodsureEntity;
+              final percent = calculateBloodPressurePercentage(
+                bloodData.systolic,
+                bloodData.diastolic,
+              );
 
               return SingleChildScrollView(
                 child: Column(
@@ -160,22 +248,26 @@ class _BloodsureScreenState extends State<BloodsureScreen> {
                                       child: CircularPercentIndicator(
                                         radius: 100.0,
                                         lineWidth: 15.0,
-                                        percent: 1.0,
+                                        percent: calculateIdealBloodPressurePercent(bloodData.systolic, bloodData.diastolic),
                                         center: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            Text("100%",
-                                                style: TextStyle(
-                                                    fontSize: 24,
-                                                    fontWeight: FontWeight.bold)),
-                                            Text("đạt mục tiêu",
-                                                style: TextStyle(color: Colors.grey)),
+                                            Text(
+                                              "${(calculateIdealBloodPressurePercent(bloodData.systolic, bloodData.diastolic) * 100).toStringAsFixed(0)}%",
+                                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              getBloodPressureStatus(bloodData.systolic, bloodData.diastolic),
+                                              style: TextStyle(color: Colors.grey, fontSize: 12),
+                                            ),
                                           ],
                                         ),
-                                        progressColor: Colors.green,
+                                        progressColor: getBloodPressureColor(bloodData.systolic, bloodData.diastolic),
                                         backgroundColor: Colors.grey[200]!,
                                       ),
                                     ),
+
+
                                   ],
                                 ),
                               ],
