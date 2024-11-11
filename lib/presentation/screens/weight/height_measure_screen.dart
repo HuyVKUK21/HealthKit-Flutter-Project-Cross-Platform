@@ -1,6 +1,7 @@
 import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
 import 'package:fitnessapp/presentation/events/weight/weight_event.dart';
 import 'package:fitnessapp/presentation/screens/weight/weight_screen.dart';
+import 'package:fitnessapp/presentation/state/weight/weight_state.dart';
 import 'package:fitnessapp/utils/global/user.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -42,130 +43,137 @@ class _HeightMeasureScreenState extends State<HeightMeasureScreen> {
   @override
   Widget build(BuildContext context) {
     final weight = ModalRoute.of(context)!.settings.arguments as double;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    return BlocListener<WeightBloc, WeightState>(
+      listener: (context, state) {
+        print("Hello" + state.toString());
+        if (state is WeightUpdated) {
+          Navigator.pushReplacementNamed(
+            context,
+            WeightScreen.routeName,
+          );
+        }
+      },
+      child: Scaffold(
         backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.close, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.close, color: Colors.black),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
         ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: 10),
-            Text(
-              'Chiều cao',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.calendar_today_outlined, color: Colors.black),
-                SizedBox(width: 8),
-                Text(
-                  'Hôm nay, $currentDate',
-                  style: TextStyle(fontSize: 16, color: Colors.black54),
-                ),
-              ],
-            ),
-            SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.remove_circle, color: Colors.red, size: 30),
-                  onPressed: () {
-                    setState(() {
-                      if (height > 0) height -= 0.1;
-                    });
-                  },
-                ),
-                Text(
-                  height.toStringAsFixed(1),
-                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
-                ),
-                IconButton(
-                  icon: Icon(Icons.add_circle, color: Colors.green, size: 30),
-                  onPressed: () {
-                    setState(() {
-                      height += 0.1;
-                    });
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            ToggleButtons(
-              borderColor: Colors.transparent,
-              selectedColor: Colors.pink,
-              fillColor: Colors.transparent,
-              borderRadius: BorderRadius.circular(8),
-              isSelected: [true],
-              onPressed: (int index) {},
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Text('cm', style: TextStyle(fontSize: 16, color: Colors.black)),
-                ),
-              ],
-            ),
-            SizedBox(height: 30),
-            Slider(
-              value: height,
-              min: 40,
-              max: 210,
-              divisions: 110,
-              activeColor: Colors.green,
-              inactiveColor: Colors.grey[300],
-              label: height.toStringAsFixed(1),
-              onChanged: (double value) {
-                setState(() {
-                  height = value;
-                });
-              },
-            ),
-            Spacer(),
-            TextButton.icon(
-              onPressed: () {
-                // Open help screen
-              },
-              icon: Icon(Icons.chat_bubble_outline, color: Colors.black54),
-              label: Text(
-                'Đo chiều cao như thế nào?',
-                style: TextStyle(color: Colors.black54),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: 10),
+              Text(
+                'Chiều cao',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                minimumSize: Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.calendar_today_outlined, color: Colors.black),
+                  SizedBox(width: 8),
+                  Text(
+                    'Hôm nay, $currentDate',
+                    style: TextStyle(fontSize: 16, color: Colors.black54),
+                  ),
+                ],
+              ),
+              SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.remove_circle, color: Colors.red, size: 30),
+                    onPressed: () {
+                      setState(() {
+                        if (height > 0) height -= 0.1;
+                      });
+                    },
+                  ),
+                  Text(
+                    height.toStringAsFixed(1),
+                    style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.add_circle, color: Colors.green, size: 30),
+                    onPressed: () {
+                      setState(() {
+                        height += 0.1;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              ToggleButtons(
+                borderColor: Colors.transparent,
+                selectedColor: Colors.pink,
+                fillColor: Colors.transparent,
+                borderRadius: BorderRadius.circular(8),
+                isSelected: [true],
+                onPressed: (int index) {},
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Text('cm', style: TextStyle(fontSize: 16, color: Colors.black)),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
+              Slider(
+                value: height,
+                min: 40,
+                max: 210,
+                divisions: 110,
+                activeColor: Colors.green,
+                inactiveColor: Colors.grey[300],
+                label: height.toStringAsFixed(1),
+                onChanged: (double value) {
+                  setState(() {
+                    height = value;
+                  });
+                },
+              ),
+              Spacer(),
+              TextButton.icon(
+                onPressed: () {
+                  // Open help screen
+                },
+                icon: Icon(Icons.chat_bubble_outline, color: Colors.black54),
+                label: Text(
+                  'Đo chiều cao như thế nào?',
+                  style: TextStyle(color: Colors.black54),
                 ),
               ),
-              onPressed: () {
-                context.read<WeightBloc>().add(SaveWeightHeightData(weight, height));
-                Navigator.pushNamed(
-                  context,
-                  WeightScreen.routeName
-                );
-              },
-              child: Text(
-                'Tiếp tục',
-                style: TextStyle(fontSize: 18, color: Colors.white),
+              SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.black,
+                  minimumSize: Size(double.infinity, 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onPressed: () {
+                  context.read<WeightBloc>().add(SaveWeightHeightData(weight, height));
+                },
+                child: Text(
+                  'Tiếp tục',
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-          ],
+              SizedBox(height: 20),
+            ],
+          ),
         ),
       ),
     );
