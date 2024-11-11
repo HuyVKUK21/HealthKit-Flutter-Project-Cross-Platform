@@ -16,6 +16,8 @@ import 'package:fitnessapp/utils/global/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../data/repositories/cigarette/cigarette_repository_impl.dart';
+import '../../../domain/usecases/cigarette/cigarette_usecase.dart';
 import '../../../utils/page_route_builder.dart';
 import '../my_medicine/my_medicine_screen.dart';
 import '../quit_smoking/profile_smoking_screen.dart';
@@ -35,12 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
   late String userId = "";
   String? _targetScreen;
   AccountEntity? account;
+  late CigaretteUseCase _cigaretteUseCase;
+  late bool activeSmoking;
 
   @override
   void initState() {
     super.initState();
     _getUserId();
-
+    _cigaretteUseCase = CigaretteUseCase(CigaretteRepositoryImpl());
+    _checkActive();
   }
 
   Future<void> _getUserId() async {
@@ -53,6 +58,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<void> _checkActive() async {
+    try {
+      bool isExistCigarette = await _cigaretteUseCase.isExistCigarette(userId);
+      setState(() {
+        activeSmoking = isExistCigarette;
+      });
+    } catch (e) {}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         title: "Bước đi",
                         subtitle: "180 bước • Hôm nay",
                         points: "56",
-                        measure: false,
+                        measure: "Xem",
                         onTap: () {
                           Navigator.push(
                             context,
@@ -126,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         title: "Nhịp tim",
                         subtitle: "78 bpm • Hôm nay",
                         points: "56",
-                        measure: true,
+                        measure: "Đo ngay",
                         onTap: () {
                           Navigator.push(
                             context,
@@ -140,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         title: "Cân nặng",
                         subtitle: "68 kg • Hôm qua",
                         points: "114",
-                        measure: true,
+                        measure: "Đo ngay",
                         onTap: () {
                           print("dạng" + _targetScreen.toString());
                           if (_targetScreen != null) {
@@ -154,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         title: "Đường huyết",
                         subtitle: "98.4 mg/DL • Hôm nay",
                         points: "168",
-                        measure: true,
+                        measure: "Đo ngay",
                         onTap: () {
                           Navigator.push(
                             context,
@@ -168,11 +181,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         title: "Thuốc của tôi",
                         subtitle: "Hôm nay",
                         points: "0",
-                        measure: false,
+                        measure: "Xem",
                         onTap: () {
                           Navigator.push(
                             context,
-                            RouteHelper.createFadeRoute(MyMedicineScreen(idUser: "nvCeupX3wCTu30uoXbDh",)),
+                            RouteHelper.createFadeRoute(MyMedicineScreen(idUser: userId,)),
                           );
                         },
                       ),
@@ -182,12 +195,19 @@ class _HomeScreenState extends State<HomeScreen> {
                         title: "Bỏ thuốc lá",
                         subtitle: "Hôm nay",
                         points: "0",
-                        measure: false,
+                        measure: activeSmoking ? "Xem" : "Thêm",
                         onTap: () => {
-                          Navigator.pushReplacement(
-                            context,
-                            RouteHelper.createFadeRoute(ProfileSmokingScreen(idUser: "nvCeupX3wCTu30uoXbDh",)),
-                          )
+                          if(activeSmoking) {
+                            Navigator.pushReplacement(
+                              context,
+                              RouteHelper.createFadeRoute(QuitSmokingPage(idUser: userId,)),
+                            )
+                          }else {
+                            Navigator.pushReplacement(
+                              context,
+                              RouteHelper.createFadeRoute(ProfileSmokingScreen(idUser: userId,)),
+                            )
+                          }
                         },
                       ),
                       SizedBox(height: 20),
