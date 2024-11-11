@@ -98,7 +98,7 @@ class _ForgetPassword extends State<ForgetPassword> {
                 shadowColor: Color(0xFF118036),
               ),
               child: Text(
-                "Xác nhận",
+                "Xác nhận OK",
                 style: TextStyle(fontSize: 14, color: Colors.white),
               ),
             ),
