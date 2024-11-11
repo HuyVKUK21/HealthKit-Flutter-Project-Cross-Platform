@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitnessapp/data/models/cigarette_model.dart';
+import 'package:injectable/injectable.dart';
 import '../../../domain/repositories/cigarette/cigarette_repository.dart';
 
+@LazySingleton(as: CigaretteRepository)
 class CigaretteRepositoryImpl extends CigaretteRepository {
   final CollectionReference _cigaretteCollection = FirebaseFirestore.instance.collection('quit_smoking');
 
