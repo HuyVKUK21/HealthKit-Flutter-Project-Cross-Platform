@@ -75,5 +75,16 @@ class MedicineRepositoryImpl extends MedicineRepository {
     }
   }
 
+  @override
+  Future<bool> isExistMedicine(String idUser) async {
+    final querySnapshot = await _medicinesCollection
+        .where('user_id', isEqualTo: idUser)
+        .where('offStatus', isEqualTo: false)
+        .limit(1)
+        .get();
+
+    return querySnapshot.docs.isNotEmpty;
+  }
+
 
 }

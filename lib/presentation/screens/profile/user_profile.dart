@@ -1,4 +1,3 @@
-
 import 'package:fitnessapp/data/repositories/user/forget_password_impl.dart';
 import 'package:fitnessapp/domain/entities/account_entity.dart';
 import 'package:fitnessapp/domain/usecases/user/forget_password_usercase.dart';
