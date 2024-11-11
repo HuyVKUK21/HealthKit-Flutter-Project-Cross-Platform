@@ -26,11 +26,16 @@ class GoalCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            Text(title,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             SizedBox(height: 10),
-            LinearProgressIndicator(value: progressPercent, backgroundColor: Colors.grey[300], color: Colors.red),
+            LinearProgressIndicator(
+                value: progressPercent,
+                backgroundColor: Colors.grey[300],
+                color: progress >= (goal / 2) ? Colors.green : Colors.red),
             SizedBox(height: 10),
-            Text("$progress / $goal $unit", style: TextStyle(fontSize: 14, color: Colors.grey[600])),
+            Text("$progress / $goal $unit",
+                style: TextStyle(fontSize: 14, color: Colors.grey[600])),
           ],
         ),
       ),
