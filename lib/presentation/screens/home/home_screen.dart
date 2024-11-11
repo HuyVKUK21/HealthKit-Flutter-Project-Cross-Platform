@@ -1,4 +1,6 @@
+import 'package:fitnessapp/data/repositories/medicine/medicine_repository_impl.dart';
 import 'package:fitnessapp/domain/entities/account_entity.dart';
+import 'package:fitnessapp/domain/usecases/medicine/medicine_usecase.dart';
 import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
 import 'package:fitnessapp/presentation/events/weight/weight_event.dart';
 import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_screen.dart';
@@ -38,13 +40,16 @@ class _HomeScreenState extends State<HomeScreen> {
   String? _targetScreen;
   AccountEntity? account;
   late CigaretteUseCase _cigaretteUseCase;
+  late MedicineUseCase _medicineUseCase;
   late bool activeSmoking;
+  late bool activeMedicine;
 
   @override
   void initState() {
     super.initState();
     _getUserId();
     _cigaretteUseCase = CigaretteUseCase(CigaretteRepositoryImpl());
+    _medicineUseCase = MedicineUseCase(MedicineRepositoryImpl());
     _checkActive();
   }
 
@@ -61,8 +66,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _checkActive() async {
     try {
       bool isExistCigarette = await _cigaretteUseCase.isExistCigarette(userId);
+      bool isExistMedicine = await _medicineUseCase.isExistMedicine(userId);
       setState(() {
         activeSmoking = isExistCigarette;
+        activeMedicine = isExistMedicine;
       });
     } catch (e) {}
   }
@@ -181,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         title: "Thuốc của tôi",
                         subtitle: "Hôm nay",
                         points: "0",
-                        measure: "Xem",
+                        measure: activeMedicine ? "Xem" : "Thêm",
                         onTap: () {
                           Navigator.push(
                             context,
