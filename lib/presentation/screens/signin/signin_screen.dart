@@ -32,7 +32,7 @@ class SigninScreen extends StatelessWidget {
                 );
               } else if (state is AuthError) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Đăng nhập không thành công. Lỗi: ${state.message}')),
+                  SnackBar(content: Text('Đăng nhập không thành công . Lỗi: ${state.message}')),
                 );
               }
             },
