@@ -62,8 +62,9 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           fontFamily: "Poppins",
         ),
-        initialRoute: initialRoute,
+        home: SigninScreen(),
       ),
     );
   }
+
 }
