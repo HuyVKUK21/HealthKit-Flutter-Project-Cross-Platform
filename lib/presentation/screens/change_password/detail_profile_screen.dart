@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class DetailProfileScreen extends StatefulWidget {
@@ -10,10 +12,41 @@ class DetailProfileScreen extends StatefulWidget {
 }
 
 class _DetailProfileScreen extends State<DetailProfileScreen> {
+  final _auth = FirebaseAuth.instance;
+  final _firestore = FirebaseFirestore.instance;
   final TextEditingController _fullnameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserInfo();
+  }
+
+  Future<void> _loadUserInfo() async {
+    final user = _auth.currentUser;
+
+    if (user != null) {
+      _emailController.text = user.email ?? '';
+
+      final userData = await _firestore
+          .collection('users')
+          .where('userId', isEqualTo: user.uid)
+          .limit(1)
+          .get();
+      if (userData.docs.isNotEmpty) {
+        final data =
+            userData.docs.first.data(); // Lấy dữ liệu từ tài liệu đầu tiên
+        setState(() {
+          _fullnameController.text = data['fullName'] ?? '';
+          _phoneController.text = data['phone'] ?? '';
+          _ageController.text = data['age']?.toString() ?? '';
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
