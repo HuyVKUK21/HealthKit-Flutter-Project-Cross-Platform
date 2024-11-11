@@ -1,4 +1,7 @@
+import 'package:fitnessapp/presentation/bloc/bloodsugar/bloodsugar_bloc.dart';
+import 'package:fitnessapp/presentation/events/bloodsugar/bloodsugar_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class BloodSugarMeasureScreen extends StatefulWidget {
@@ -15,7 +18,21 @@ class _BloodSugarMeasureScreenState extends State<BloodSugarMeasureScreen> {
   String getCurrentDateTime() {
     final now = DateTime.now();
     final formatter = DateFormat(" d 'tháng' M HH:mm");
-    return "Hôm nay,"+ formatter.format(now);
+    return "Hôm nay," + formatter.format(now);
+  }
+
+  // Function to get the text representation of the meal state
+  String getMealStateText() {
+    switch (selectedMealState) {
+      case 0:
+        return "Nhịn ăn";
+      case 1:
+        return "Sau ăn";
+      case 2:
+        return "Trước ăn";
+      default:
+        return "";
+    }
   }
 
   @override
@@ -40,7 +57,6 @@ class _BloodSugarMeasureScreenState extends State<BloodSugarMeasureScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(height: 10),
-          // Tiêu đề và ngày giờ
           Text(
             "Đường huyết",
             style: TextStyle(
@@ -72,7 +88,6 @@ class _BloodSugarMeasureScreenState extends State<BloodSugarMeasureScreen> {
             ),
           ),
           SizedBox(height: 60),
-          // Giá trị đo đường huyết
           Text(
             bloodSugarValue.toStringAsFixed(1),
             style: TextStyle(
@@ -82,7 +97,6 @@ class _BloodSugarMeasureScreenState extends State<BloodSugarMeasureScreen> {
             ),
           ),
           SizedBox(height: 10),
-          // Chọn đơn vị
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -108,30 +122,28 @@ class _BloodSugarMeasureScreenState extends State<BloodSugarMeasureScreen> {
                 ),
               ),
               SizedBox(width: 10),
-
             ],
           ),
           SizedBox(height: 30),
-          // Thanh trượt để chọn giá trị
           SliderTheme(
             data: SliderThemeData(
-              activeTrackColor: Colors.pink, // Màu thanh trượt khi đang hoạt động
-              inactiveTrackColor: Colors.grey[300], // Màu thanh trượt khi không hoạt động
-              thumbColor: Colors.pinkAccent, // Màu chấm trượt
-              overlayColor: Colors.pink.withOpacity(0.2), // Màu phủ khi chấm trượt được nhấn
-              valueIndicatorColor: Colors.pinkAccent, // Màu của chỉ báo giá trị
-              valueIndicatorTextStyle: TextStyle(color: Colors.white), // Màu chữ trong chỉ báo giá trị
-              trackHeight: 8, // Độ cao của thanh trượt
-              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 15), // Kích thước thumb
-              trackShape: RoundedRectSliderTrackShape(), // Hình dạng của thanh trượt
-              overlayShape: RoundSliderOverlayShape(overlayRadius: 30), // Kích thước của overlay
+              activeTrackColor: Colors.pink,
+              inactiveTrackColor: Colors.grey[300],
+              thumbColor: Colors.pinkAccent,
+              overlayColor: Colors.pink.withOpacity(0.2),
+              valueIndicatorColor: Colors.pinkAccent,
+              valueIndicatorTextStyle: TextStyle(color: Colors.white),
+              trackHeight: 8,
+              thumbShape: RoundSliderThumbShape(enabledThumbRadius: 15),
+              trackShape: RoundedRectSliderTrackShape(),
+              overlayShape: RoundSliderOverlayShape(overlayRadius: 30),
             ),
             child: Slider(
               value: bloodSugarValue,
               min: 0.0,
               max: 899.5,
-              divisions: 8995, // Chia thành 8995 đoạn để mỗi bước là 0.1
-              label: bloodSugarValue.toStringAsFixed(1), // Hiển thị giá trị của slider
+              divisions: 8995,
+              label: bloodSugarValue.toStringAsFixed(1),
               onChanged: (value) {
                 setState(() {
                   bloodSugarValue = value;
@@ -147,7 +159,6 @@ class _BloodSugarMeasureScreenState extends State<BloodSugarMeasureScreen> {
             ),
           ),
           SizedBox(height: 85),
-          // Các nút trạng thái bữa ăn
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -159,7 +170,6 @@ class _BloodSugarMeasureScreenState extends State<BloodSugarMeasureScreen> {
             ],
           ),
           SizedBox(height: 8),
-          // Mô tả trạng thái bữa ăn
           Text(
             mealDescription,
             style: TextStyle(
@@ -172,11 +182,17 @@ class _BloodSugarMeasureScreenState extends State<BloodSugarMeasureScreen> {
             ),
           ),
           Spacer(),
-          // Nút "Tiếp tục"
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                context.read<BloodsugarBloc>().add(
+                  SaveBloodsugarData(
+                    index: bloodSugarValue,
+                    status: getMealStateText(), // Using the meal state text
+                  ),
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
                 minimumSize: Size(double.infinity, 50),
@@ -199,7 +215,6 @@ class _BloodSugarMeasureScreenState extends State<BloodSugarMeasureScreen> {
     );
   }
 
-  // Hàm xây dựng nút trạng thái bữa ăn với màu và mô tả tùy chỉnh
   Widget _buildMealButton(String text, int index, String description, Color color) {
     bool isSelected = selectedMealState == index;
     return GestureDetector(

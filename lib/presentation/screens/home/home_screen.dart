@@ -5,6 +5,7 @@ import 'package:fitnessapp/presentation/bloc/bloodsure/bloodsure_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
 import 'package:fitnessapp/presentation/events/bloodsure/bloodsure_event.dart';
 import 'package:fitnessapp/presentation/events/weight/weight_event.dart';
+import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_measure_screen.dart';
 import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_screen.dart';
 import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_measure_screen.dart';
 import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_screen.dart';
@@ -196,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            RouteHelper.createFadeRoute(BloodSugarScreen()),
+                            RouteHelper.createFadeRoute(BloodSugarMeasureScreen()),
                           );
                         },
                       ),
@@ -223,12 +224,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         measure: activeSmoking ? "Xem" : "Thêm",
                         onTap: () => {
                           if(activeSmoking) {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
                               RouteHelper.createFadeRoute(QuitSmokingPage(idUser: userId,)),
                             )
                           }else {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
                               RouteHelper.createFadeRoute(ProfileSmokingScreen(idUser: userId,)),
                             )

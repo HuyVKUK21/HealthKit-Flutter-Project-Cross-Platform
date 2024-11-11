@@ -12,10 +12,14 @@ import 'package:cloud_firestore/cloud_firestore.dart' as _i974;
 import 'package:firebase_auth/firebase_auth.dart' as _i59;
 import 'package:fitnessapp/data/datasources/auth/firebase_auth_datasource.dart'
     as _i1071;
+import 'package:fitnessapp/data/datasources/bloodsugar/bloodsugar_remote_datasource.dart'
+    as _i179;
 import 'package:fitnessapp/data/datasources/bloodsure/bloodsure_remote_datasource.dart'
     as _i844;
 import 'package:fitnessapp/data/datasources/weight/weight_remote_datasource.dart'
     as _i682;
+import 'package:fitnessapp/data/repositories/bloodsugar/bloodsugar_repository_impl.dart'
+    as _i411;
 import 'package:fitnessapp/data/repositories/bloodsure/bloodsure_repository_impl.dart'
     as _i336;
 import 'package:fitnessapp/data/repositories/cigarette/cigarette_repository_impl.dart'
@@ -32,6 +36,8 @@ import 'package:fitnessapp/data/repositories/user/user_repository_impl.dart'
     as _i960;
 import 'package:fitnessapp/data/repositories/weight/weight_repository_impl.dart'
     as _i255;
+import 'package:fitnessapp/domain/repositories/bloodsugar/bloodsugar_repository.dart'
+    as _i294;
 import 'package:fitnessapp/domain/repositories/bloodsure/bloodsure_repository.dart'
     as _i27;
 import 'package:fitnessapp/domain/repositories/cigarette/cigarette_repository.dart'
@@ -48,6 +54,8 @@ import 'package:fitnessapp/domain/repositories/user/user_repository.dart'
     as _i645;
 import 'package:fitnessapp/domain/repositories/weight/weight_repository.dart'
     as _i191;
+import 'package:fitnessapp/domain/usecases/bloodsugar/set_bloodsugar_usecase.dart'
+    as _i212;
 import 'package:fitnessapp/domain/usecases/bloodsure/get_bloodsure_usecase.dart'
     as _i399;
 import 'package:fitnessapp/domain/usecases/bloodsure/set_bloodsure_usecase.dart'
@@ -66,6 +74,8 @@ import 'package:fitnessapp/domain/usecases/weight/get_weight_usecase.dart'
 import 'package:fitnessapp/domain/usecases/weight/set_weight_usecase.dart'
     as _i804;
 import 'package:fitnessapp/firebase_module.dart' as _i139;
+import 'package:fitnessapp/presentation/bloc/bloodsugar/bloodsugar_bloc.dart'
+    as _i663;
 import 'package:fitnessapp/presentation/bloc/bloodsure/bloodsure_bloc.dart'
     as _i320;
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart' as _i876;
@@ -93,6 +103,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i682.WeightRemoteDatasource(gh<_i974.FirebaseFirestore>()));
     gh.factory<_i844.BloodsureRemoteDatasource>(
         () => _i844.BloodsureRemoteDatasource(gh<_i974.FirebaseFirestore>()));
+    gh.factory<_i179.BloodsugarRemoteDatasource>(
+        () => _i179.BloodsugarRemoteDatasource(gh<_i974.FirebaseFirestore>()));
     gh.lazySingleton<_i91.MedicineRepository>(
         () => _i708.MedicineRepositoryImpl());
     gh.lazySingleton<_i1069.CigaretteRepository>(
@@ -115,6 +127,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i535.FootStepUsecase(gh<_i240.FootStepRepository>()));
     gh.factory<_i379.GetWeightUsecase>(
         () => _i379.GetWeightUsecase(gh<_i191.WeightRepository>()));
+    gh.lazySingleton<_i294.BloodsugarRepository>(() =>
+        _i411.BloodsugarRepositoryImpl(gh<_i179.BloodsugarRemoteDatasource>()));
     gh.factory<_i1071.FirebaseAuthDataSource>(
         () => _i1071.FirebaseAuthDataSource(gh<_i59.FirebaseAuth>()));
     gh.factory<_i520.CigaretteUseCase>(
@@ -129,6 +143,10 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i432.ForgetPasswordUsercase>(() =>
         _i432.ForgetPasswordUsercase(gh<_i1069.ForgetPasswordRespository>()));
+    gh.factory<_i212.SetBloodsugarUsecase>(
+        () => _i212.SetBloodsugarUsecase(gh<_i294.BloodsugarRepository>()));
+    gh.factory<_i663.BloodsugarBloc>(
+        () => _i663.BloodsugarBloc(gh<_i212.SetBloodsugarUsecase>()));
     gh.lazySingleton<_i645.UserRepository>(() => _i960.UserRepositoryImpl(
           gh<_i1071.FirebaseAuthDataSource>(),
           gh<_i397.AuthLocalDataSource>(),
