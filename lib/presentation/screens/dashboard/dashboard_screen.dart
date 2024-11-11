@@ -1,10 +1,11 @@
 import 'dart:io';
-
-import 'package:fitnessapp/presentation/screens/camera/camera_screen.dart';
 import 'package:fitnessapp/presentation/screens/health_management/health_management_screen.dart';
+import 'package:fitnessapp/presentation/screens/my_medicine/my_medicine_screen.dart';
 import 'package:fitnessapp/presentation/screens/profile/user_profile.dart';
 import 'package:fitnessapp/utils/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:fitnessapp/presentation/screens/chatbot/chatbot_screen.dart';
+
 
 import '../home/home_screen.dart';
 
@@ -23,8 +24,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
     const HealthManagementScreen(),
-    const CameraScreen(),
-    const UserProfile()
+    MyMedicineScreen(idUser: "nvCeupX3wCTu30uoXbDh"),
+    ChatScreen(),
+    SettingsScreen()
   ];
 
   @override
@@ -46,9 +48,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               color: AppColors.whiteColor,
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 2,
-                    offset: Offset(0, -2))
+                    color: Colors.black12, blurRadius: 2, offset: Offset(0, -2))
               ]),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -87,13 +87,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     }
                   }),
               TabButton(
-                  icon: "assets/icons/user_icon.png",
-                  selectIcon: "assets/icons/user_select_icon.png",
+                  icon: "assets/icons/chatbot.png",
+                  selectIcon: "assets/icons/chatbot.png",
                   isActive: selectTab == 3,
                   onTap: () {
                     if (mounted) {
                       setState(() {
                         selectTab = 3;
+                      });
+                    }
+                  }),
+              TabButton(
+                  icon: "assets/icons/user_icon.png",
+                  selectIcon: "assets/icons/user_select_icon.png",
+                  isActive: selectTab == 4,
+                  onTap: () {
+                    if (mounted) {
+                      setState(() {
+                        selectTab = 4;
                       });
                     }
                   }),
@@ -139,8 +150,7 @@ class TabButton extends StatelessWidget {
               width: 4,
               height: 4,
               decoration: BoxDecoration(
-                  color: Colors.green,
-                  borderRadius: BorderRadius.circular(2)),
+                  color: Colors.green, borderRadius: BorderRadius.circular(2)),
             ),
           )
         ],

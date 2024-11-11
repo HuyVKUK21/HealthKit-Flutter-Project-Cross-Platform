@@ -1,11 +1,18 @@
+import 'package:fitnessapp/data/models/weight_model.dart';
+import 'package:fitnessapp/presentation/screens/bloodsugar/bloodsugar_screen.dart';
+import 'package:fitnessapp/presentation/screens/bloodsure/bloodsure_screen.dart';
+import 'package:fitnessapp/presentation/screens/weight/weight_screen.dart';
 import 'package:fitnessapp/presentation/widgets/health_management/activities_card_widget.dart';
 import 'package:fitnessapp/presentation/widgets/health_management/button_group_widget.dart';
 import 'package:fitnessapp/presentation/widgets/health_management/header_widget.dart';
 import 'package:fitnessapp/presentation/widgets/health_management/log_book_button.dart';
+import 'package:fitnessapp/utils/page_route_builder.dart';
 import 'package:flutter/material.dart';
 
 class HealthManagementWidget extends StatelessWidget {
+  const HealthManagementWidget({super.key, required this.weightModel});
 
+  final WeightModel weightModel;
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +40,14 @@ class HealthManagementWidget extends StatelessWidget {
                         statusColor: Colors.redAccent,
                         lastUpdated: 'HÔM QUA, 8:16',
                         daysRemaining: '37 NGÀY NỮA',
-                        mainValue: '87.1',
+                        mainValue: '${weightModel.currentWeight}',
                         mainUnit: 'kg',
                         secondaryValue: '6.4',
                         secondaryUnit: ' kg cần giảm',
+                        onTap: () {
+                          Navigator.push(context,
+                              RouteHelper.createFadeRoute(WeightScreen()));
+                        },
                       ),
                       const SizedBox(height: 16),
                       ActivityCard(
@@ -50,6 +61,10 @@ class HealthManagementWidget extends StatelessWidget {
                         mainUnit: 'mmHg',
                         secondaryValue: '90 / 60',
                         secondaryUnit: ' mmHg',
+                        onTap: () {
+                          Navigator.push(context,
+                              RouteHelper.createFadeRoute(BloodsureScreen()));
+                        },
                       ),
                       const SizedBox(height: 16),
                       ActivityCard(
@@ -63,6 +78,10 @@ class HealthManagementWidget extends StatelessWidget {
                         mainUnit: 'mg/dL',
                         secondaryValue: '168',
                         secondaryUnit: ' ngày',
+                        onTap: () {
+                          Navigator.push(context,
+                              RouteHelper.createFadeRoute(BloodSugarScreen()));
+                        },
                       ),
                       const SizedBox(height: 16),
                       LogBookButton(),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MedicineCard extends StatelessWidget {
   final String medicineName;
   final String dosageTime;
-  final String remainingDoses;
+  final int remainingDoses;
   final bool? offStatus;
   final bool? usageStatus;
   final String iconRight;
@@ -25,12 +25,12 @@ class MedicineCard extends StatelessWidget {
     return GestureDetector(
       onTap: onEditPressed,
       child: Container(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(20.0),
         margin: EdgeInsets.symmetric(vertical: 4.0),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12.0),
-          border: Border.all(color: offStatus == false ? (usageStatus == true ? Colors.green : Colors.red) : Colors.grey, width: 2.0),
+          borderRadius: BorderRadius.circular(20.0),
+          border: Border.all(color: offStatus == false ? (usageStatus == true ? Colors.green : Colors.red) : Colors.grey, width: 1.0),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +40,11 @@ class MedicineCard extends StatelessWidget {
               child: CircleAvatar(
                 backgroundColor: Colors.grey[200],
                 radius: 24,
-                child: Icon(Icons.medication, color: Colors.black),
+                child: Image.asset(
+                  'assets/images/medicine_icon.png',
+                  width: 24,
+                  height: 24,
+                ),
               ),
             ),
             SizedBox(width: 16.0),
@@ -52,11 +56,12 @@ class MedicineCard extends StatelessWidget {
                     medicineName,
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(height: 4.0),
+                  SizedBox(height: 2.0),
                   Text(offStatus == false ?
                   (usageStatus == true ? "Đã uống vào lúc $dosageTime" : "Bỏ qua vào $dosageTime") :
-                  "Chưa có nhắc nhở nào được đặt", style: TextStyle(fontSize: 14)),
-                  Text("$remainingDoses lần dùng còn lại", style: TextStyle(fontSize: 14)),
+                  "Chưa có nhắc nhở nào được đặt", style: TextStyle(fontSize: 14, color: Colors.grey)),
+                  SizedBox(height: 2.0),
+                  Text("$remainingDoses lần dùng còn lại", style: TextStyle(fontSize: 14, color: Colors.grey)),
                 ],
               ),
             ),
@@ -70,6 +75,7 @@ class MedicineCard extends StatelessWidget {
             ),
           ],
         ),
+
       ),
     );
   }

@@ -1,11 +1,12 @@
-import 'package:fitnessapp/events/user/user_event.dart';
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';
+import 'package:fitnessapp/presentation/events/user/signin_event.dart';
+import 'package:fitnessapp/presentation/screens/forget_password/forget_password.dart';
+import 'package:fitnessapp/utils/page_route_builder.dart';
 import 'package:flutter/material.dart';
 
 class SigninForm extends StatefulWidget {
   final SignInBloc signInBloc;
   const SigninForm({super.key, required this.signInBloc});
-
 
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -46,7 +47,8 @@ class _LoginFormState extends State<SigninForm> {
                   obscureText = !obscureText;
                 });
               },
-              child: Icon(obscureText ? Icons.visibility_off : Icons.visibility, color: Color(0xFF787878)),
+              child: Icon(obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: Color(0xFF787878)),
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
@@ -58,19 +60,22 @@ class _LoginFormState extends State<SigninForm> {
         Align(
           alignment: Alignment.centerRight,
           child: TextButton(
-            onPressed: () {},
-            child: Text("Quên mật khẩu?", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w400)),
+            onPressed: () {
+              Navigator.push(
+                context,
+                RouteHelper.createFadeRoute(ForgetPassword()),
+              );
+            },
+            child: Text("Quên mật khẩu?",
+                style: TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.w400)),
           ),
         ),
         SizedBox(height: 16),
         ElevatedButton(
           onPressed: () {
             widget.signInBloc.add(
-              ButtonSubmitPressed(
-                  email: _emailController.text,
-                  password: _passwordController.text
-              )
-            );
+                SignInEvent(_emailController.text, _passwordController.text));
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: Color(0xFF118036),
@@ -81,11 +86,10 @@ class _LoginFormState extends State<SigninForm> {
             elevation: 10,
             shadowColor: Color(0xFF118036),
           ),
-          child: Text("Đăng nhập", style: TextStyle(fontSize: 14, color: Colors.white)),
+          child: Text("Đăng nhập",
+              style: TextStyle(fontSize: 14, color: Colors.white)),
         ),
-
         SizedBox(height: 40),
-
       ],
     );
   }

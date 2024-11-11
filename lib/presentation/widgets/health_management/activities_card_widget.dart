@@ -13,6 +13,7 @@ class ActivityCard extends StatelessWidget {
   final String mainUnit;
   final String secondaryValue;
   final String secondaryUnit;
+  final void Function() onTap;  // <-- Thêm parameter này vào
 
   const ActivityCard({
     required this.imagePath,
@@ -25,13 +26,12 @@ class ActivityCard extends StatelessWidget {
     required this.mainUnit,
     required this.secondaryValue,
     required this.secondaryUnit,
+    required this.onTap, // <-- Đảm bảo parameter này được truyền vào constructor
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
-    int daysRemainingWeight;
-    daysRemainingWeight = 1;
     final media = MediaQuery.of(context).size;
 
     return Card(
@@ -56,7 +56,7 @@ class ActivityCard extends StatelessWidget {
                 ),
                 Spacer(),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: onTap,  // <-- Gọi function này khi người dùng nhấn
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size.zero,
                     padding: EdgeInsets.symmetric(vertical: 3, horizontal: 16),

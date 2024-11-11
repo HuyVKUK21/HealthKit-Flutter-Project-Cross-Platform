@@ -6,7 +6,7 @@ class HealthMetricCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final String points;
-  final bool measure;
+  final String measure;
   final VoidCallback? onTap;
 
   HealthMetricCard({
@@ -75,7 +75,7 @@ class HealthMetricCard extends StatelessWidget {
                       shadowColor: Color(0xFF118036),
                     ),
                     child: Text(
-                      measure ? "Đo ngay" : "Xem",
+                      measure,
                       style: TextStyle(fontSize: 14, color: Colors.white),
                     ),
                   ),

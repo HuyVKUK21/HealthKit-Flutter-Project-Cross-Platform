@@ -1,0 +1,41 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fitnessapp/data/models/cigarette_model.dart';
+import 'package:injectable/injectable.dart';
+import '../../../domain/repositories/cigarette/cigarette_repository.dart';
+
+@LazySingleton(as: CigaretteRepository)
+class CigaretteRepositoryImpl extends CigaretteRepository {
+  final CollectionReference _cigaretteCollection = FirebaseFirestore.instance.collection('quit_smoking');
+
+  @override
+  Future<CigaretteModel> getCigaretteByUserId(String idUser) async {
+    QuerySnapshot querySnapshot = await _cigaretteCollection
+        .where('user_id', isEqualTo: idUser)
+        .get();
+
+
+    if (querySnapshot.docs.isNotEmpty) {
+      DocumentSnapshot doc = querySnapshot.docs.first;
+      print('pass');
+      return CigaretteModel.fromFirebaseCigarette(doc.data() as Map<String, dynamic>, doc.id);
+    } else {
+      throw Exception('Cigarette not found or already completed');
+    }
+  }
+
+  @override
+  Future<void> insertCigarette(CigaretteModel cigarette) async {
+    await _cigaretteCollection.add(cigarette.toFirebaseCigarette());
+  }
+
+  @override
+  Future<bool> isExistCigarette(String idUser) async {
+    final querySnapshot = await _cigaretteCollection
+        .where('user_id', isEqualTo: idUser)
+        .where('completed_status', isEqualTo: false)
+        .limit(1)
+        .get();
+
+    return querySnapshot.docs.isNotEmpty;
+  }
+}
