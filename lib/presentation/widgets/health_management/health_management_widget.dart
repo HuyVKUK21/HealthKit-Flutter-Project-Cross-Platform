@@ -1,3 +1,4 @@
+import 'package:fitnessapp/data/models/weight_model.dart';
 import 'package:fitnessapp/presentation/widgets/health_management/activities_card_widget.dart';
 import 'package:fitnessapp/presentation/widgets/health_management/button_group_widget.dart';
 import 'package:fitnessapp/presentation/widgets/health_management/header_widget.dart';
@@ -5,7 +6,9 @@ import 'package:fitnessapp/presentation/widgets/health_management/log_book_butto
 import 'package:flutter/material.dart';
 
 class HealthManagementWidget extends StatelessWidget {
+  const HealthManagementWidget({super.key, required this.weightModel});
 
+  final WeightModel weightModel;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class HealthManagementWidget extends StatelessWidget {
                         statusColor: Colors.redAccent,
                         lastUpdated: 'HÔM QUA, 8:16',
                         daysRemaining: '37 NGÀY NỮA',
-                        mainValue: '87.1',
+                        mainValue: '${weightModel.currentWeight}',
                         mainUnit: 'kg',
                         secondaryValue: '6.4',
                         secondaryUnit: ' kg cần giảm',

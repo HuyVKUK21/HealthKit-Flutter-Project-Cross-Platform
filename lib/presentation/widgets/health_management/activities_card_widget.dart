@@ -1,8 +1,9 @@
+import 'package:fitnessapp/presentation/screens/weight/weight_screen.dart';
+import 'package:fitnessapp/utils/page_route_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ActivityCard extends StatelessWidget {
-
   final String imagePath;
   final String title;
   final String statusText;
@@ -48,7 +49,8 @@ class ActivityCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Image.asset(imagePath, width: media.width * 0.1, height: media.width * 0.1),
+                Image.asset(imagePath,
+                    width: media.width * 0.1, height: media.width * 0.1),
                 SizedBox(width: 10),
                 Text(
                   title,
@@ -56,7 +58,10 @@ class ActivityCard extends StatelessWidget {
                 ),
                 Spacer(),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context, RouteHelper.createFadeRoute(WeightScreen()));
+                  },
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size.zero,
                     padding: EdgeInsets.symmetric(vertical: 3, horizontal: 16),
@@ -79,11 +84,17 @@ class ActivityCard extends StatelessWidget {
               children: [
                 Text(
                   lastUpdated,
-                  style: TextStyle(fontSize: 10, color: Colors.grey, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 10,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold),
                 ),
                 Text(
                   daysRemaining,
-                  style: TextStyle(fontSize: 10, color: Colors.grey, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 10,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -95,8 +106,13 @@ class ActivityCard extends StatelessWidget {
                   text: TextSpan(
                     style: TextStyle(color: Colors.black),
                     children: <TextSpan>[
-                      TextSpan(text: mainValue, style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-                      TextSpan(text: mainUnit, style: TextStyle(fontSize: 10, color: Colors.grey)),
+                      TextSpan(
+                          text: mainValue,
+                          style: TextStyle(
+                              fontSize: 32, fontWeight: FontWeight.bold)),
+                      TextSpan(
+                          text: mainUnit,
+                          style: TextStyle(fontSize: 10, color: Colors.grey)),
                     ],
                   ),
                 ),
@@ -104,8 +120,15 @@ class ActivityCard extends StatelessWidget {
                   text: TextSpan(
                     style: TextStyle(color: Colors.black),
                     children: <TextSpan>[
-                      TextSpan(text: secondaryValue, style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey)),
-                      TextSpan(text: secondaryUnit, style: TextStyle(fontSize: 14, color: Colors.grey)),
+                      TextSpan(
+                          text: secondaryValue,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey)),
+                      TextSpan(
+                          text: secondaryUnit,
+                          style: TextStyle(fontSize: 14, color: Colors.grey)),
                     ],
                   ),
                 ),

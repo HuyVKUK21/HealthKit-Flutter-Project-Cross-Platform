@@ -25,12 +25,10 @@ class _WeightScreenState extends State<WeightScreen> {
   String? _targetScreen;
   AccountEntity? account;
 
-
   @override
   void initState() {
     super.initState();
     _getUserId();
-
   }
 
   Future<void> _getUserId() async {
@@ -43,7 +41,6 @@ class _WeightScreenState extends State<WeightScreen> {
     });
     context.read<WeightBloc>().add(LoadWeightData(userId));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +81,6 @@ class _WeightScreenState extends State<WeightScreen> {
       ),
     );
   }
-
 
   Widget _buildWeightStats(WeightEntity weightData) {
     return Padding(
@@ -149,9 +145,7 @@ class _WeightScreenState extends State<WeightScreen> {
               ),
               child: DropdownButton<String>(
                 value: 'Hiển thị theo Tuần',
-                items: <String>[
-                  'Hiển thị theo Tuần'
-                ].map((String value) {
+                items: <String>['Hiển thị theo Tuần'].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Padding(
@@ -183,9 +177,9 @@ class _WeightScreenState extends State<WeightScreen> {
 
     List<FlSpot> spots = [];
 
-
     for (int i = 1; i <= 7; i++) {
-      double weight = weightData.currentWeight; // Hàm này cần được định nghĩa để lấy trọng số cho ngày i
+      double weight = weightData
+          .currentWeight; // Hàm này cần được định nghĩa để lấy trọng số cho ngày i
       spots.add(FlSpot(i.toDouble(), weight));
     }
     return Container(
@@ -307,8 +301,7 @@ class _WeightScreenState extends State<WeightScreen> {
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
-                      color: Colors.white
-                  ),
+                      color: Colors.white),
                 ),
               ),
             ],
@@ -410,8 +403,10 @@ class _WeightScreenState extends State<WeightScreen> {
                 radiusFactor: 0.8,
                 ranges: <GaugeRange>[
                   GaugeRange(startValue: 0, endValue: 18.5, color: Colors.blue),
-                  GaugeRange(startValue: 18.5, endValue: 24.9, color: Colors.green),
-                  GaugeRange(startValue: 24.9, endValue: 29.9, color: Colors.orange),
+                  GaugeRange(
+                      startValue: 18.5, endValue: 24.9, color: Colors.green),
+                  GaugeRange(
+                      startValue: 24.9, endValue: 29.9, color: Colors.orange),
                   GaugeRange(startValue: 29.9, endValue: 40, color: Colors.red),
                 ],
                 pointers: <GaugePointer>[
@@ -423,7 +418,8 @@ class _WeightScreenState extends State<WeightScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          bmi.toStringAsFixed(1), // Display BMI value dynamically
+                          bmi.toStringAsFixed(
+                              1), // Display BMI value dynamically
                           style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,
@@ -451,7 +447,6 @@ class _WeightScreenState extends State<WeightScreen> {
       ),
     );
   }
-
 
   String _getBmiStatus(double bmi) {
     if (bmi < 18.5) {
@@ -547,5 +542,3 @@ class _WeightScreenState extends State<WeightScreen> {
     );
   }
 }
-
-
