@@ -43,7 +43,6 @@ class _WeightScreenState extends State<WeightScreen> {
       appBar: CustomAppBar(),
       body: BlocBuilder<WeightBloc, WeightState>(
         builder: (context, state) {
-          print("Check state" + state.toString());
           if (state is WeightLoading) {
             return Center(child: CircularProgressIndicator());
           } else if (state is WeightLoaded) {

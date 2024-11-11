@@ -49,7 +49,6 @@ class FirebaseAuthDataSource {
     if (googleUser == null) {
       throw Exception('Đăng nhập bị hủy.');
     }
-
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
     final UserCredential userCredential = await _firebaseAuth.signInWithCredential(

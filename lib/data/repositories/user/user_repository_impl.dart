@@ -33,8 +33,14 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<AccountEntity> saveInfoAccount(String userId) async{
+  Future<AccountEntity?> saveInfoAccount(String userId) async {
     final account = await firebaseAuthDataSource.getInfoAccount(userId);
-    return account!.toEntity();
+    if (account != null) {
+      return account.toEntity();
+    } else {
+      print("Account info is null for userId: $userId");
+      return null;
+    }
   }
+
 }
