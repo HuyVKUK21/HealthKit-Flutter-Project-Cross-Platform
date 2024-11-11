@@ -4,6 +4,7 @@ import 'package:fitnessapp/data/repositories/user/auth_local_data_source_impl.da
 import 'package:fitnessapp/domain/entities/account_entity.dart';
 import 'package:fitnessapp/domain/repositories/user/auth_local_data_source.dart';
 import 'package:fitnessapp/firebase_options.dart';
+import 'package:fitnessapp/presentation/bloc/bloodsugar/bloodsugar_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/bloodsure/bloodsure_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/signin/signin_bloc.dart';
 import 'package:fitnessapp/presentation/bloc/signup/signup_bloc.dart';
@@ -49,6 +50,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<BloodsureBloc>(
           create: (context) => getIt<BloodsureBloc>(),
+        ),
+        BlocProvider<BloodsugarBloc>(
+          create: (context) => getIt<BloodsugarBloc>(),
         ),
       ],
       child: MaterialApp(
