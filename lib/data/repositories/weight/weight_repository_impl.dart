@@ -5,10 +5,10 @@ import 'package:fitnessapp/domain/repositories/weight/weight_repository.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: WeightRepository)
-class UserRepositoryImpl implements WeightRepository {
+class WeightRepositoryImpl implements WeightRepository {
   final WeightRemoteDatasource weightRemoteDatasource;
 
-  UserRepositoryImpl(this.weightRemoteDatasource);
+  WeightRepositoryImpl(this.weightRemoteDatasource);
 
   @override
   Future<WeightEntity?> getWeightEntity(String userId) async {

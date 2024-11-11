@@ -1,4 +1,7 @@
+import 'package:fitnessapp/presentation/bloc/bloodsure/bloodsure_bloc.dart';
+import 'package:fitnessapp/presentation/events/bloodsure/bloodsure_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BloodSureMeasureScreen extends StatefulWidget {
   @override
@@ -19,8 +22,6 @@ class _BloodSureMeasureScreenState extends State<BloodSureMeasureScreen> {
   @override
   void initState() {
     super.initState();
-
-    // Thêm listener cho các FocusNode
     _systolicFocus.addListener(() {
       if (_systolicFocus.hasFocus) {
         setState(() {
@@ -235,7 +236,7 @@ class _BloodSureMeasureScreenState extends State<BloodSureMeasureScreen> {
                 minimumSize: Size(double.infinity, 50),
               ),
               onPressed: () {
-                // Thêm chức năng khi bấm nút Hoàn tất
+                context.read<BloodsureBloc>().add(SaveBloodsureData(systolic: int.tryParse(_systolicController.text) ?? 0, diastolic:  int.tryParse(_diastolicController.text) ?? 0, heartRate:  int.tryParse(_heartRateController.text) ?? 0));
               },
               child: Text(
                 "Hoàn tất",
