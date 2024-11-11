@@ -42,8 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
   AccountEntity? account;
   late CigaretteUseCase _cigaretteUseCase;
   late MedicineUseCase _medicineUseCase;
-  late bool activeSmoking;
-  late bool activeMedicine;
+  late bool activeSmoking = false;
+  late bool activeMedicine = false;
 
   @override
   void initState() {
@@ -51,20 +51,21 @@ class _HomeScreenState extends State<HomeScreen> {
     _getUserId();
     _cigaretteUseCase = CigaretteUseCase(CigaretteRepositoryImpl());
     _medicineUseCase = MedicineUseCase(MedicineRepositoryImpl());
-    _checkActive();
   }
 
   Future<void> _getUserId() async {
     final fetchedAccount = await GlobalUtil.getAccount();
-    setState(() {
+    setState(() async {
       account = fetchedAccount;
       if (account != null) {
         userId = account!.userId;
+
+        _checkActive(userId);
       }
     });
   }
 
-  Future<void> _checkActive() async {
+  Future<void> _checkActive(String userId) async {
     try {
       bool isExistCigarette = await _cigaretteUseCase.isExistCigarette(userId);
       bool isExistMedicine = await _medicineUseCase.isExistMedicine(userId);

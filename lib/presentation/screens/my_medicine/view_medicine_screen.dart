@@ -88,7 +88,9 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
             Spacer(),
             Center(
               child: ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  
+                },
                 icon: Icon(Icons.add, color: Colors.white, size: 20),
                 label: Text('Thêm thuốc', style: TextStyle(color: Colors.white, fontSize: 16)),
                 style: ElevatedButton.styleFrom(

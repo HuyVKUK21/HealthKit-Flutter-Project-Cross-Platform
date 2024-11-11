@@ -45,4 +45,20 @@ class MedicineModel {
         isDeleted: data['isDeleted'] ?? false,
     );
   }
+
+  Map<String, dynamic> toFirebaseMedicine() {
+    return {
+      'medicineName': medicineName,
+      'dosageTime': dosageTime,
+      'remainingDoses': remainingDoses,
+      'drugForm': drugForm,
+      'frequencyUse': frequencyUse,
+      'drugStartTime': drugStartTime,
+      'drugEndTime': drugEndTime,
+      'offStatus': offStatus,
+      'usageStatus': usageStatus,
+      'idUser': idUser,
+      'isDeleted': isDeleted,
+    };
+  }
 }
