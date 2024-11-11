@@ -1,4 +1,6 @@
-  import 'package:fitnessapp/data/datasources/user/firebase_auth_datasource.dart';
+
+import 'package:fitnessapp/data/datasources/auth/firebase_auth_datasource.dart';
+import 'package:fitnessapp/domain/entities/account_entity.dart';
 import 'package:fitnessapp/domain/entities/user_entity.dart';
 import 'package:fitnessapp/domain/repositories/user/auth_local_data_source.dart';
 import 'package:fitnessapp/domain/repositories/user/user_repository.dart';
@@ -27,10 +29,12 @@ class UserRepositoryImpl implements UserRepository {
   @override
   Future<UserEntity> register(String email, String password, {required String fullName, required String age, required String phone}) async{
     final user = await firebaseAuthDataSource.registerWithEmailAndPassword(email, password, fullName: fullName, age: age, phone: phone);
-
     return UserEntity(email: user.email!, uid: user.uid!);
   }
 
-
-
+  @override
+  Future<AccountEntity> saveInfoAccount(String userId) async{
+    final account = await firebaseAuthDataSource.getInfoAccount(userId);
+    return account!.toEntity();
+  }
 }

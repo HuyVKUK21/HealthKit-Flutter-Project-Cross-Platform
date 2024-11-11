@@ -1,3 +1,4 @@
+import 'package:fitnessapp/domain/entities/account_entity.dart';
 import 'package:fitnessapp/presentation/events/user/signin_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fitnessapp/domain/entities/user_entity.dart';

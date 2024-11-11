@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitnessapp/data/models/account_model.dart';
 import 'package:fitnessapp/data/models/user_model.dart';
+import 'package:fitnessapp/domain/entities/account_entity.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,9 +41,6 @@ class FirebaseAuthDataSource {
 
   Future<UserModel> signInWithEmailAndPassword(String email, String password) async {
     UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
-    String uid = userCredential.user?.uid ?? '';
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('user_uid', uid);
     return UserModel.fromFirebaseUser(userCredential.user!);
   }
 
@@ -61,5 +60,19 @@ class FirebaseAuthDataSource {
     );
 
     return UserModel.fromFirebaseUser(userCredential.user!);
+  }
+
+  Future<AccountModel?> getInfoAccount(String userId) async {
+    try {
+      DocumentSnapshot snapshot = await _firestore.collection('users').doc(userId).get();
+      if (snapshot.exists) {
+        AccountModel accountModel = AccountModel.fromJson(snapshot.data() as Map<String, dynamic>);
+        return accountModel;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

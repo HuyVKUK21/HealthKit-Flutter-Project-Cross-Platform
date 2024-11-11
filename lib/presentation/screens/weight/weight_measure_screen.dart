@@ -154,7 +154,7 @@ class _WeightScreenState extends State<WeightMeasureScreen> {
                 ),
               ),
               onPressed: () {
-                Navigator.pushNamed(
+                Navigator.pushReplacementNamed(
                   context,
                   HeightMeasureScreen.routeName,
                   arguments: weight,
