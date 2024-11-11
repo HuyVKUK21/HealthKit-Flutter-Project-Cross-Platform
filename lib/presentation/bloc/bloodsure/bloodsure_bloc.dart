@@ -1,5 +1,6 @@
 import 'package:fitnessapp/domain/entities/bloodsure_entity.dart';
 import 'package:fitnessapp/domain/entities/weight_entity.dart';
+import 'package:fitnessapp/domain/usecases/bloodsure/get_bloodsure_usecase.dart';
 import 'package:fitnessapp/domain/usecases/bloodsure/set_bloodsure_usecase.dart';
 import 'package:fitnessapp/domain/usecases/weight/check_weight_usecase.dart';
 import 'package:fitnessapp/domain/usecases/weight/get_weight_usecase.dart';
@@ -15,24 +16,25 @@ import 'package:injectable/injectable.dart';
 @injectable
 class BloodsureBloc extends Bloc<BloodsureEvent, BloodsureState> {
   final SetBloodsureUsecase setBloodsureUsecase;
+  final GetBloodsureUsecase getBloodsureUsecase;
 
-  BloodsureBloc(this.setBloodsureUsecase)
+  BloodsureBloc(this.setBloodsureUsecase, this.getBloodsureUsecase)
       : super(BloodsureInitial()) {
 
-    // on<LoadBloodsureData>((event, emit) async {
-    //   emit(BloodsureLoading());
-    //   try {
-    //     // final weightData = await getWeightUseCase(event.userId);
-    //     if (weightData != null) {
-    //       emit(BloodsureLoaded(weightData));
-    //     }
-    //     else {
-    //       emit(BloodsureError("No bloodsure data found for this auth."));
-    //     }
-    //   } catch (e) {
-    //     emit(BloodsureError("Failed to load weight data: $e"));
-    //   }
-    // });
+    on<LoadBloodsureData>((event, emit) async {
+      emit(BloodsureLoading());
+      try {
+        final bloodsureData = await getBloodsureUsecase(event.userId);
+        if (bloodsureData != null) {
+          emit(BloodsureLoaded(bloodsureData));
+        }
+        else {
+          emit(BloodsureError("No bloodsure data found for this auth."));
+        }
+      } catch (e) {
+        emit(BloodsureError("Failed to load weight data: $e"));
+      }
+    });
 
     on<SaveBloodsureData>((event, emit) async {
       emit(BloodsureLoading());

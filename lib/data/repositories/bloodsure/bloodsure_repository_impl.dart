@@ -16,9 +16,9 @@ class BloodsureRepositoryImpl implements BloodsureRepository {
 
 
   @override
-  Future<BloodsureEntity?> getBloodsureEntity(String userId) {
-    // TODO: implement getBloodsureEntity
-    throw UnimplementedError();
+  Future<BloodsureEntity?> getBloodsureEntity(String userId) async{
+    final bloodsureEntity = await bloodsureRemoteDatasource.getBloodsureEntity(userId);
+    return bloodsureEntity;
   }
 
   @override
