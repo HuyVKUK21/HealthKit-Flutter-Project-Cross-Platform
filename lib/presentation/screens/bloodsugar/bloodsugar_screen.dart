@@ -45,7 +45,7 @@ class _BloodSugarScreenState extends State<BloodSugarScreen> {
       appBar: CustomAppBar(),
       body: BlocBuilder<BloodsugarBloc, BloodsugarState>(
         builder: (context, state) {
-          print("Kiem tra " + state.toString());
+
           if (state is BloodsugarLoading) {
             return Center(child: CircularProgressIndicator());
           } else if (state is BloodsugarLoaded) {
