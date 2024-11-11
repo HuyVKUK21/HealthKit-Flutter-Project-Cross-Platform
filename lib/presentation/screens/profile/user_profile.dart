@@ -6,6 +6,7 @@ import 'package:fitnessapp/domain/repositories/user/auth_local_data_source.dart'
 import 'package:fitnessapp/domain/repositories/user/user_repository.dart';
 import 'package:fitnessapp/domain/usecases/user/forget_password_usercase.dart';
 import 'package:fitnessapp/domain/usecases/user/user_usecase.dart';
+import 'package:fitnessapp/presentation/screens/change_password/change_password_screen.dart';
 import 'package:fitnessapp/presentation/screens/change_password/detail_profile_screen.dart';
 import 'package:fitnessapp/presentation/screens/profile/complete_profile_screen.dart';
 import 'package:fitnessapp/presentation/screens/signin/signin_screen.dart';
@@ -86,7 +87,16 @@ class SettingsScreen extends StatelessWidget {
                 SettingsItem(
                     icon: Icons.privacy_tip, title: 'Chính sách bảo mật'),
                 SettingsItem(icon: Icons.games, title: 'Quy tắc Trò chơi hoá'),
-                SettingsItem(icon: Icons.cookie, title: 'Chính sách Cookie'),
+                SettingsItem(
+                  icon: Icons.password,
+                  title: 'Thay đổi mật khẩu',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      RouteHelper.createFadeRoute(ChangePasswordScreen()),
+                    );
+                  },
+                ),
                 SettingsItem(
                   icon: Icons.logout,
                   title: 'Đăng xuất',
