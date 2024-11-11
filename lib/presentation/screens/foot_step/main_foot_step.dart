@@ -242,22 +242,41 @@ class _MainFootStepScreen extends State<MainFootStepScreen> {
                   ),
                   child: ToggleButtons(
                     children: [
-                      Text('NGÀY'),
-                      Text('TUẦN'),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          'NGÀY',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          'TUẦN',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ),
                     ],
                     isSelected: [screen == 'day', screen == 'week'],
                     onPressed: (int index) {
                       setState(() {
-                        if (index == 0) {
-                          screen = "day";
-                        } else if (index == 1) {
-                          screen = "week";
-                        }
+                        screen = index == 0 ? 'day' : 'week';
                       });
                     },
                     borderRadius: BorderRadius.circular(20),
                     selectedColor: Colors.white,
-                    fillColor: Colors.black,
+                    fillColor: Colors.blueAccent,
+                    borderColor: Colors.blueAccent,
+                    splashColor: Colors.blue.withOpacity(0.3),
+                    highlightColor: Colors.blue.withOpacity(0.2),
+                    textStyle:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
