@@ -18,13 +18,14 @@ class UserUseCase {
   Future<UserEntity> callSignIn(String email, String password) async {
     final userEntity = await _userRepository.signIn(email, password);
     final userAccount = await _userRepository.saveInfoAccount(userEntity.uid);
-    await _authLocalDataSource.saveLocalAccount(userAccount);
+    await _authLocalDataSource.saveLocalAccount(userAccount!);
     return userEntity;
   }
 
   Future<UserEntity> callsignInWithGoogle() async {
     final userEntity = await _userRepository.signInWithGoogle();
-    await _authLocalDataSource.saveUid(userEntity.uid);
+    final userAccount = await _userRepository.saveInfoAccount(userEntity.uid);
+    await _authLocalDataSource.saveLocalAccount(userAccount!);
     return userEntity;
   }
 }

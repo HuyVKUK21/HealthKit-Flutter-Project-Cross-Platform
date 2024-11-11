@@ -17,7 +17,7 @@ class GlobalUtil {
     await _authLocalDataSource.clearUid();
   }
 
-  Future<AccountEntity?> getAccount() async {
-    await _authLocalDataSource.getAccount();
+  static Future<AccountEntity?> getAccount() async {
+    return await _authLocalDataSource.getAccount();
   }
 }

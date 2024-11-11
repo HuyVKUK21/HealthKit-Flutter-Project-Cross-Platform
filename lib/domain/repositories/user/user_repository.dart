@@ -13,5 +13,5 @@ abstract class UserRepository {
       });
   Future<UserEntity> signIn(String email, String password);
   Future<UserEntity> signInWithGoogle();
-  Future<AccountEntity> saveInfoAccount(String userId);
+  Future<AccountEntity?> saveInfoAccount(String userId);
 }
