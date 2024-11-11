@@ -1,6 +1,4 @@
 import 'dart:io';
-
-import 'package:fitnessapp/presentation/screens/camera/camera_screen.dart';
 import 'package:fitnessapp/presentation/screens/health_management/health_management_screen.dart';
 import 'package:fitnessapp/presentation/screens/my_medicine/my_medicine_screen.dart';
 import 'package:fitnessapp/presentation/screens/profile/user_profile.dart';

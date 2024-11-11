@@ -28,7 +28,7 @@ class _BloodSureMeasureScreenState extends State<BloodSureMeasureScreen> {
         });
       } else {
         setState(() {
-          _infoText = ""; // Reset infoText khi không còn focus
+          _infoText = "";
         });
       }
     });

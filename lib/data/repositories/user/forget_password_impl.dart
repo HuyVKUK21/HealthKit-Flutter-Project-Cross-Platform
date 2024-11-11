@@ -19,7 +19,7 @@ class ForgetPasswordImpl extends ForgetPasswordRespository {
 
       // Clear UID from local storage
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.remove('user_uid');
+      await prefs.remove('user_account');
 
       print("User signed out successfully");
     } catch (e) {
