@@ -12,5 +12,4 @@ class CigaretteUseCase {
   Future<CigaretteModel> getCigaretteByUserId(String id) async {
     return await _cigaretteRepository.getCigaretteByUserId(id);
   }
-
 }
