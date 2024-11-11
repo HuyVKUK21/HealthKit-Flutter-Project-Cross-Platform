@@ -45,10 +45,12 @@ class FirebaseAuthDataSource {
   }
 
   Future<UserModel> signInWithGoogle() async {
+    // Đăng nhập Google
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
     if (googleUser == null) {
       throw Exception('Đăng nhập bị hủy.');
     }
+
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
     final UserCredential userCredential = await _firebaseAuth.signInWithCredential(
@@ -58,8 +60,25 @@ class FirebaseAuthDataSource {
       ),
     );
 
-    return UserModel.fromFirebaseUser(userCredential.user!);
+    User? user = userCredential.user;
+    if (user != null) {
+      final userDoc = await _firestore.collection('users').doc(user.uid).get();
+
+      if (!userDoc.exists) {
+        await _firestore.collection('users').doc(user.uid).set({
+          'userId': user.uid,
+          'email': user.email,
+          'fullName': user.displayName ?? 'No Name',
+          'age': null,
+          'phone': null,
+        });
+      }
+      return UserModel.fromFirebaseUser(userCredential.user!);
+    } else {
+      throw Exception('Đăng nhập không thành công.');
+    }
   }
+
 
   Future<AccountModel?> getInfoAccount(String userId) async {
     try {
