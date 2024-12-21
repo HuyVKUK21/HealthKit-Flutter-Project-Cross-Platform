@@ -20,15 +20,14 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
 
   String medicineName = '';
   String dosage = '';
-  String form = '';
+  String form = 'Viên';
   String treatment = '';
-  int remainingDoses = 0;
-  String frequency = '';
-  String schedule = '';
+  int remainingDoses = 1;
+  String frequency = '1 lần';
+  String schedule = '8:00 AM';
 
   late MedicineUseCase _medicineUseCase;
 
-  // Khởi tạo
   @override
   void initState() {
     super.initState();
@@ -38,8 +37,48 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text("Tùy chỉnh thuốc"),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    RouteHelper.createFadeRoute(
+                      MyMedicineScreen(idUser: widget.idUser),
+                    ),
+                  );
+                },
+              ),
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/images/app_logo.png',
+                    width: 34,
+                    height: 34,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'HealthKit',
+                    style: TextStyle(
+                      color: Color(0xFF043723),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -48,63 +87,115 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Thông tin thuốc",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Text(
+                    "Thông tin thuốc",
+                    style: TextStyle(
+                      color: Colors.green.shade500,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Icon(
+                    Icons.medication,
+                    color: Colors.green.shade500,
+                    size: 28,
+                  ),
+                ],
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 20),
               _buildListItem("Tên", (value) => medicineName = value),
               _buildListItem("Liều lượng", (value) => dosage = value),
-              _buildListItem("Dạng", (value) => form = value),
+              _buildDropdown(
+                "Dạng",
+                ["Viên", "Gói"],
+                    (value) => setState(() => form = value!),
+                form,
+              ),
               _buildListItem("Điều trị", (value) => treatment = value),
-              _buildListItem("Trong hộp", (value) {
-                remainingDoses = int.tryParse(value) ?? remainingDoses;
-              }, isNumeric: true),
+              _buildDropdown(
+                "Trong hộp",
+                List.generate(30, (index) => (index + 1).toString()),
+                    (value) => setState(() => remainingDoses = int.parse(value!)),
+                remainingDoses.toString(),
+              ),
               SizedBox(height: 20),
               Text(
                 "Nhắc nhở",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 10),
-              _buildListItem("Tần suất (ngày)", (value) => frequency = value),
-              _buildListItem("Đặt lịch", (value) => schedule = value),
-              SizedBox(height: 30),
+              _buildDropdown(
+                "Tần suất",
+                ["1 lần", "2 lần", "3 lần", "4 lần", "5 lần"],
+                    (value) => setState(() => frequency = value!),
+                frequency,
+              ),
+              _buildDropdown(
+                "Đặt lịch",
+                [
+                  "12:00 AM", "1:00 AM", "2:00 AM", "3:00 AM", "4:00 AM", "5:00 AM",
+                  "6:00 AM", "7:00 AM", "8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM",
+                  "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM",
+                  "6:00 PM", "7:00 PM", "8:00 PM", "9:00 PM", "10:00 PM", "11:00 PM"
+                ],
+                    (value) => setState(() => schedule = value!),
+                schedule,
+              ),
+              SizedBox(height: 50),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       MedicineModel medicine = MedicineModel(
-                          medicineName: medicineName,
-                          dosageTime: schedule,
-                          remainingDoses: remainingDoses,
-                          drugForm: form,
-                          frequencyUse: int.parse(frequency),
-                          idUser: widget.idUser,
-                          offStatus: false,
-                          usageStatus: false,
+                        medicineName: medicineName,
+                        dosageTime: schedule,
+                        remainingDoses: remainingDoses,
+                        drugForm: form,
+                        frequencyUse: int.parse(RegExp(r'\d+').firstMatch(frequency)!.group(0)!),
+                        idUser: widget.idUser,
+                        offStatus: false,
+                        usageStatus: false,
                       );
                       try {
                         _medicineUseCase.insertMedicine(medicine);
                         Navigator.push(
                           context,
-                          RouteHelper.createFadeRoute(MyMedicineScreen(idUser: widget.idUser,)),
+                          RouteHelper.createFadeRoute(MyMedicineScreen(idUser: widget.idUser)),
                         );
-                      } catch (e) {}
-
+                      } catch (e) {
+                        // Handle errors
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 16.0),
-                    foregroundColor: Colors.black,
-                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.green.shade500,
                     minimumSize: Size(double.infinity, 48),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.0),
+                      borderRadius: BorderRadius.circular(10.0),
                       side: BorderSide(
-                          color: Colors.grey.shade300, width: 1.0),
+                          color: Colors.green.shade500, width: 1.0),
                     ),
                   ),
-                  child: Text("Lưu"),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.save, size: 24, color: Colors.white),
+                      SizedBox(width: 8),
+                      Text(
+                        "Lưu",
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(height: 20),
@@ -126,7 +217,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
       ),
       child: Row(
         children: [
-          Icon(_getIcon(label), color: Colors.grey, size: 30,),
+          Icon(_getIcon(label), color: Colors.grey, size: 30),
           SizedBox(width: 10),
           Expanded(
             child: TextFormField(
@@ -150,6 +241,34 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
     );
   }
 
+  Widget _buildDropdown(String label, List<String> options, void Function(String?)? onChanged, String value) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+      ),
+      child: Row(
+        children: [
+          Icon(_getIcon(label), color: Colors.grey, size: 30),
+          SizedBox(width: 10),
+          Expanded(
+            child: DropdownButtonFormField<String>(
+              value: value,
+              items: options.map((option) => DropdownMenuItem(value: option, child: Text(option))).toList(),
+              onChanged: onChanged,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   IconData _getIcon(String label) {
     switch (label) {
       case "Tên":
@@ -162,7 +281,7 @@ class _AddMedicineScreenState extends State<AddMedicineScreen> {
         return Icons.healing;
       case "Trong hộp":
         return Icons.inventory;
-      case "Tần suất (ngày)":
+      case "Tần suất":
         return Icons.schedule;
       case "Đặt lịch":
         return Icons.alarm;

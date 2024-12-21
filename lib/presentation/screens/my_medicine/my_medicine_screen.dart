@@ -97,10 +97,24 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        'Thuốc của tôi',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Thông tin thuốc",
+                            style: TextStyle(
+                              color: Colors.green.shade500,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 24,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Icon(
+                            Icons.medication,
+                            color: Colors.green.shade500,
+                            size: 28,
+                          ),
+                        ],
+                      )
                     ),
                     SizedBox(height: 24.0),
                     SizedBox(
