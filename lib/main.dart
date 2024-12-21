@@ -17,6 +17,7 @@ import 'package:fitnessapp/service_locator.dart';
 import 'package:fitnessapp/utils/initialize_firebase.dart';
 import 'package:fitnessapp/utils/route_initializer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MultiBlocProvider(
       providers: [
         BlocProvider<SignInBloc>(

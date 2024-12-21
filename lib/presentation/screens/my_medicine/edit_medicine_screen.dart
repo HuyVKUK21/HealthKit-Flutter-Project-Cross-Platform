@@ -29,19 +29,44 @@ class _EditMedicineScreenState extends State<EditMedicineScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         elevation: 0,
-        leading: SizedBox.shrink(),
-        actions: [
-          IconButton(
-            padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 30.0),
-            icon: Icon(Icons.close, color: Colors.black),
-            onPressed: () {
-              Navigator.pushReplacement(
-                  context, RouteHelper.createFadeRoute(ViewMedicineScreen(idUser: widget.medicineInfo.idUser,)));
-            },
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.black),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context, RouteHelper.createFadeRoute(ViewMedicineScreen(idUser: widget.medicineInfo.idUser,)));
+                  }
+              ),
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/images/app_logo.png',
+                    width: 34,
+                    height: 34,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'HealthKit',
+                    style: TextStyle(
+                      color: Color(0xFF043723),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
+        ),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -50,11 +75,23 @@ class _EditMedicineScreenState extends State<EditMedicineScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 16),
-              Text(
-                "Tùy chỉnh loại thuốc",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
+              Row(
+                children: [
+                  Text(
+                    "Chỉnh sửa thuốc",
+                    style: TextStyle(
+                      color: Colors.green.shade500,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Icon(
+                    Icons.medication,
+                    color: Colors.green.shade500,
+                    size: 28,
+                  ),
+                ],
               ),
               SizedBox(height: 20),
               Align(
@@ -134,7 +171,7 @@ class _EditMedicineScreenState extends State<EditMedicineScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 30),
+              SizedBox(height: 50),
               if(widget.medicineInfo.offStatus == true)
                 Center(
                   child: ElevatedButton(
@@ -228,21 +265,21 @@ class _EditMedicineScreenState extends State<EditMedicineScreen> {
                     },
                     style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 16.0),
-                      foregroundColor: Colors.black,
-                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.green.shade500,
                       minimumSize: Size(double.infinity, 48),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(10.0),
                         side: BorderSide(
-                            color: Colors.grey.shade300, width: 1.0),
+                            color: Colors.green.shade500, width: 1.0),
                       ),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.pause, size: 28, color: Colors.black),
+                        Icon(Icons.pause, size: 28, color: Colors.white),
                         SizedBox(width: 8),
-                        Text('Ngưng thuốc', style: TextStyle(fontSize: 22)),
+                        Text('Ngưng thuốc', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
@@ -270,7 +307,7 @@ Widget _buildEditMedicineItem(
     decoration: BoxDecoration(
       color: Colors.white, // Background color
       border: Border.all(color: Colors.grey, width: 1), // Grey border
-      borderRadius: BorderRadius.circular(20), // Rounded corners
+      borderRadius: BorderRadius.circular(8), // Rounded corners
     ),
     child: EditMedicineItem(icon: icon, title: title, value: value),
   );

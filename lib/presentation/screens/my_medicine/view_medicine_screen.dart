@@ -48,29 +48,72 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
     List<MedicineModel> inactiveMedicines = _medicineList.where((medicine) => medicine.offStatus! && !medicine.isDeleted!).toList();
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          padding: EdgeInsets.symmetric(vertical: 30),
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {
-            Navigator.pushReplacement(context, RouteHelper.createFadeRoute(MyMedicineScreen(idUser: widget.idUser,)));
-          },
-        ),
-        title: Container(
-          margin: EdgeInsets.only(top: 24),
-          child: Text(
-            'Hộp thuốc của tôi',
-            style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    RouteHelper.createFadeRoute(
+                      MyMedicineScreen(idUser: widget.idUser),
+                    ),
+                  );
+                },
+              ),
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/images/app_logo.png',
+                    width: 34,
+                    height: 34,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'HealthKit',
+                    style: TextStyle(
+                      color: Color(0xFF043723),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-        centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              children: [
+                Text(
+                  "Hộp thuốc của tôi",
+                  style: TextStyle(
+                    color: Colors.green.shade500,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Icon(
+                  Icons.medication,
+                  color: Colors.green.shade500,
+                  size: 28,
+                ),
+              ],
+            ),
             SizedBox(height: 10),
             MedicineSection(
               title: 'Còn hạn (${activeMedicines.length})',
@@ -98,7 +141,7 @@ class _ViewMedicineScreen extends State<ViewMedicineScreen> {
                 icon: Icon(Icons.add, color: Colors.white, size: 20),
                 label: Text('Thêm thuốc', style: TextStyle(color: Colors.white, fontSize: 16)),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
+                  backgroundColor: Colors.green,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),
                   ),
