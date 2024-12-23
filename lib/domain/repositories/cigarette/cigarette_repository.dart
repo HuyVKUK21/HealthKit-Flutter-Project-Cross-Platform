@@ -7,4 +7,5 @@ abstract class CigaretteRepository {
   Future<void> updateUsageStatusCigarette(String idUser, bool smokingStatusToday);
   Future<bool> checkStatusCigaretteToday(String idUser);
   Future<void> updateEndDate(String id, String newDate);
+  Future<void> resetAllUsageStatuses();
 }

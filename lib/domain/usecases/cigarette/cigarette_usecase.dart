@@ -33,4 +33,8 @@ class CigaretteUseCase {
     return await _cigaretteRepository.updateEndDate(id, newDate);
   }
 
+  Future<void> resetAllUsageStatuses() async {
+    return await _cigaretteRepository.resetAllUsageStatuses();
+  }
+
 }

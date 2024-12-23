@@ -96,4 +96,18 @@ class CigaretteRepositoryImpl extends CigaretteRepository {
       });
     } catch (e) {}
   }
+
+  @override
+  Future<void> resetAllUsageStatuses() async {
+    try {
+      QuerySnapshot snapshot = await _cigaretteCollection
+          .where('smoking_status_today', isEqualTo: true)
+          .get();
+      for (var doc in snapshot.docs) {
+        await doc.reference.update({'smoking_status_today': false});
+      }
+    } catch (e) {
+      print('Error resetting usage statuses: $e');
+    }
+  }
 }
