@@ -20,4 +20,17 @@ class CigaretteUseCase {
   Future<bool> isExistCigarette(String idUser) async {
     return await _cigaretteRepository.isExistCigarette(idUser);
   }
+
+  Future<void> updateUsageStatusCigarette(String idUser, bool smokingStatusToday) async {
+    return await _cigaretteRepository.updateUsageStatusCigarette(idUser, smokingStatusToday);
+  }
+
+  Future<bool> checkStatusCigaretteToday(String idUser) async {
+    return await _cigaretteRepository.checkStatusCigaretteToday(idUser);
+  }
+
+  Future<void> updateEndDate(String id, String newDate) async {
+    return await _cigaretteRepository.updateEndDate(id, newDate);
+  }
+
 }

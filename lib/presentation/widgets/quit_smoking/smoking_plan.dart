@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 
-class SmokingPlan extends StatelessWidget {
+class SmokingPlan extends StatefulWidget {
   final String startDate;
   final String endDate;
   final int dailyCigarettes;
+  final Function? onConfirm;
 
   SmokingPlan({
     required this.startDate,
     required this.endDate,
     required this.dailyCigarettes,
+    this.onConfirm,
   });
+
+  @override
+  _SmokingPlanState createState() => _SmokingPlanState();
+}
+
+class _SmokingPlanState extends State<SmokingPlan> {
+  String newDate = "";
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +46,19 @@ class SmokingPlan extends StatelessWidget {
                 ),
                 OutlinedButton(
                   onPressed: () {
-                    // Add edit functionality here
+                    TextEditingController dateController = TextEditingController();
+                    showSmokingDialogWithDatePicker(
+                      context,
+                          (selectedDate) {
+                        setState(() {
+                          newDate = selectedDate;
+                        });
+                        if (widget.onConfirm != null) {
+                          widget.onConfirm!(selectedDate);  // Gọi onConfirm nếu có
+                        }
+                      },
+                      dateController,
+                    );
                   },
                   style: OutlinedButton.styleFrom(
                     foregroundColor: Colors.grey.shade700,
@@ -75,7 +96,7 @@ class SmokingPlan extends StatelessWidget {
                       Icon(Icons.flag, size: 20),
                       SizedBox(width: 8),
                       Text(
-                        "$dailyCigarettes điếu/ngày",
+                        "${widget.dailyCigarettes} điếu/ngày",
                         style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,
@@ -84,7 +105,7 @@ class SmokingPlan extends StatelessWidget {
                       ),
                       SizedBox(width: 8),
                       Text(
-                        "trước $startDate",
+                        "trước ${widget.startDate}",
                         style: TextStyle(
                           color: Colors.grey.shade600,
                           fontWeight: FontWeight.bold,
@@ -110,7 +131,7 @@ class SmokingPlan extends StatelessWidget {
                     ),
                     SizedBox(width: 8),
                     Text(
-                      "trước $endDate",
+                      "trước ${newDate.isNotEmpty ? newDate : widget.endDate}",
                       style: TextStyle(
                         color: Colors.grey.shade600,
                         fontWeight: FontWeight.bold,
@@ -126,4 +147,79 @@ class SmokingPlan extends StatelessWidget {
       ),
     );
   }
+}
+
+void showSmokingDialogWithDatePicker(BuildContext context, Function(String) onConfirm, TextEditingController dateController) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        elevation: 3,
+        shadowColor: Colors.grey,
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.grey[200],
+                radius: 36,
+                child: Icon(Icons.calendar_today, size: 36, color: Colors.black),
+              ),
+              SizedBox(height: 16.0),
+              Center(
+                child: Text(
+                  "Cập nhật kế hoạch hút thuốc",
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: 24.0),
+              TextField(
+                controller: dateController,
+                decoration: InputDecoration(
+                  labelText: "Chọn ngày hoàn thành kế hoạch",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  suffixIcon: Icon(Icons.date_range),
+                ),
+                readOnly: true,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2000),
+                    lastDate: DateTime(2101),
+                  );
+                  if (pickedDate != null) {
+                    dateController.text = "${pickedDate.day} thg ${pickedDate.month}, ${pickedDate.year}";
+                  }
+                },
+              ),
+              SizedBox(height: 24.0),
+              ElevatedButton(
+                onPressed: () {
+                  onConfirm(dateController.text); // Truyền ngày đã chọn về onConfirm
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
+                ),
+                child: Text("Xác nhận", style: TextStyle(fontSize: 16)),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
 }
