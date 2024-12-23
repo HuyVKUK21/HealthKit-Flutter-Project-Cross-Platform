@@ -30,6 +30,8 @@ import 'package:fitnessapp/presentation/widgets/home/health_metric_card.dart';
 import 'package:fitnessapp/utils/global/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:async';
+
 
 import '../../../data/repositories/cigarette/cigarette_repository_impl.dart';
 import '../../../domain/usecases/cigarette/cigarette_usecase.dart';
@@ -71,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _cigaretteUseCase = CigaretteUseCase(CigaretteRepositoryImpl());
     _medicineUseCase = MedicineUseCase(MedicineRepositoryImpl());
     _footStepUsecase = FootStepUsecase(FootStepRepositoryImpl());
+    _scheduleMidnightReset();
     getTodaySteps();
   }
 
@@ -112,11 +115,23 @@ class _HomeScreenState extends State<HomeScreen> {
         _calories = (_stepToDay.step * 00.4).ceil().toInt();
 
         _time = _stepToDay.step ~/ 100;
-        ;
       });
     } catch (e) {
       print('Lỗi khi lấy số bước chân: $e');
     }
+  }
+
+  // reset lượt hút thuoc sau 12h đêm
+  void _scheduleMidnightReset() {
+    DateTime now = DateTime.now();
+    DateTime nextMidnight = DateTime(now.year, now.month, now.day + 1);
+
+    Duration timeUntilMidnight = nextMidnight.difference(now);
+
+    Timer(timeUntilMidnight, () async {
+      await _medicineUseCase.resetAllUsageStatuses();
+      _scheduleMidnightReset();
+    });
   }
 
   @override
