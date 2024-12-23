@@ -1,4 +1,5 @@
 import 'package:fitnessapp/data/models/cigarette_model.dart';
+import 'package:fitnessapp/presentation/screens/home/home_screen.dart';
 import 'package:fitnessapp/presentation/screens/quit_smoking/smoking_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import '../../../data/repositories/cigarette/cigarette_repository_impl.dart';
 import '../../../domain/usecases/cigarette/cigarette_usecase.dart';
 import '../../../utils/page_route_builder.dart';
+import '../dashboard/dashboard_screen.dart';
 
 class ProfileSmokingScreen extends StatefulWidget {
   final String idUser;
@@ -107,21 +109,59 @@ class _ProfileSmokingScreenState extends State<ProfileSmokingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF8F8F8),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 0, 15, 0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                  icon: Icon(Icons.arrow_back, color: Colors.black),
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                        context, RouteHelper.createFadeRoute(DashboardScreen()));
+                  }
+              ),
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/images/app_logo.png',
+                    width: 34,
+                    height: 34,
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    'HealthKit',
+                    style: TextStyle(
+                      color: Color(0xFF043723),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        automaticallyImplyLeading: true,
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 50),
+              SizedBox(height: 30),
               Center(
                 child: Text(
                   "Hồ sơ",
                   style: TextStyle(
-                    fontSize: 24,
+                    color: Colors.green.shade500,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    fontSize: 24,
                   ),
                 ),
               ),
@@ -131,7 +171,7 @@ class _ProfileSmokingScreenState extends State<ProfileSmokingScreen> {
                   "Hoàn tất hồ sơ hút thuốc của bạn",
                   style: TextStyle(
                     fontSize: 16,
-                    color: Color(0xFF9B9B9B),
+                    color: Colors.green.shade500,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -151,7 +191,7 @@ class _ProfileSmokingScreenState extends State<ProfileSmokingScreen> {
                   padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: Colors.grey.shade300),
                   ),
                   child: Row(
@@ -194,12 +234,6 @@ class _ProfileSmokingScreenState extends State<ProfileSmokingScreen> {
               Spacer(),
               Row(
                 children: [
-                  IconButton(
-                    icon: Icon(Icons.arrow_back_ios, color: Colors.grey[600]),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
                   Expanded(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -239,15 +273,15 @@ class _ProfileSmokingScreenState extends State<ProfileSmokingScreen> {
                         } catch (e) {}
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
+                        backgroundColor: Colors.green.shade500,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         minimumSize: Size(double.infinity, 50),
                       ),
                       child: Text(
                         'Tiếp theo',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -284,7 +318,7 @@ class _ProfileSmokingScreenState extends State<ProfileSmokingScreen> {
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(30),
+              borderRadius: BorderRadius.circular(10),
               border: Border.all(color: Colors.grey.shade300),
             ),
             child: TextField(

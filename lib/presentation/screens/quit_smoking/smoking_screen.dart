@@ -1,5 +1,6 @@
 import 'package:fitnessapp/data/repositories/cigarette/cigarette_repository_impl.dart';
 import 'package:fitnessapp/domain/usecases/cigarette/cigarette_usecase.dart';
+import 'package:fitnessapp/presentation/screens/dashboard/dashboard_screen.dart';
 import 'package:fitnessapp/presentation/widgets/quit_smoking/smoking_plan.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -75,7 +76,7 @@ class _QuitSmokingPageState extends State<QuitSmokingPage> {
               onPressed: () {
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => DashboardScreen()),
                       (route) => false,
                 );
               },
@@ -271,15 +272,15 @@ class _QuitSmokingPageState extends State<QuitSmokingPage> {
                                   );
                                   switch (value.toInt()) {
                                     case 0:
-                                      return Text('Thg6', style: style);
-                                    case 1:
-                                      return Text('Thg7', style: style);
-                                    case 2:
                                       return Text('Thg8', style: style);
-                                    case 3:
+                                    case 1:
                                       return Text('Thg9', style: style);
-                                    case 4:
+                                    case 2:
                                       return Text('Thg10', style: style);
+                                    case 3:
+                                      return Text('Thg11', style: style);
+                                    case 4:
+                                      return Text('Thg12', style: style);
                                     case 5:
                                       return Text('Tháng này',
                                           style: style.copyWith(
@@ -297,9 +298,16 @@ class _QuitSmokingPageState extends State<QuitSmokingPage> {
                   ),
                 ),
                 SizedBox(height: 20),
-                GeneralProgress(daysQuit: cigaretteInfo.amountDayQuit, cigarettesAvoided: cigaretteInfo.amountQuitSmoking , moneySaved: '${cigaretteInfo.amountQuitSmoking}n'),
+                GeneralProgress(daysQuit: cigaretteInfo.amountAvoidedReport!, cigarettesAvoided: cigaretteInfo.amountQuitSmoking , moneySaved: '${cigaretteInfo.amountQuitSmoking * (cigaretteInfo.price / cigaretteInfo.cigaretteInPack)}'),
                 SizedBox(height: 20),
-                SmokingPlan(dailyCigarettes: cigaretteInfo.smokeDaily, startDate: cigaretteInfo.startDate, endDate: cigaretteInfo.endDate,),
+                SmokingPlan(
+                  dailyCigarettes: cigaretteInfo.smokeDaily,
+                  startDate: cigaretteInfo.startDate,
+                  endDate: cigaretteInfo.endDate,
+                  onConfirm: (String newDate) async {
+                    await _cigaretteUseCase.updateEndDate(cigaretteInfo.id!, newDate);
+                  },
+                ),
               ],
             ),
           ),
