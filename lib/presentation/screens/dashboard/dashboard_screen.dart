@@ -104,8 +104,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     }
                   }),
               TabButton(
-                  icon: "assets/icons/camera_icon.png",
-                  selectIcon: "assets/icons/camera_select_icon.png",
+                  icon: "assets/images/medicine_icon_nav.png",
+                  selectIcon: "assets/images/medicine_icon_nav.png",
                   isActive: selectTab == 2,
                   onTap: () {
                     if (mounted) {
