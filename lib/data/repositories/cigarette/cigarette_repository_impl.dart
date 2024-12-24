@@ -79,7 +79,7 @@ class CigaretteRepositoryImpl extends CigaretteRepository {
     try {
       QuerySnapshot querySnapshot = await _cigaretteCollection
           .where('user_id', isEqualTo: idUser)
-          .where('completed_status', isEqualTo: false)
+          .where('smoking_status_today', isEqualTo: false)
           .limit(1)
           .get();
       return querySnapshot.docs.isNotEmpty;

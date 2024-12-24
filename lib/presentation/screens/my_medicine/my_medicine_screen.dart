@@ -30,7 +30,6 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
   late MedicineUseCase _medicineUseCase;
   late MedicineModel medicineInfo;
 
-  // Khởi tạo
   @override
   void initState() {
     super.initState();
@@ -40,7 +39,6 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
     _scheduleMidnightReset();
   }
 
-  // Duyệt danh sách dữ liệu thuốc
   Future<void> _fetchMedicines() async {
     try {
       List<MedicineModel> medicines = await _medicineUseCase.getMedicineData(widget.idUser);
@@ -52,7 +50,6 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
     }
   }
 
-  // reset lượt uống sau 12h đêm
   void _scheduleMidnightReset() {
     DateTime now = DateTime.now();
     DateTime nextMidnight = DateTime(now.year, now.month, now.day + 1);
@@ -65,7 +62,6 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
     });
   }
 
-  // Ngày hiện tại (tính toán + animation)
   void _scrollToCurrentDay() {
     double screenWidth = MediaQuery.of(context).size.width;
     double itemWidth = 58.0;
@@ -114,7 +110,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                             size: 28,
                           ),
                         ],
-                      )
+                      ),
                     ),
                     SizedBox(height: 24.0),
                     SizedBox(
@@ -137,7 +133,7 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                                   style: TextStyle(
                                     color: isToday ? Colors.green : Colors.black,
                                     fontWeight: isToday ? FontWeight.bold : FontWeight.normal,
-                                    fontSize: 12
+                                    fontSize: 12,
                                   ),
                                 ),
                               ),
@@ -170,13 +166,10 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
               SizedBox(height: 12.0),
               Expanded(
                 child: ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   itemCount: _medicineList.length + 1,
                   itemBuilder: (context, index) {
                     if (index == _medicineList.length) {
-                      // Last item for the button
                       return Container(
                         margin: EdgeInsets.symmetric(vertical: 20.0),
                         child: Center(
@@ -191,20 +184,25 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                             onPressed: () {
                               Navigator.pushReplacement(
                                 context,
-                                RouteHelper.createFadeRoute(ViewMedicineScreen(idUser: widget.idUser,)),
+                                RouteHelper.createFadeRoute(
+                                  ViewMedicineScreen(idUser: widget.idUser),
+                                ),
                               );
                             },
                             icon: Icon(Icons.edit, color: Colors.white),
                             label: Text(
                               "Chỉnh sửa hộp thuốc",
-                              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
                         ),
                       );
                     }
 
-                    // Display medicine card
                     MedicineModel medicine = _medicineList.elementAt(index);
                     return Column(
                       children: [
@@ -222,17 +220,23 @@ class _MyMedicineScreenState extends State<MyMedicineScreen> {
                                 medicineInfo = fetchedMedicineInfo;
                               });
                               showMedicineDialog(
-                                  context,
-                                  medicineInfo.medicineName,
-                                  medicineInfo.usageStatus,
-                                  medicineInfo.dosageTime,
-                                  () async {
-                                    await _medicineUseCase.updateUsageStatusMedicine(medicine.id, medicine.usageStatus);
-                                    Navigator.pushReplacement(
-                                        context,
-                                        RouteHelper.createFadeRoute(MyMedicineScreen(idUser: widget.idUser,))
-                                    );
-                                  });
+                                context,
+                                medicineInfo.medicineName,
+                                medicineInfo.usageStatus,
+                                medicineInfo.dosageTime,
+                                    () async {
+                                  await _medicineUseCase.updateUsageStatusMedicine(
+                                    medicine.id,
+                                    medicine.usageStatus,
+                                  );
+                                  Navigator.pushReplacement(
+                                    context,
+                                    RouteHelper.createFadeRoute(
+                                      MyMedicineScreen(idUser: widget.idUser),
+                                    ),
+                                  );
+                                },
+                              );
                             } catch (e) {
                               print('Error fetching medicine info: $e');
                             }

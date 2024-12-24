@@ -2,7 +2,6 @@ import 'package:fitnessapp/domain/entities/account_entity.dart';
 import 'package:fitnessapp/domain/entities/weight_entity.dart';
 import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
 import 'package:fitnessapp/presentation/events/weight/weight_event.dart';
-import 'package:fitnessapp/presentation/screens/quit_smoking/popup_smoking_screen.dart';
 import 'package:fitnessapp/presentation/screens/weight/weight_goal_screen.dart';
 import 'package:fitnessapp/presentation/state/weight/weight_state.dart';
 import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
