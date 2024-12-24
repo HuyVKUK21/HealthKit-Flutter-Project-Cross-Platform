@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:fitnessapp/presentation/screens/chatbot/chatbot_screen.dart';
 
 
+import '../../../domain/entities/account_entity.dart';
+import '../../../utils/global/user.dart';
 import '../home/home_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -20,14 +22,40 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int selectTab = 0;
+  late String userId = "";
+  AccountEntity? account;
+  late List<Widget> _widgetOptions = [];
 
-  final List<Widget> _widgetOptions = <Widget>[
-    const HomeScreen(),
-    const HealthManagementScreen(),
-    MyMedicineScreen(idUser: "nvCeupX3wCTu30uoXbDh"),
-    ChatScreen(),
-    SettingsScreen()
-  ];
+  @override
+  void initState() {
+    super.initState();
+    print('Test');
+    _getUserId();
+    _widgetOptions = <Widget>[
+      const HomeScreen(),
+      const HealthManagementScreen(),
+      MyMedicineScreen(idUser:"HMYCUzXYfLQ2P0CxbMWYauDj0dg1"),
+      ChatScreen(),
+      SettingsScreen()
+    ];
+  }
+
+  Future<void> _getUserId() async {
+    final fetchedAccount = await GlobalUtil.getAccount();
+    setState(() async {
+      account = fetchedAccount;
+      if (account != null) {
+        userId = account!.userId;
+        _widgetOptions = <Widget>[
+          const HomeScreen(),
+          const HealthManagementScreen(),
+          MyMedicineScreen(idUser:userId),
+          ChatScreen(),
+          SettingsScreen()
+        ];
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

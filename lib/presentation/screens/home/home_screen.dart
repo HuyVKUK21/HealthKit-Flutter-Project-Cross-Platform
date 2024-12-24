@@ -30,6 +30,8 @@ import 'package:fitnessapp/presentation/widgets/home/health_metric_card.dart';
 import 'package:fitnessapp/utils/global/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'dart:async';
+
 
 import '../../../data/repositories/cigarette/cigarette_repository_impl.dart';
 import '../../../domain/usecases/cigarette/cigarette_usecase.dart';
@@ -56,6 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late CigaretteUseCase _cigaretteUseCase;
   late MedicineUseCase _medicineUseCase;
   late bool activeSmoking = false;
+  late bool statusSmokingToday = false;
   late bool activeMedicine = false;
   late FootStepUsecase _footStepUsecase;
   late FootStepModel _footStepData;
@@ -65,12 +68,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    print('Test');
     _getUserId();
 
     _cigaretteUseCase = CigaretteUseCase(CigaretteRepositoryImpl());
     _medicineUseCase = MedicineUseCase(MedicineRepositoryImpl());
     _footStepUsecase = FootStepUsecase(FootStepRepositoryImpl());
+    _scheduleMidnightReset();
     getTodaySteps();
   }
 
@@ -90,9 +93,11 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       bool isExistCigarette = await _cigaretteUseCase.isExistCigarette(userId);
       bool isExistMedicine = await _medicineUseCase.isExistMedicine(userId);
+      bool checkStatusToday = await _cigaretteUseCase.checkStatusCigaretteToday(userId);
       setState(() {
         activeSmoking = isExistCigarette;
         activeMedicine = isExistMedicine;
+        statusSmokingToday = checkStatusToday;
       });
     } catch (e) {}
   }
@@ -110,11 +115,23 @@ class _HomeScreenState extends State<HomeScreen> {
         _calories = (_stepToDay.step * 00.4).ceil().toInt();
 
         _time = _stepToDay.step ~/ 100;
-        ;
       });
     } catch (e) {
       print('Lỗi khi lấy số bước chân: $e');
     }
+  }
+
+  // reset lượt hút thuoc sau 12h đêm
+  void _scheduleMidnightReset() {
+    DateTime now = DateTime.now();
+    DateTime nextMidnight = DateTime(now.year, now.month, now.day + 1);
+
+    Duration timeUntilMidnight = nextMidnight.difference(now);
+
+    Timer(timeUntilMidnight, () async {
+      await _medicineUseCase.resetAllUsageStatuses();
+      _scheduleMidnightReset();
+    });
   }
 
   @override
@@ -270,15 +287,31 @@ class _HomeScreenState extends State<HomeScreen> {
                         subtitle: "Hôm nay",
                         points: "0",
                         measure: activeSmoking ? "Xem" : "Thêm",
-                        onTap: () => {
+                        onTap: () async => {
                           if (activeSmoking)
                             {
-                              Navigator.pushReplacement(
-                                context,
-                                RouteHelper.createFadeRoute(QuitSmokingPage(
-                                  idUser: userId,
-                                )),
-                              )
+                              if (!statusSmokingToday) {
+                                showSmokingDialog(
+                                    context,
+                                    userId,
+                                        () async {
+                                      await _cigaretteUseCase.updateUsageStatusCigarette(userId, false);
+                                    },
+                                        () async {
+                                      await _cigaretteUseCase.updateUsageStatusCigarette(userId, true);
+                                    }
+                                )
+                              }
+                              else
+                              {
+                                Navigator.pushReplacement(
+                                  context,
+                                  RouteHelper.createFadeRoute(
+                                    QuitSmokingPage(
+                                    idUser: userId,
+                                  )),
+                                )
+                              }
                             }
                           else
                             {
@@ -371,3 +404,95 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+void showSmokingDialog(BuildContext context, String userId, Function onAvoid, Function onSmoked) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        elevation: 3,
+        shadowColor: Colors.grey,
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircleAvatar(
+                backgroundColor: Colors.grey[200],
+                radius: 36,
+                child: Icon(Icons.smoking_rooms, size: 36, color: Colors.black),
+              ),
+              SizedBox(height: 16.0),
+              Center(
+                child: Text(
+                  "Chọn trạng thái hút thuốc hôm nay!",
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: 24.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        onAvoid();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.red,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 12.0),
+                      ),
+                      child: Text("Bỏ qua", style: TextStyle(fontSize: 16)),
+                    ),
+                  ),
+                  SizedBox(width: 16.0),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        onSmoked();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        padding: EdgeInsets.symmetric(vertical: 12.0),
+                      ),
+                      child: Text("Hút thuốc", style: TextStyle(fontSize: 16)),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 24.0),
+              TextButton(
+                onPressed: () {
+                  Navigator.pushReplacement(
+                    context,
+                    RouteHelper.createFadeRoute(
+                        QuitSmokingPage(
+                          idUser: userId,
+                        )),
+                  );
+                },
+                child: Text(
+                  "Xem báo cáo",
+                  style: TextStyle(fontSize: 16, color: Colors.blue, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
