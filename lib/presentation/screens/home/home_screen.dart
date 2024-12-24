@@ -290,15 +290,31 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () async => {
                           if (activeSmoking)
                             {
-                              if (!statusSmokingToday) {
+                              if (statusSmokingToday) {
                                 showSmokingDialog(
                                     context,
                                     userId,
                                         () async {
                                       await _cigaretteUseCase.updateUsageStatusCigarette(userId, false);
-                                    },
+                                      Navigator.pop(context);
+                                      Navigator.pushReplacement(
+                                        context,
+                                        RouteHelper.createFadeRoute(
+                                            QuitSmokingPage(
+                                              idUser: userId,
+                                            )),
+                                      );
+                                      },
                                         () async {
                                       await _cigaretteUseCase.updateUsageStatusCigarette(userId, true);
+                                      Navigator.pop(context);
+                                      Navigator.pushReplacement(
+                                        context,
+                                        RouteHelper.createFadeRoute(
+                                            QuitSmokingPage(
+                                              idUser: userId,
+                                            )),
+                                      );
                                     }
                                 )
                               }

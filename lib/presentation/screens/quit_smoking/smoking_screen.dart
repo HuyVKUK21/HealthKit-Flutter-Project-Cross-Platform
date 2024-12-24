@@ -225,80 +225,57 @@ class _QuitSmokingPageState extends State<QuitSmokingPage> {
                 SizedBox(height: 20),
                 // Chart
                 Card(
+                  color: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15),
+                    side: BorderSide(
+                      width: 1,
+                      color: Colors.grey.shade400
+                    )
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: AspectRatio(
-                      aspectRatio: 1.5,
-                      child: BarChart(
-                        BarChartData(
-                          alignment: BarChartAlignment.spaceAround,
-                          barGroups: [
-                            BarChartGroupData(x: 0, barsSpace: 4, barRods: [
-                              BarChartRodData(
-                                  toY: 0, color: Colors.grey, width: 16)
-                            ]),
-                            BarChartGroupData(x: 1, barsSpace: 4, barRods: [
-                              BarChartRodData(
-                                  toY: 0, color: Colors.grey, width: 16)
-                            ]),
-                            BarChartGroupData(x: 2, barsSpace: 4, barRods: [
-                              BarChartRodData(
-                                  toY: 0, color: Colors.grey, width: 16)
-                            ]),
-                            BarChartGroupData(x: 3, barsSpace: 4, barRods: [
-                              BarChartRodData(
-                                  toY: 0, color: Colors.grey, width: 16)
-                            ]),
-                            BarChartGroupData(x: 4, barsSpace: 4, barRods: [
-                              BarChartRodData(
-                                  toY: 1, color: Colors.green, width: 16)
-                            ]),
-                          ],
-                          titlesData: FlTitlesData(
-                            leftTitles: AxisTitles(
-                              sideTitles: SideTitles(showTitles: true),
-                            ),
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                getTitlesWidget: (value, _) {
-                                  const style = TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12,
-                                  );
-                                  switch (value.toInt()) {
-                                    case 0:
-                                      return Text('Thg8', style: style);
-                                    case 1:
-                                      return Text('Thg9', style: style);
-                                    case 2:
-                                      return Text('Thg10', style: style);
-                                    case 3:
-                                      return Text('Thg11', style: style);
-                                    case 4:
-                                      return Text('Thg12', style: style);
-                                    case 5:
-                                      return Text('Tháng này',
-                                          style: style.copyWith(
-                                              color: Colors.pink));
-                                    default:
-                                      return Text('');
-                                  }
-                                },
+                      aspectRatio: 1,
+                      child: PieChart(
+                        PieChartData(
+                          sections: [
+                            PieChartSectionData(
+                              value: cigaretteInfo.amountAvoidedReport!.toDouble(),
+                              color: Colors.grey,
+                              title: 'Tránh hút',
+                              titleStyle: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
                               ),
                             ),
-                          ),
+                            PieChartSectionData(
+                              value: cigaretteInfo.amountSmokedReport!.toDouble(),
+                              color: Colors.red,
+                              title: 'Đã hút',
+                              titleStyle: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                          sectionsSpace: 2,
+                          centerSpaceRadius: 40,
                         ),
                       ),
                     ),
                   ),
                 ),
                 SizedBox(height: 20),
-                GeneralProgress(daysQuit: cigaretteInfo.amountAvoidedReport!, cigarettesAvoided: cigaretteInfo.amountQuitSmoking , moneySaved: '${cigaretteInfo.amountQuitSmoking * (cigaretteInfo.price / cigaretteInfo.cigaretteInPack)}'),
+                GeneralProgress(
+                  daysQuit: cigaretteInfo.amountAvoidedReport!,
+                  cigarettesAvoided: cigaretteInfo.amountQuitSmoking,
+                  moneySaved: (cigaretteInfo.amountQuitSmoking *
+                      (cigaretteInfo.price / cigaretteInfo.cigaretteInPack))
+                      .toStringAsFixed(2),
+                ),
                 SizedBox(height: 20),
                 SmokingPlan(
                   dailyCigarettes: cigaretteInfo.smokeDaily,
