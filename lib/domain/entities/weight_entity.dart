@@ -1,34 +1,41 @@
 class WeightEntity {
   final String userId;
-  final double currentWeight;
-  final double? targetWeight;
+  final double? currentWeight;
   final DateTime? targetWeightDate;
-  final String? measurementFrequency;
+  final double? weightGoal;
+  final String? paceGoal;
+  final int? weightsPerWeekGoal;
+  final String? selectedTimeUnit;
   final double? height;
   final double? bmi;
 
   WeightEntity({
     required this.userId,
-    required this.currentWeight,
-    this.targetWeight,
+    this.currentWeight,
     this.targetWeightDate,
-    this.measurementFrequency,
+    this.weightGoal,
+    this.paceGoal,
+    this.weightsPerWeekGoal,
+    this.selectedTimeUnit,
     this.height,
     this.bmi,
   });
 
+
   @override
   String toString() {
-    return 'WeightEntity(userId: $userId, currentWeight: $currentWeight, targetWeight: $targetWeight, targetWeightDate: $targetWeightDate, measurementFrequency: $measurementFrequency, height: $height, bmi: $bmi)';
+    return 'WeightEntity{userId: $userId, currentWeight: $currentWeight, targetWeightDate: $targetWeightDate, weightGoal: $weightGoal, paceGoal: $paceGoal, weightsPerWeekGoal: $weightsPerWeekGoal, selectedTimeUnit: $selectedTimeUnit, height: $height, bmi: $bmi}';
   }
 
   Map<String, dynamic> toJson() {
     return {
       'userId': userId,
       'currentWeight': currentWeight,
-      'targetWeight': targetWeight,
       'targetWeightDate': targetWeightDate?.toIso8601String(),
-      'measurementFrequency': measurementFrequency,
+      'weightGoal': weightGoal,
+      'paceGoal': paceGoal,
+      'weightsPerWeekGoal': weightsPerWeekGoal,
+      'selectedTimeUnit': selectedTimeUnit,
       'height': height,
       'bmi': bmi,
     };

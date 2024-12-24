@@ -2,15 +2,17 @@ import 'package:fitnessapp/presentation/screens/weight/weight_frequency_screen.d
 import 'package:flutter/material.dart';
 
 class WeightPaceScreen extends StatefulWidget {
+  static String routeName = "/WeightPaceScreen";
   @override
   _PaceScreenState createState() => _PaceScreenState();
 }
 
 class _PaceScreenState extends State<WeightPaceScreen> {
   String selectedPace = 'Dễ';
-
+  late double weightGoal;
   @override
   Widget build(BuildContext context) {
+    weightGoal = ModalRoute.of(context)!.settings.arguments as double;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -98,9 +100,13 @@ class _PaceScreenState extends State<WeightPaceScreen> {
         Expanded(
           child: ElevatedButton(
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.pushReplacementNamed(
                 context,
-                MaterialPageRoute(builder: (context) => WeightFrequencyScreen()),
+                WeightFrequencyScreen.routeName,
+                arguments: {
+                  'weightGoal': weightGoal,
+                  'paceGoal': selectedPace,
+                },
               );
             },
             child: Text('Chọn kế hoạch', style: TextStyle(color: Colors.white),),

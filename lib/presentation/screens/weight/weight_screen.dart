@@ -2,6 +2,7 @@ import 'package:fitnessapp/domain/entities/account_entity.dart';
 import 'package:fitnessapp/domain/entities/weight_entity.dart';
 import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
 import 'package:fitnessapp/presentation/events/weight/weight_event.dart';
+import 'package:fitnessapp/presentation/screens/quit_smoking/popup_smoking_screen.dart';
 import 'package:fitnessapp/presentation/screens/weight/weight_goal_screen.dart';
 import 'package:fitnessapp/presentation/state/weight/weight_state.dart';
 import 'package:fitnessapp/presentation/widgets/appbar/custom_app_bar.dart';
@@ -25,7 +26,6 @@ class WeightScreen extends StatefulWidget {
 
 class _WeightScreenState extends State<WeightScreen> {
   late String userId = "";
-  String? _targetScreen;
   AccountEntity? account;
 
   @override
@@ -58,7 +58,6 @@ class _WeightScreenState extends State<WeightScreen> {
             final weightData = state.weightEntity;
             final currentWeight = weightData.currentWeight;
             final bmi = weightData.bmi;
-            final bmiStatus = weightData.currentWeight;
 
             return SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -69,8 +68,8 @@ class _WeightScreenState extends State<WeightScreen> {
                   children: [
                     _buildWeightStats(weightData),
                     _buildWeightChart(weightData),
-                    _buildControlPanel(),
-                    _buildBmiSection(bmi!),
+                    _buildControlPanel(weightData),
+                    _buildBmiSection(bmi ?? 0.0),
                     _buildWeightHistory(),
                     _buildRecommendations(),
                   ],
@@ -177,13 +176,11 @@ class _WeightScreenState extends State<WeightScreen> {
 
   Widget _buildWeightChart(WeightEntity weightData) {
     int todayIndex = DateTime.now().weekday;
-
     List<FlSpot> spots = [];
-
     for (int i = 1; i <= 7; i++) {
-      double weight = weightData
-          .currentWeight; // Hàm này cần được định nghĩa để lấy trọng số cho ngày i
-      spots.add(FlSpot(i.toDouble(), weight));
+      double? weight = weightData
+          .currentWeight;
+      spots.add(FlSpot(i.toDouble(), weight!));
     }
     return Container(
       height: 200,
@@ -261,7 +258,192 @@ class _WeightScreenState extends State<WeightScreen> {
     );
   }
 
-  Widget _buildControlPanel() {
+
+  Widget _buildControlPanel(WeightEntity weightData) {
+    double? currentWeightConst = weightData.currentWeight;
+    double? currentWeight = weightData.currentWeight;
+    double? weightGoal = weightData.weightGoal;
+    String? paceGoal = weightData.paceGoal;
+
+    bool isDataMissing = currentWeight == null || weightGoal == null || paceGoal == null;
+
+    if (!isDataMissing) {
+      late double weightPerWeekGoal;
+
+      if (paceGoal == "Dễ") {
+        weightPerWeekGoal = 0.25;
+      } else if (paceGoal == "Vừa") {
+        weightPerWeekGoal = 0.5;
+      } else if (paceGoal == "Khó") {
+        weightPerWeekGoal = 0.75;
+      } else if (paceGoal == "Tối đa") {
+        weightPerWeekGoal = 1.0;
+      }
+
+      double totalWeightToGain = weightGoal - currentWeight;
+
+      double weeksToGoal = totalWeightToGain / weightPerWeekGoal;
+
+      List<Map<String, dynamic>> weightProgress = [];
+      DateTime currentDate = DateTime.now();
+
+      for (int i = 1; i <= weeksToGoal.ceil(); i++) {
+        currentWeight = (currentWeight! + weightPerWeekGoal)!;
+        currentDate = currentDate.add(Duration(days: 7));
+        weightProgress.add({
+          'weight': currentWeight,
+          'date': currentDate,
+        });
+      }
+
+      List<Map<String, dynamic>> displayedProgress = weightProgress.take(3).toList();
+
+      return Container(
+        padding: EdgeInsets.all(22),
+        margin: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              blurRadius: 12,
+              offset: Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Kiểm soát cân nặng",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => WeightGoalScreen()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  child: Text(
+                    "Tạo mới",
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                FaIcon(FontAwesomeIcons.award, color: Colors.blue, size: 24),
+                SizedBox(width: 8),
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: "$weightGoal",
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      TextSpan(
+                        text: " kg",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(width: 8),
+                Text(
+                  "trước ${weightProgress.last['date'].toString().substring(0, 10)}", // Hiển thị ngày đạt mục tiêu
+                  style: TextStyle(
+                    color: Colors.grey[600],
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            Divider(),
+            Column(
+              children: [
+                if (displayedProgress.length >= 3)
+                  Text(
+                    '...',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                  ),
+                SizedBox(height: 16),
+                ...displayedProgress.reversed.take(3).map((progress) {
+                  return Column(
+                    children: [
+                      Row(
+                        children: [
+                          FaIcon(
+                            FontAwesomeIcons.flag,
+                            color: Colors.black,
+                            size: 14,
+                          ),
+                          SizedBox(width: 12),
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.w600),
+                              children: [
+                                TextSpan(
+                                  text: "${progress['weight'].toStringAsFixed(0)}",
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                TextSpan(
+                                  text: " kg",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            "trước ${progress['date'].toString().substring(0, 10)}",
+                            style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                    ],
+                  );
+                }).toList(),
+
+
+
+              ],
+            )
+
+
+          ],
+        ),
+      );
+    }
+
+    // Return container with message if data is missing
     return Container(
       padding: EdgeInsets.all(22),
       margin: EdgeInsets.symmetric(horizontal: 8, vertical: 24),
@@ -298,7 +480,7 @@ class _WeightScreenState extends State<WeightScreen> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
+                  backgroundColor: Colors.blueAccent,
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(14),
@@ -315,57 +497,20 @@ class _WeightScreenState extends State<WeightScreen> {
             ],
           ),
           SizedBox(height: 16),
-          Row(
-            children: [
-              FaIcon(FontAwesomeIcons.award, color: Colors.blue, size: 24),
-              SizedBox(width: 8),
-              Text(
-                "--.-- kg",
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
-                ),
+          Center(
+            child: Text(
+              "Vui lòng cập nhật thông tin cân nặng",
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 16,
               ),
-              SizedBox(width: 4),
-              Text(
-                "trước ---- --, ----",
-                style: TextStyle(
-                  color: Colors.grey[600],
-                  fontSize: 18,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 16),
-          Divider(),
-          SizedBox(height: 16),
-          // Phần mô tả và hình ảnh
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Expanded(
-                child: Text(
-                  "Tạo kế hoạch để đạt mục tiêu cân nặng lý tưởng.",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-                ),
-              ),
-              SizedBox(width: 8),
-              Image.asset(
-                'assets/images/doctor_image.png',
-                height: 100,
-                width: 100,
-              ),
-            ],
+            ),
           ),
         ],
       ),
     );
   }
+
 
   Widget _buildBmiSection(double bmi) {
     return Container(

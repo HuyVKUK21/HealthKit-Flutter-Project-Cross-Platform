@@ -1,8 +1,13 @@
+import 'package:fitnessapp/presentation/bloc/weight/weight_bloc.dart';
+import 'package:fitnessapp/presentation/events/weight/weight_event.dart';
 import 'package:fitnessapp/presentation/screens/weight/weight_screen.dart';
+import 'package:fitnessapp/presentation/state/weight/weight_state.dart';
 import 'package:fitnessapp/utils/page_route_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WeightFrequencyScreen extends StatefulWidget {
+  static String routeName = "/WeightFrequencyScreen";
   @override
   _FrequencyScreenState createState() => _FrequencyScreenState();
 }
@@ -10,46 +15,60 @@ class WeightFrequencyScreen extends StatefulWidget {
 class _FrequencyScreenState extends State<WeightFrequencyScreen> {
   int weightsPerWeek = 3;
   String selectedTimeUnit = 'tuần';
-
+  late double weightGoal;
+  String paceGoal = "";
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              _buildHeader(),
-              const SizedBox(height: 40),
-              Image.asset(
-                'assets/images/doctor_image.png',
-                height: 150,
-                width: 150,
-              ),
-              const SizedBox(height: 20),
-              Text(
-                'Cân nặng',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                'Bạn thường đo cân nặng bao lâu một lần?',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 40),
-              _buildFrequencySelector(),
-              Text(
-                'lần mỗi',
-                style: TextStyle(color: Colors.grey),
-              ),
-              _buildTimeUnitSelector(),
-              Text(
-                'Tối thiểu theo tình hình sức khoẻ của bạn',
-                style: TextStyle(color: Colors.grey),
-              ),
-              Spacer(),
-              _buildNavigationButtons(),
-            ],
+    final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    weightGoal = args['weightGoal'] as double;
+    paceGoal = args['paceGoal'] as String;
+    return BlocListener<WeightBloc, WeightState>(
+        listener: (context, state) {
+      if (state is WeightUpdated) {
+        Navigator.pushReplacementNamed(
+          context,
+          WeightScreen.routeName,
+        );
+      }
+    },
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                _buildHeader(),
+                const SizedBox(height: 40),
+                Image.asset(
+                  'assets/images/doctor_image.png',
+                  height: 150,
+                  width: 150,
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Cân nặng',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Bạn thường đo cân nặng bao lâu một lần?',
+                  style: TextStyle(fontSize: 16, color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 40),
+                _buildFrequencySelector(),
+                Text(
+                  'lần mỗi',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                _buildTimeUnitSelector(),
+                Text(
+                  'Tối thiểu theo tình hình sức khoẻ của bạn',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                Spacer(),
+                _buildNavigationButtons(),
+              ],
+            ),
           ),
         ),
       ),
@@ -149,10 +168,7 @@ class _FrequencyScreenState extends State<WeightFrequencyScreen> {
         Expanded(
           child: ElevatedButton(
             onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                RouteHelper.createFadeRoute(WeightScreen()),
-              );
+              context.read<WeightBloc>().add(SaveWeightGoalData(weightGoal, paceGoal, weightsPerWeek, selectedTimeUnit));
             },
             child: Text('Lưu', style: TextStyle(color: Colors.white),),
             style: ElevatedButton.styleFrom(

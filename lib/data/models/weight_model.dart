@@ -1,20 +1,25 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fitnessapp/domain/entities/weight_entity.dart';
 
 class WeightModel extends WeightEntity {
   WeightModel({
     required String userId,
-    required double currentWeight,
-    double? targetWeight,
+    double? currentWeight,
     DateTime? targetWeightDate,
-    String? measurementFrequency,
+    double? weightGoal,
+    String? paceGoal,
+    int? weightsPerWeekGoal,
+    String? selectedTimeUnit,
     double? height,
     double? bmi,
   }) : super(
     userId: userId,
     currentWeight: currentWeight,
-    targetWeight: targetWeight,
     targetWeightDate: targetWeightDate,
-    measurementFrequency: measurementFrequency,
+    weightGoal: weightGoal,
+    paceGoal: paceGoal,
+    weightsPerWeekGoal: weightsPerWeekGoal,
+    selectedTimeUnit: selectedTimeUnit,
     height: height,
     bmi: bmi,
   );
@@ -23,9 +28,11 @@ class WeightModel extends WeightEntity {
     return WeightModel(
       userId: entity.userId,
       currentWeight: entity.currentWeight,
-      targetWeight: entity.targetWeight,
       targetWeightDate: entity.targetWeightDate,
-      measurementFrequency: entity.measurementFrequency,
+      weightGoal: entity.weightGoal,
+      paceGoal: entity.paceGoal,
+      weightsPerWeekGoal: entity.weightsPerWeekGoal,
+      selectedTimeUnit: entity.selectedTimeUnit,
       height: entity.height,
       bmi: entity.bmi,
     );
@@ -36,9 +43,11 @@ class WeightModel extends WeightEntity {
     return WeightEntity(
       userId: userId,
       currentWeight: currentWeight,
-      targetWeight: targetWeight,
       targetWeightDate: targetWeightDate,
-      measurementFrequency: measurementFrequency,
+      weightGoal: weightGoal,
+      paceGoal: paceGoal,
+      weightsPerWeekGoal: weightsPerWeekGoal,
+      selectedTimeUnit: selectedTimeUnit,
       height: height,
       bmi: bmi,
     );
@@ -46,26 +55,31 @@ class WeightModel extends WeightEntity {
 
   factory WeightModel.fromJson(Map<String, dynamic> json) {
     return WeightModel(
-      userId: json['userId'],
-      currentWeight: json['currentWeight'],
-      targetWeight: json['targetWeight'],
+      userId: json['userId'] ?? '',
+      currentWeight: json['currentWeight'] ?? 0.0,
       targetWeightDate: json['targetWeightDate'] != null
-          ? DateTime.parse(json['targetWeightDate'])
+          ? (json['targetWeightDate'] as Timestamp).toDate()
           : null,
-      measurementFrequency: json['measurementFrequency'],
-      height: json['height'],
-      bmi: json['bmi'],
+      weightGoal: json['weightGoal'] != null ? json['weightGoal'] : null,
+      paceGoal: json['paceGoal'],
+      weightsPerWeekGoal: json['weightsPerWeekGoal'],
+      selectedTimeUnit: json['selectedTimeUnit'],
+      height: json['height'] ?? 0.0,
+      bmi: json['bmi'] ?? 0.0,
     );
   }
+
 
   @override
   Map<String, dynamic> toJson() {
     return {
       'userId': userId,
       'currentWeight': currentWeight,
-      'targetWeight': targetWeight,
       'targetWeightDate': targetWeightDate?.toIso8601String(),
-      'measurementFrequency': measurementFrequency,
+      'weightGoal': weightGoal,
+      'paceGoal': paceGoal,
+      'weightsPerWeekGoal': weightsPerWeekGoal,
+      'selectedTimeUnit': selectedTimeUnit,
       'height': height,
       'bmi': bmi,
     };
