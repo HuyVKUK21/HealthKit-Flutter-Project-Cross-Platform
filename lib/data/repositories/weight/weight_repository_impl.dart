@@ -13,13 +13,15 @@ class WeightRepositoryImpl implements WeightRepository {
   @override
   Future<WeightEntity?> getWeightEntity(String userId) async {
     final weightEntity = await weightRemoteDatasource.getWeightEntity(userId);
+    print("WeightEntity: $weightEntity");
     return weightEntity;
   }
 
   @override
   Future<void> setWeightEntity(WeightEntity weightEntity) async {
-
     await weightRemoteDatasource.addOrUpdateWeightEntity(weightEntity);
   }
+
+
 
 }

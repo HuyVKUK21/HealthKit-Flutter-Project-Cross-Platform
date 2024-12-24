@@ -17,6 +17,7 @@ class WeightRemoteDatasource {
         WeightModel weightModel = WeightModel.fromJson(snapshot.data() as Map<String, dynamic>);
         return weightModel.toEntity();
       } else {
+        print('No data found for userId: $userId');
         return null;
       }
     } catch (e) {
@@ -24,12 +25,36 @@ class WeightRemoteDatasource {
     }
   }
 
-  Future<void> addOrUpdateWeightEntity(WeightEntity weightEntity) async {
+  Future addOrUpdateWeightEntity(WeightEntity weightEntity) async {
     try {
       final weightModel = WeightModel.fromEntity(weightEntity);
-      await firestore.collection('weights').doc(weightModel.userId).set(weightModel.toJson());
+
+      final docSnapshot = await firestore.collection('weights').doc(weightModel.userId).get();
+
+      if (docSnapshot.exists) {
+        await firestore.collection('weights').doc(weightModel.userId).update({
+          'weightGoal': weightEntity.weightGoal,
+          'paceGoal': weightEntity.paceGoal,
+          'selectedTimeUnit': weightEntity.selectedTimeUnit,
+          'targetWeightDate': weightEntity.targetWeightDate ?? FieldValue.serverTimestamp(),
+          'weightsPerWeekGoal': weightEntity.weightsPerWeekGoal,
+        });
+      } else {
+
+        await firestore.collection('weights').doc(weightModel.userId).set({
+          'bmi': weightEntity.bmi,
+          'currentWeight': weightEntity.currentWeight,
+          'height': weightEntity.height,
+          'userId': weightEntity.userId,
+          'weightGoal': null,
+          'paceGoal': null,
+          'selectedTimeUnit': null,
+          'targetWeightDate': null,
+          'weightsPerWeekGoal': null,
+        });
+      }
     } catch (e) {
-      throw Exception("Error updating weight data: $e");
+      throw Exception("Error adding or updating weight data: $e");
     }
   }
 

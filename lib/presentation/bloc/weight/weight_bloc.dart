@@ -15,7 +15,6 @@ class WeightBloc extends Bloc<WeightEvent, WeightState> {
 
   WeightBloc(this.getWeightUseCase, this.setWeightUseCase)
       : super(WeightInitial()) {
-
     on<LoadWeightData>((event, emit) async {
       emit(WeightLoading());
       try {
@@ -50,5 +49,24 @@ class WeightBloc extends Bloc<WeightEvent, WeightState> {
       }
     });
 
+
+    on<SaveWeightGoalData>((event, emit) async {
+      emit(WeightLoading());
+      try {
+        final account = await GlobalUtil.getAccount();
+        final userId = account?.userId;
+        final weightEntity = WeightEntity(
+          userId: userId ?? '',
+          weightGoal: event.weightGoal,
+          paceGoal: event.paceGoal,
+          weightsPerWeekGoal: event.weightsPerWeek,
+          selectedTimeUnit: event.selectedTimeUnit,
+        );
+        await setWeightUseCase(weightEntity);
+        emit(WeightUpdated());
+      } catch (e) {
+        emit(WeightError("Failed to save weight and height data: $e"));
+      }
+    });
   }
 }

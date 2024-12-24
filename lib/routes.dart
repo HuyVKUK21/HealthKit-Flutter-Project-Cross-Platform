@@ -18,7 +18,10 @@ import 'package:fitnessapp/presentation/screens/on_boarding/start_screen.dart';
 import 'package:fitnessapp/presentation/screens/signin/signin_screen.dart';
 import 'package:fitnessapp/presentation/screens/signup/signup_screen.dart';
 import 'package:fitnessapp/presentation/screens/weight/height_measure_screen.dart';
+import 'package:fitnessapp/presentation/screens/weight/weight_frequency_screen.dart';
+import 'package:fitnessapp/presentation/screens/weight/weight_goal_screen.dart';
 import 'package:fitnessapp/presentation/screens/weight/weight_measure_screen.dart';
+import 'package:fitnessapp/presentation/screens/weight/weight_pace_screen.dart';
 import 'package:fitnessapp/presentation/screens/weight/weight_screen.dart';
 import 'package:fitnessapp/presentation/screens/welcome/welcome_screen.dart';
 import 'package:fitnessapp/presentation/screens/workout_schedule_view/workout_schedule_view.dart';
@@ -49,4 +52,7 @@ final Map<String, WidgetBuilder> routes = {
   ForgetPassword.routeName: (context) => ForgetPassword(),
   DetailProfileScreen.routeName: (context) => DetailProfileScreen(),
   ChangePasswordScreen.routeName: (context) => ChangePasswordScreen(),
+  WeightGoalScreen.routeName: (context) => WeightGoalScreen(),
+  WeightPaceScreen.routeName: (context) => WeightPaceScreen(),
+  WeightFrequencyScreen.routeName: (context) => WeightFrequencyScreen(),
 };

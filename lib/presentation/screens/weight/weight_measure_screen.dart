@@ -16,7 +16,6 @@ class _WeightScreenState extends State<WeightMeasureScreen> {
   double weight = 50.0;
   String currentDate = '';
 
-  // Danh sách tháng bằng tiếng Việt
   final List<String> months = [
     'Tháng 1',
     'Tháng 2',
@@ -105,11 +104,11 @@ class _WeightScreenState extends State<WeightMeasureScreen> {
             ToggleButtons(
               borderColor: Colors.transparent,
               selectedColor: Colors.pink,
-              fillColor: Colors.transparent, // Xóa hiệu ứng bóng
+              fillColor: Colors.transparent,
               borderRadius: BorderRadius.circular(8),
-              isSelected: [true], // Chỉ một nút được chọn
+              isSelected: [true],
               onPressed: (int index) {
-                // Logic không cần thiết ở đây vì chỉ có một nút
+
               },
               children: [
                 Padding(

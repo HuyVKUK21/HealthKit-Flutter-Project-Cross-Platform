@@ -2,6 +2,7 @@ import 'package:fitnessapp/presentation/screens/weight/weight_pace_screen.dart';
 import 'package:flutter/material.dart';
 
 class WeightGoalScreen extends StatefulWidget {
+  static String routeName = "/WeightGoalScreen";
   @override
   _WeightGoalScreenState createState() => _WeightGoalScreenState();
 }
@@ -131,9 +132,10 @@ class _WeightGoalScreenState extends State<WeightGoalScreen> {
       onPressed: () {
         double? weight = double.tryParse(weightController.text);
         if (weight != null && weight > 0) {
-          Navigator.pushReplacement(
+          Navigator.pushReplacementNamed(
             context,
-            MaterialPageRoute(builder: (context) => WeightPaceScreen()),
+            WeightPaceScreen.routeName,
+            arguments: weight,
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

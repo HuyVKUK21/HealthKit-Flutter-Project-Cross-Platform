@@ -27,3 +27,14 @@ class SaveWeightHeightData extends WeightEvent {
 
   SaveWeightHeightData(this.weight, this.height);
 }
+
+
+class SaveWeightGoalData extends WeightEvent {
+  final double weightGoal;
+  final String paceGoal;
+  final int weightsPerWeek;
+  final String selectedTimeUnit;
+
+  SaveWeightGoalData(this.weightGoal, this.paceGoal, this.weightsPerWeek, this.selectedTimeUnit);
+}
+
